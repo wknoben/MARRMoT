@@ -1,6 +1,10 @@
 # MARRMoT
 Modular Assessment of Rainfall-Runoff Models Toolbox - Matlab code for 46 conceptual hydrologic models.
 
+<p align="center">
+<img src="Figures/logo.jpg" alt="MARRMoT logo" width="200"/>
+</p>
+
 MARRMoT is a novel rainfall-runoff model comparison framework, that allows objective comparison between different conceptual hydrological model structures. 
 The framework provides Matlab code for 46 unique model structures, standardized parameter ranges across all model structures and robust numerical implementation of each model.
 The framework is provided with extensive documentation, a User Manual and several workflow scripts that give examples of how to use the framework.
@@ -71,5 +75,7 @@ MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for deta
 
 ## Acknowledgements
 MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged.
+
+
 
 

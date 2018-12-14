@@ -66,7 +66,7 @@ In addition to a range of unnamed models, the following models provided inspirat
 - CLASSIC
 
 ## License
-MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE.md file for details.
+MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for details.
 
 ## Acknowledgements
 MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged.

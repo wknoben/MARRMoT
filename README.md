@@ -5,10 +5,10 @@ Modular Assessment of Rainfall-Runoff Models Toolbox - Matlab code for 46 concep
 <img src="Figures/logo.jpg" alt="MARRMoT logo" width="200"/>
 </p>
 
-MARRMoT is a novel rainfall-runoff model comparison framework, that allows objective comparison between different conceptual hydrological model structures. 
+MARRMoT is a novel rainfall-runoff model comparison framework that allows objective comparison between different conceptual hydrological model structures. 
 The framework provides Matlab code for 46 unique model structures, standardized parameter ranges across all model structures and robust numerical implementation of each model.
 The framework is provided with extensive documentation, a User Manual and several workflow scripts that give examples of how to use the framework.
-MARRMoT is based around inidivudal flux function and aggregated model functions, allowing a wide range of possible applications.
+MARRMoT is based around individual flux functions and aggregated model functions, allowing a wide range of possible applications.
 
 If you have any questions about using or running the code, or are willing to contribute, please contact w.j.m.knoben[-at-]bristol.ac.uk.
 
@@ -16,7 +16,7 @@ If you have any questions about using or running the code, or are willing to con
 These instructions will help you install a copy of MARRMoT and run a few example cases. 
 
 ### Requirements
-MARRMoT was developed on Matlab version version 9.2.0.538062 (R2017a) and the Optimization Toolbox is required (tested with version 7.6). 
+MARRMoT was developed on Matlab version 9.2.0.538062 (R2017a) and the Optimization Toolbox is required (tested with version 7.6). 
 If using Octave, MARRMoT was tested on Octave 4.4.1 and requires the 'optim' package. 
 The following instructions assume that MARRMoT will be used with Matlab. 
 

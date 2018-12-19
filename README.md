@@ -26,6 +26,7 @@ Download a copy of the files from this repository (note: do not use the folder '
 ### Try an example application
 - Open Matlab
 - Add the folder 'MARRMoT' and its subfolders 'Functions', 'Models' and 'User Manual' to the Matlab path
+- **Note:** Ensure that the folder "Octave" is **not** included, and remove this folder if it is
 - Navigate Matlab's current folder to './MARRMoT/User Manual'
 - Open the script 'workflow_example_1.m'
 - Run the script by pressing F5

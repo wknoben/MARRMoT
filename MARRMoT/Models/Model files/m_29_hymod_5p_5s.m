@@ -12,7 +12,7 @@ function [ fluxOutput, fluxInternal, storeInternal, waterBalance ] = ...
 %
 % Wagener, T., Boyle, D. P., Lees, M. J., Wheater, H. S., Gupta, Hoshin, 
 % V., & Sorooshian, S. (2001). A framework for development and application 
-% of hydrological models. Hydrology and Earth System Sciences, 5, 13–26.
+% of hydrological models. Hydrology and Earth System Sciences, 5, 13â€“26.
 
 % Steps
 % --- Practical ---
@@ -122,25 +122,20 @@ scheme  = solver.name;
 [~,store_fun]     = feval(scheme,storeInitial,delta_t);                     % storeInitial is used to find the number of stores, actual values are irrelevant here
 
 % Root-finding options
-if ~exist('octave_config_info')                                             % Matlab
-    fsolve_options = optimoptions('fsolve','Display','none',...             % Disable display settings
-                                    'JacobPattern', [1,0,0,0,0;
-                                                     1,1,0,0,0;
-                                                     0,1,1,0,0;
-                                                     0,0,1,1,0;
-                                                     1,0,0,0,1]);           % Specify the Jacobian pattern                                             
-    lsqnonlin_options = optimoptions('lsqnonlin',...                        % lsqnonlin settings for cases when fsolve fails
-                                     'Display','none',...
-                                     'JacobPattern',[1,0,0,0,0;
-                                                     1,1,0,0,0;
-                                                     0,1,1,0,0;
-                                                     0,0,1,1,0;
-                                                     1,0,0,0,1],...
-                                     'MaxFunEvals',1000); 
-else                                                                        % Octave
-    fsolve_options    = optimset('MaxFunEvals',1000);                       % Display off by default, specifying Jacobian not possible
-    lsqnonlin_options = optimset('MaxFunEvals',1000);
-end
+fsolve_options = optimoptions('fsolve','Display','none',...             % Disable display settings
+                                'JacobPattern', [1,0,0,0,0;
+                                                 1,1,0,0,0;
+                                                 0,1,1,0,0;
+                                                 0,0,1,1,0;
+                                                 1,0,0,0,1]);           % Specify the Jacobian pattern                                             
+lsqnonlin_options = optimoptions('lsqnonlin',...                        % lsqnonlin settings for cases when fsolve fails
+                                 'Display','none',...
+                                 'JacobPattern',[1,0,0,0,0;
+                                                 1,1,0,0,0;
+                                                 0,1,1,0,0;
+                                                 0,0,1,1,0;
+                                                 1,0,0,0,1],...
+                                 'MaxFunEvals',1000); 
     
 %% 5. Solve the system for the full time series
 for t = 1:t_end

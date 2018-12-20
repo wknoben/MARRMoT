@@ -1,7 +1,7 @@
 % This file is part of the Modular Assessment of Rainfall-Runoff Models 
 % Toolbox (MARRMoT) – User manual. It contains an example application of a
-% single model to a single catchment. See section 2 in the manual for
-% details.
+% single model to a single catchment. See section 3 in the User Manual 
+% for details.
 % 
 % Author:   Wouter J.M. Knoben
 % Date:     26-09-2018

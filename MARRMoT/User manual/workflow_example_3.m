@@ -1,7 +1,7 @@
 % This file is part of the Modular Assessment of Rainfall-Runoff Models 
 % Toolbox (MARRMoT) – User manual. It contains an example application of 
-% multiple models to a single catchment. See section 2 in the manual for
-% details.
+% multiple models to a single catchment. See section 3 in the User Manual 
+% for details.
 % 
 % Author:   Wouter J.M. Knoben
 % Date:     26-09-2018
@@ -36,7 +36,7 @@ input_climatology.delta_t  = 1;                                                 
 % be sampled as part of the investigation. See lines 69-77 in this script.
 
 % Model name 
-% NOTE: these can be found in the User Manual.
+% NOTE: these can be found in the Model Descriptions.
 model_list  = {'m_29_hymod_5p_5s',...
                'm_01_collie1_1p_1s',...
                'm_27_tank_12p_4s'};                     

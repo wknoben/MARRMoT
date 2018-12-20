@@ -30,7 +30,7 @@ Download a copy of the files from this repository (note: do not use the folder '
 - Navigate Matlab's current folder to './MARRMoT/User Manual'
 - Open the script 'workflow_example_1.m'
 - Run the script by pressing F5
-- Repeat with 'workflow_example_2.m' and 'workflow_example_3.m'
+- Repeat with 'workflow_example_2.m' and 'workflow_example_3.m' ('workflow_example_4.m' shows a calibration example and takes a bit longer)
 
 The User Manual provides further details.
 

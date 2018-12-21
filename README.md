@@ -78,7 +78,3 @@ MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for deta
 
 ## Acknowledgements
 MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged.
-
-
-
-

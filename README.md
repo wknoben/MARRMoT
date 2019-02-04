@@ -40,7 +40,11 @@ The User Manual provides further details.
 The article describing MARRMoT development will soon be submitted to the scientific journal 'Geoscientific Model Development'.
 This paper, its Supporting Material and the User Manual cover the following topics:
 
-- **Paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment
+- **Paper**: https://doi.org/10.5194/gmd-2018-332
+- **Supporting info**: https://www.geosci-model-dev-discuss.net/gmd-2018-332/gmd-2018-332-supplement.pdf
+- **User Manual**: https://github.com/wknoben/MARRMoT/blob/master/User%20Manual%20v1.0.pdf
+
+- **Paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. 
 - **Supporting Material 2**: detailed description of each model structure, giving Ordinary Differential Equations and constitutive functions for each model store
 - **Supporting Material 3**: translation of constitutive functions (fluxes) to Matlab code
 - **Supporting Material 4**: overview of Unit Hydrograph code

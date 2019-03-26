@@ -5,7 +5,7 @@ function [ opt ] = optimoptions( varargin )
 %
 % NOTE: this is NOT an Octave implementation of Matlab's optimoptions. DO
 % NOT INCLUDE this file with MARRMoT's Matlab distribution because Matlab
-% will preferntially use this file instead of its own built-in 
+% will preferentially use this file instead of its own built-in 
 % optimoptions.
 %
 % Copyright (C) 2018 W. Knoben

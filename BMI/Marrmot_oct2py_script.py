@@ -1,6 +1,6 @@
 #!python
 """
-wflow_prepare
+Marrmot_oct2py
 =============
 A script to run Marrmot octave using oct2py. Still in a very initial development phase.
 Usage::
@@ -14,7 +14,7 @@ import scipy
 from oct2py import octave
 
 """
-set path o config file
+set path to config file
 """
 path = '/home/yifat/MARRMoT/BMI/Config/BMI_testcase_m01_BuffaloRiver_TN_USA' 
 

@@ -1,0 +1,10 @@
+data_origin,forcing.precip,forcing.temp,forcing.pet,forcing.delta_t_days,time_unit,model_name,parameters,store_ini,time_end,time_start,solver.name,solver.resnorm_tolerance,solver.resnorm_maxiter
+35.29,1,15,0.5,1,"""day""","""m_01_collie1_1p_1s""",10,5,2000,2000,"""createOdeApprox_IE""",0.1,6
+87.49,1,15,0.5,,,,,,1,1,,,
+,1,15,0.5,,,,,,1,11,,,
+,1,15,0.5,,,,,,,,,,
+,1,15,0.5,,,,,,,,,,
+,1,15,0.5,,,,,,,,,,
+,1,15,0.5,,,,,,,,,,
+,1,15,0.5,,,,,,,,,,
+,1,15,0.5,,,,,,,,,,

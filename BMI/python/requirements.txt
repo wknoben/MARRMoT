@@ -1,0 +1,4 @@
+oct2py
+git+https://github.com/eWaterCycle/grpc4bmi.git#egg=grpc4bmi
+numpy
+scipy

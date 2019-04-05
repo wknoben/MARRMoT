@@ -1,5 +1,7 @@
 # BMI for Octave
 
+This directory contains the [BMI interface](https://bmi-spec.readthedocs.io) of the model.
+
 ## Dependencies:
 
 ### Octave
@@ -30,4 +32,14 @@ sudo apt-get install gnuplot
 sudo apt-get install gnuplot-x11
 ```
 
+
+# Building grpc4bmi Docker image
+
+Building the Docker image with [grpc4bmi wrapper](https://grpc4bmi.readthedocs.io) for MARRMoT.
+
+```bash
+docker build -t sverhoeven/marrmot .
+```
+
+See https://grpc4bmi.readthedocs.io/en/latest/container/usage.html how to use the Docker image.
 

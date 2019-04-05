@@ -4,7 +4,7 @@ MAINTAINER Stefan Verhoeven <s.verhoeven@esciencecenter.nl>
 # Install octave 4.4.x, Octave packages from Octave forge
 RUN echo deb http://deb.debian.org/debian stretch-backports main > /etc/apt/sources.list.d/stretch-backports.list && \
 apt update && apt install -t stretch-backports -y python3-pip octave liboctave-dev && \
-octave --eval 'pkg install -verbose -forge netcdf struct statistics optim' && \
+octave --eval 'pkg install -verbose -forge netcdf io struct statistics optim' && \
 echo 'pkg load optim' > /usr/local/../octaverc
 
 # Install Python deps

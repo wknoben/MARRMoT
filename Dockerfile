@@ -1,11 +1,11 @@
 FROM python:3
-MAINTAINER Stefan Verhoeven <s.verhoeven@esciencecenter.nl>
+LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
 # Install octave 4.4.x, Octave packages from Octave forge
 RUN echo deb http://deb.debian.org/debian stretch-backports main > /etc/apt/sources.list.d/stretch-backports.list && \
 apt update && apt install -t stretch-backports -y python3-pip octave liboctave-dev libnetcdf-dev && \
 octave --eval 'pkg install -verbose -forge netcdf io struct statistics optim' && \
-echo 'pkg load optim' > /usr/local/../octaverc
+echo 'pkg load optim' >> /usr/share/octave/site/m/startup/octaverc
 
 # Install Python deps
 ADD BMI/python/requirements.txt /opt/

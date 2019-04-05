@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import os
 from oct2py import octave
 from BMI import BMI
 import numpy as np
@@ -8,9 +9,10 @@ import numpy as np
 
 
 class MARRMoTPythonBMI(BMI):
-    def __init__(self,MARRMoTLoc):
+    def __init__(self,MARRMoTLoc=None):
         self._name = "MARRMoTPythonBMI"
-        octave.addpath(octave.genpath(MARRMoTLoc))
+        octave_model_root = os.getenv('OCTAVE_MODEL_ROOT', MARRMoTLoc)
+        octave.addpath(octave.genpath(octave_model_root))
         octave.eval("model = marrmotBMI_oct()")
                
     def initialize(self, filename):

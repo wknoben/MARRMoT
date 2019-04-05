@@ -43,3 +43,8 @@ docker build -t sverhoeven/marrmot .
 
 See https://grpc4bmi.readthedocs.io/en/latest/container/usage.html how to use the Docker image.
 
+# Run Docker
+
+```bash
+docker run -v $PWD:/data --entrypoint octave sverhoeven/marrmot /data/script.m
+```

@@ -1,10 +1,17 @@
 FROM python:3
 MAINTAINER Stefan Verhoeven <s.verhoeven@esciencecenter.nl>
 
-ADD ./ /opt/MARRMoT/
+# Install octave 4.4.x, Octave packages from Octave forge
+RUN echo deb http://deb.debian.org/debian stretch-backports main > /etc/apt/sources.list.d/stretch-backports.list && \
+apt update && apt install -t stretch-backports -y python3-pip octave liboctave-dev && \
+octave --eval 'pkg install -verbose -forge netcdf struct statistics optim' && \
+echo 'pkg load optim' > /usr/local/../octaverc
 
-# Install octave and Python deps
-RUN apt update && apt install -y octave && pip install -r /opt/MARRMoT/BMI/python/requirements.txt
+# Install Python deps
+ADD BMI/python/requirements.txt /opt/
+RUN pip3 install -r /opt/requirements.txt
+
+ADD ./ /opt/MARRMoT/
 
 # Set environment
 WORKDIR /data/input

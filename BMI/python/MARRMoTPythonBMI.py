@@ -67,7 +67,7 @@ class MARRMoTPythonBMI(BMI):
     def get_end_time(self):
         return octave.eval('model.get_end_time()')
 
-    def get_time_units(self):
+    def get_time_units(self): 
         return octave.eval('model.get_time_units()')
 
     def get_time_step(self):
@@ -81,8 +81,9 @@ class MARRMoTPythonBMI(BMI):
         commandString = 'model.get_value_ptr("' + varName + '")'
         return octave.eval(commandString)
 
-    def get_value_at_indices(self):
-        return "not implemented yet"
+    def get_value_at_indices(self, varName, indices):
+	#commandString = "model.get_value_at_indices(" + varName + "," + np.array2string(indices)+ ")"
+        return "grids not implemented yet"#octave.eval(commandString)
 
     def set_value(self, varName, src):
         commandString = "model.set_value(" + varName + "," + np.array2string(src) + ")"
@@ -94,33 +95,39 @@ class MARRMoTPythonBMI(BMI):
 
     # Grid information
     def get_grid_rank(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_rank()')
+
 
     def get_grid_size(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_size()')
+
 
     def get_grid_type(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_type()')
 
     # Uniform rectilinear
     def get_grid_shape(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_shape()')
 
     def get_grid_spacing(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_spacing()')
 
     def get_grid_origin(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_origin()')
 
     # Non-uniform rectilinear, curvilinear
     def get_grid_x(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_x()')
 
     def get_grid_y(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_y()')
+
+    #not implemented in MARRMoT
 
     def get_grid_z(self):
         return "grids not implemented yet"
+
+   #not implemented in MARRMoT
 
     def get_grid_node_count(self):
         return "grids not implemented yet"

@@ -284,6 +284,11 @@ classdef marrmotBMI_oct < handle
             output = 1;                              % Fixed for all MARRMoT models
         end
         
+        % Grid Z
+        function output = get_grid_z(~)
+            output = 1;                              % Fixed for all MARRMoT models
+        end
+        
 %% Variable information
 
         % Units

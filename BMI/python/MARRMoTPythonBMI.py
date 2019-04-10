@@ -82,9 +82,13 @@ class MARRMoTPythonBMI(BMI):
         return octave.eval(commandString)
 
     def get_value_at_indices(self, varName, indices):
-	#commandString = "model.get_value_at_indices(" + varName + "," + np.array2string(indices)+ ")"
-        return "grids not implemented yet"#octave.eval(commandString)
-
+        # temporary fix since get_value_at_indices doesn't work with indices input and MARRMoT do not have grids
+        if str(indices) != '[0, 0]':
+            raise Exception('indices are out of bound. The model has no grid, thus indices=[0,0])')    
+        else:
+            commandString = 'model.get_value("' + varName + '")'
+            return octave.eval(commandString)
+ 
     def set_value(self, varName, src):
         commandString = "model.set_value(" + varName + "," + np.array2string(src) + ")"
         return octave.eval(commandString)
@@ -122,12 +126,10 @@ class MARRMoTPythonBMI(BMI):
     def get_grid_y(self):
         return octave.eval('model.get_grid_y()')
 
-    #not implemented in MARRMoT
-
     def get_grid_z(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_z()')
 
-   #not implemented in MARRMoT
+   #not implemented in MARRMoT (all MARRMoT models have no grid)
 
     def get_grid_node_count(self):
         return "grids not implemented yet"

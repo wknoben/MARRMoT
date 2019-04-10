@@ -67,7 +67,7 @@ class MARRMoTPythonBMI(BMI):
     def get_end_time(self):
         return octave.eval('model.get_end_time()')
 
-    def get_time_units(self):
+    def get_time_units(self): 
         return octave.eval('model.get_time_units()')
 
     def get_time_step(self):
@@ -81,9 +81,14 @@ class MARRMoTPythonBMI(BMI):
         commandString = 'model.get_value_ptr("' + varName + '")'
         return octave.eval(commandString)
 
-    def get_value_at_indices(self):
-        return "not implemented yet"
-
+    def get_value_at_indices(self, varName, indices):
+        # temporary fix since get_value_at_indices doesn't work with indices input and MARRMoT do not have grids
+        if str(indices) != '[0, 0]':
+            raise Exception('indices are out of bound. The model has no grid, thus indices=[0,0])')    
+        else:
+            commandString = 'model.get_value("' + varName + '")'
+            return octave.eval(commandString)
+ 
     def set_value(self, varName, src):
         commandString = "model.set_value(" + varName + "," + np.array2string(src) + ")"
         return octave.eval(commandString)
@@ -94,33 +99,37 @@ class MARRMoTPythonBMI(BMI):
 
     # Grid information
     def get_grid_rank(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_rank()')
+
 
     def get_grid_size(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_size()')
+
 
     def get_grid_type(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_type()')
 
     # Uniform rectilinear
     def get_grid_shape(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_shape()')
 
     def get_grid_spacing(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_spacing()')
 
     def get_grid_origin(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_origin()')
 
     # Non-uniform rectilinear, curvilinear
     def get_grid_x(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_x()')
 
     def get_grid_y(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_y()')
 
     def get_grid_z(self):
-        return "grids not implemented yet"
+        return octave.eval('model.get_grid_z()')
+
+   #not implemented in MARRMoT (all MARRMoT models have no grid)
 
     def get_grid_node_count(self):
         return "grids not implemented yet"

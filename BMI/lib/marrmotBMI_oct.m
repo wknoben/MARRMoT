@@ -229,7 +229,7 @@ classdef marrmotBMI_oct < handle
         
         % Time units
         function output = get_time_units(obj)
-            output = obj.forcing_time_unit;
+            output = obj.time_unit;
         end
         
         % Current time

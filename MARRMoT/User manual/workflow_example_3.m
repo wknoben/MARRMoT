@@ -1,5 +1,5 @@
 % This file is part of the Modular Assessment of Rainfall-Runoff Models 
-% Toolbox (MARRMoT) – User manual. It contains an example application of 
+% Toolbox (MARRMoT) â€“ User manual. It contains an example application of 
 % multiple models to a single catchment. See section 3 in the User Manual 
 % for details.
 % 
@@ -132,7 +132,7 @@ figure('color','w');
     end
         
     lh = legend(h,['Observed',model_list]);
-    lh.Interpreter = 'none';
+%    lh.Interpreter = 'none';                 % This changes the model names in the legend to look nicer, but this doesn't work in Octave
     title('Model sampling results')
     ylabel('Streamflow [mm/d]')
     xlabel('Time [d]')

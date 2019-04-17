@@ -1,5 +1,5 @@
 % This file is part of the Modular Assessment of Rainfall-Runoff Models 
-% Toolbox (MARRMoT) – User manual. It contains an example application of 
+% Toolbox (MARRMoT) â€“ User manual. It contains an example application of 
 % calibration of a single models to a single catchment. See section 3 in 
 % the User Manual for details.
 %
@@ -9,6 +9,9 @@
 % ranges. The file can be downloaded from Matlab's File Exchange:
 % https://uk.mathworks.com/matlabcentral/fileexchange/8277-fminsearchbnd-fminsearchcon
 % 
+% NOTE: this file does not work very well in Octave. Octave users might 
+% need to consider alternative parameter optimisation methods.
+%
 % Author:   Wouter J.M. Knoben
 % Date:     26-09-2018
 % Contact:  w.j.m.knoben@bristol.ac.uk

@@ -159,7 +159,7 @@ model_out_eval = feval(model,...
 % Compute evaluation performance
 of_eval = feval(of_name,...                                                 % Objective function name (here 'of_KGE')
                 q_obs_eval,...                                              % Observed flow during evaluation period
-                model_out.Q);                                               % Simulated flow during evaluation period, using calibrated parameters            
+                model_out_eval.Q);                                          % Simulated flow during evaluation period, using calibrated parameters            
             
 %% 8. Visualise the results
 % Get simulated flow during calibration

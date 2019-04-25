@@ -237,7 +237,7 @@ classdef marrmotBMI_oct < handle
         function output = get_time_units(obj)
             timeformat_index = strncmp(obj.time_unit, 'days', 3);
             if timeformat_index ~= 0
-              commandstring = "days since 1 Jan 1970";
+              commandstring = "days since 1970-01-01 00:00:00.0 00:00";
               output = commandstring;
             else
               output = obj.time_unit;

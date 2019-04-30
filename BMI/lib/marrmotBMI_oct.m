@@ -219,22 +219,36 @@ classdef marrmotBMI_oct < handle
         
         % Start time
         function output = get_start_time(obj)
-            output=obj.startTime;
+            # datenum returns the date as a serial number since Jan 1 0000
+            # output will return the date as a number of days since CUT - 1 Jan 1970 
+            CUT_time = [1970 01 01 0 0 0];
+            output = datenum(obj.startTime) - datenum(CUT_time);
+            # output = datenum(obj.startTime);
         end
         
         % End time
         function output = get_end_time(obj)
-            output=obj.endTime;
+            # output will return the date as a number of days since CUT - 1 Jan 1970 
+            CUT_time = [1970 01 01 0 0 0];
+            output = datenum(obj.endTime) - datenum(CUT_time);
         end
         
         % Time units
         function output = get_time_units(obj)
-            output = obj.time_unit;
+            timeformat_index = strncmp(obj.time_unit, 'days', 3);
+            if timeformat_index ~= 0
+              commandstring = "days since 1970-01-01 00:00:00.0 00:00";
+              output = commandstring;
+            else
+              output = obj.time_unit;
+            end
         end
         
         % Current time
         function output = get_current_time(obj)
-            output=obj.time;
+            CUT_time = [1970 01 01 0 0 0];
+            t_current = obj.time + datenum(obj.startTime)- datenum(CUT_time) - 1;
+            output = t_current;
         end
         
         % Time step
@@ -288,7 +302,8 @@ classdef marrmotBMI_oct < handle
         function output = get_grid_z(~)
             output = 1;                              % Fixed for all MARRMoT models
         end
-        
+
+ 
 %% Variable information
 
         % Units
@@ -315,7 +330,7 @@ classdef marrmotBMI_oct < handle
                 case 'wb'
                     output = 'mm';
                 otherwise
-                    error('unkown variable');
+                    error('unkown variable. please use one of the following variables: P, T, Ep, S, mod, par, sol, f;ux_out, flux_in, wb');
             end
         end
         

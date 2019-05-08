@@ -1,5 +1,5 @@
 function [ fluxOutput, fluxInternal, storeInternal, waterBalance ] = ...
-            m_05_ihacres_6p_1s( fluxInput, storeInitial, theta, solver )
+            m_05_ihacres_7p_1s( fluxInput, storeInitial, theta, solver )
 % Hydrologic conceptual model: IHACRES
 %
 % Copyright (C) 2018 W. Knoben
@@ -55,6 +55,7 @@ p       = theta(3);     % Flow response non-linearity [-]
 alpha   = theta(4);     % Fast/slow flow division [-]
 tau_q   = theta(5);     % Fast flow routing delay [d]
 tau_s   = theta(6);     % Slow flow routing delay [d]
+tau_d   = theta(7);     % Pure time delay of total flow [d]
 
 %%INITIALISE MODEL STORES
 S10     = storeInitial(1);       % Initial soil moisture deficit
@@ -72,14 +73,17 @@ flux_uq   = zeros(1,t_end);
 flux_us   = zeros(1,t_end);
 flux_xq   = zeros(1,t_end);
 flux_xs   = zeros(1,t_end);
+flux_qt   = zeros(1,t_end);
 
 %%PREPARE UNIT HYDROGRAPHS
 [~,uh_q] = uh_5_half(1,tau_q,delta_t);
 [~,uh_s] = uh_5_half(1,tau_s,delta_t);
+[~,uh_t] = uh_8_delay(1,tau_d,delta_t);
 
 %%INITIALISE ROUTING VECTORS
 tmp_xq_old  = zeros(1,length(uh_q));  % temporary vector needed to deal with routing
 tmp_xs_old  = zeros(1,length(uh_s));  % temporary vector needed to deal with routing
+tmp_qt_old  = zeros(1,length(uh_t));  % temporary vector needed to deal with routing
 
 %% 1. ODEs
 % Given in the documentation.
@@ -185,13 +189,19 @@ for t = 1:t_end
     tmp_xs_old      = circshift(tmp_xs_old,-1);                             % shift the 'still-to-flow-out' vector so that the next value is now at location 1
     tmp_xs_old(end) = 0;
     
+    % Apply time delay
+    tmp_qt_cur      = (flux_xq(t)+flux_xs(t)).*uh_t;
+    tmp_qt_old      = tmp_qt_old + tmp_qt_cur;
+    flux_qt(t)      = tmp_qt_old(1);
+    tmp_qt_old      = circshift(tmp_qt_old,-1);
+    tmp_qt_old(end) = 0;
 end
 
 %% 6. Generate outputs
     % --- Fluxes leaving the model ---
     % 'Ea' and 'Q' are used outside the funcion and should NOT be renamed
     fluxOutput.Ea     = flux_ea * delta_t;
-    fluxOutput.Q      = (flux_xq + flux_xs) * delta_t;
+    fluxOutput.Q      = flux_qt * delta_t;
     
     % --- Fluxes internal to the model ---
     fluxInternal.u    = flux_u * delta_t;
@@ -211,7 +221,7 @@ if nargout == 4
                    sum(fluxOutput.Q) - ...                                  % Flux Q leaving the model
                    sum(fluxOutput.Ea) + ...                                 % Flux Ea leaving the model
                    (store_S1(end)-S10) - ...                                % Deficit change
-                   (sum(tmp_xq_old)+sum(tmp_xs_old));                       % Water still in routing schemes
+                   (sum(tmp_xq_old)+sum(tmp_xs_old)+sum(tmp_qt_old));       % Water still in routing schemes
 
     % Display
     disp(['Total P  = ',num2str(sum(P)),'mm.'])                             

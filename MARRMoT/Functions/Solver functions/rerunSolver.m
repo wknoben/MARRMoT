@@ -25,7 +25,10 @@ if size(varargin,2) > 1; problem.ub = cell2mat(varargin(2)); end            % as
 % 1. minimum values
 % 2. maximum values
 % 3. location where the solver got stuck
-% 4. randomized values close to solution of previous time steps
+% 4. storages at previous time step
+% 5. storage maximums
+% 6. randomized values close to solution of previous time steps
+% 7. random values
 
 while resnorm > minX
 
@@ -46,7 +49,7 @@ while resnorm > minX
                 problem.x0 = max(zeros(1,numODE),oldVal+(rand(1,numODE)-0.5));      % 6. Randomized values close to starting location
             end
         otherwise
-            problem.x0 = max(zeros(1,numODE),oldVal+(rand(1,numODE)-0.5));          % 6. Randomized values close to starting location
+            problem.x0 = max(zeros(1,numODE),oldVal+(rand(1,numODE)-0.5));          % 7. Randomized values close to starting location
     end
    
     % Re-run the solver

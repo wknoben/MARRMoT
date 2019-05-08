@@ -1,5 +1,5 @@
-function [ theta ] = m_05_ihacres_6p_1s_parameter_ranges( )
-%m_05_ihacres_6p_1s_parameter_ranges Provides parameter ranges for calibration
+function [ theta ] = m_05_ihacres_7p_1s_parameter_ranges( )
+%m_05_ihacres_7p_1s_parameter_ranges Provides parameter ranges for calibration
 %   of the IHACRES model.
 %
 % Copyright (C) 2018 W. Knoben
@@ -24,4 +24,5 @@ theta = [1   , 2000;    % lp, Wilting point [mm]
          0   , 10;      % p, Flow response non-linearity [-]
          0   , 1;       % alpha, Fast/slow flow division [-]
          1   , 5;       % tau_q, Fast flow routing delay [d]
-         1   , 15];     % tau_s, Slow flow routing delay [d]
+         1   , 15;      % tau_s, Slow flow routing delay [d]
+         0   , 119];    % tau_d, flow delay [d]

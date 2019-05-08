@@ -1,0 +1,21 @@
+This file highlights the most important changes made during version updates. The changes listed here are limited to those changes that directly impact model code. Changes to comments or workflow example files are not included.
+
+
+
+=== v1.1 ===
+Updated from v1.0 to v1.1 to reflect several changes suggested during peer review of the MARRMoT description paper in GMD. Main changes:
+
+- Changed the logistic smoothing function "./Functions/Flux smoothing/smoothThreshold_storage_logistic". This equation used to read: "out = 1 ./ (1+exp((S-Smax-r*e*Smax)/(r*Smax)))"; and now reads: "out = 1 ./ (1+exp((S-Smax+r*e*Smax)/(r*Smax)))". See: https://gist.github.com/philippkraft/aae02d23fbdad62f98a413ab04fe6d83
+
+- Changed the IHACRES model "./Models/Model files/m_05_ihacres_6p_1s" to include pure time delay.
+
+- Changed the IHACRES model name to reflect the addition of a new parameter: "m_05_ihacres_7p_1s"
+
+- Updated the IHACRES parameter range file to reflect the model additions "./Models/Parameter range files/m_05_ihacres_6p_1s_parameter_ranges"
+
+- Added a new Unit Hydrograph routing function as a result from IHACRES changes "./Models/Unit Hydrograph files/uh_8_puredelay"
+
+
+
+=== v1.0 ===
+Base version submitted for review to Geoscientific Model Development

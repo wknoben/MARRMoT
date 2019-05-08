@@ -11,7 +11,7 @@ function [out] = smoothThreshold_storage_logistic(S,Smax,r,e)
 %       { 0, if S < Smax
 %
 %   By transforming the equation above to Q = f(P,S,Smax,e,r):
-%   Q = P * 1/ (1+exp((S-Smax-r*e*Smax)/(r*Smax)))
+%   Q = P * 1/ (1+exp((S-Smax+r*e*Smax)/(r*Smax)))
 %
 %   Inputs:
 %   S       : current storage
@@ -38,9 +38,9 @@ end
 
 % Calculate multiplier
 if Smax == 0
-    out = 1 ./ (1+exp((S-Smax-r*e*Smax)/(r)));
+    out = 1 ./ (1+exp((S-Smax+r*e*Smax)/(r)));
 else
-    out = 1 ./ (1+exp((S-Smax-r*e*Smax)/(r*Smax)));
+    out = 1 ./ (1+exp((S-Smax+r*e*Smax)/(r*Smax)));
 end
 
 end

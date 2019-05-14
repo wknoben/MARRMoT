@@ -194,10 +194,10 @@ for t = 1:t_end
 
 % Model solving -----------------------------------------------------------            
     % --- Use the specified numerical scheme to solve storages ---
-    [tmp_sNew,tmp_fval] = fsolve_noMSG(@(eq_sys) solve_fun(...              % call solve_fun as anonymous function
+    [tmp_sNew,tmp_fval] = fsolve(@(eq_sys) solve_fun(...                    % call solve_fun as anonymous function
                         eq_sys(1),eq_sys(2),eq_sys(3)),...                  % system of storage equations
                         [S1old,S2old,S3old],...                             % storage values on previous time step
-                        fsolve_options,optionFeedback);                     % solver options
+                        fsolve_options);                                    % solver options
     
     % --- Check if the solver has found an acceptable solution and re-run
     % if not. The re-run uses the 'lsqnonlin' solver which is slower but 

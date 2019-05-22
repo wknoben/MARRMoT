@@ -8,7 +8,7 @@ function [ fluxOutput, fluxInternal, storeInternal, waterBalance ] = ...
 %   
 % Model reference
 % Clark, M. P., Slater, A. G., Rupp, D. E., Woods, R. A., Vrugt, J. A., 
-% Gupta, H. V., … Hay, L. E. (2008). Framework for Understanding Structural
+% Gupta, H. V., â€¦ Hay, L. E. (2008). Framework for Understanding Structural
 % Errors (FUSE): A modular framework to diagnose differences between 
 % hydrological models. Water Resources Research, 44(12), W00B02. 
 % http://doi.org/10.1029/2007WR006735
@@ -16,7 +16,7 @@ function [ fluxOutput, fluxInternal, storeInternal, waterBalance ] = ...
 % Liang, X., Lettenmaier, D. P., Wood, E. F., & Burges, S. J. (1994). A 
 % simple hydrologically based model of land surface water and energy fluxes
 % for general circulation models. Journal of Geophysical Research, 99, 
-% 14415–14428.
+% 14415â€“14428.
 
 
 % Steps
@@ -275,7 +275,7 @@ end
     storeInternal.S1    = store_S1;
     storeInternal.S2    = store_S2;
     storeInternal.S3    = store_S3;
-    storeInternal.imax  = aux_imax;
+%   storeInternal.imax  = aux_imax;                     % This can be used to return the time-varying maximum interception storage
 
 % Check water balance
 if nargout == 4

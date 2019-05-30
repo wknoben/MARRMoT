@@ -1,5 +1,9 @@
 This file highlights the most important changes made during version updates. The changes listed here are limited to those changes that directly impact model code. Changes to comments or workflow example files are not included.
 
+=== v1.2 ===
+Updated from v1.1 to v1.2 to incorporate some important user feedback about communication of parameter ranges. Main changes:
+
+- Updated each model parameter range file with an automatic display of the currently chosen parameter ranges, and a warning that these might not be equally appropriate for all purposes.
 
 
 === v1.1 ===

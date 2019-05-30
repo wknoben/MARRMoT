@@ -19,3 +19,23 @@ theta = [0   , 200;    % Fmax, maximum infiltration rate [mm/d]
          1   , 120;    % tp, time delay for routing [d]
          0   , 4;      % c, capillary rise [mm/d]
          0   , 1];     % kp, base flow time parameter [d-1]
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'Fmax, maximum infiltration rate [mm/d]' ...
+                           'Dp, interception capacity [mm]' ...
+                           'SUmax, soil misture depth [mm]' ...
+                           'wp, wilting point as fraction of Sumax [-]' ...
+                           'p, coefficient for moisture constrained evaporation [-]' ...
+                           'tp, time delay for routing [d]' ...
+                           'c, capillary rise [mm/d]' ...
+                           'kp, base flow time parameter [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)     

@@ -19,3 +19,22 @@ theta = [0,     5;      % INSC, Maximum interception capacity, [mm]
          0,     1;      % SUB, Proportionality constant, [-]
          0,     1;      % CRAK, Proportionality constant, [-]
          0,     1];     % K, Slow flow time scale, [d-1]  
+   
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'INSC, Maximum interception capacity, [mm]' ...
+                           'COEFF, Maximum infiltration loss parameter, [mm]' ...
+                           'SQ, Infiltration loss exponent, [-]' ...
+                           'SMSC, Maximum soil moisture capacity, [mm]' ...
+                           'SUB, Proportionality constant, [-]' ...
+                           'CRAK, Proportionality constant, [-]' ...
+                           'K, Slow flow time scale, [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)

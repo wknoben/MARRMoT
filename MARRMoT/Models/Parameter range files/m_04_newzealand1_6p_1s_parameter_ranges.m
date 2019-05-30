@@ -13,10 +13,26 @@ function [ theta ] = m_04_newzealand1_6p_1s_parameter_ranges( )
 % http://doi.org/10.1029/2002WR001487
 
 theta = [1   , 2000;   % Smax, Maximum soil moisture storage [mm]
-         0.01, 1;      % sfc, Field capacity as fraction of maximum soil moisture [-]
+         0.05, 0.95;   % sfc, Field capacity as fraction of maximum soil moisture [-]
          0.05, 0.95 ;  % m, Fraction forest [-]
          0   , 1;      % a, Subsurface runoff coefficient [d-1]
          1   , 5;      % b, Runoff non-linearity [-]
          0   , 1];     % tcbf, Baseflow runoff coefficient [d-1]
      
-                        
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'Smax, Maximum soil moisture storage [mm]' ...
+                           'sfc, Field capacity as fraction of maximum soil moisture [-]' ...
+                           'm, Fraction forest [-]' ...
+                           'a, Subsurface runoff coefficient [d-1]' ...
+                           'b, Runoff non-linearity [-]' ...
+                           'tcbf, Baseflow runoff coefficient [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)                        

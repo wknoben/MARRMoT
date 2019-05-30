@@ -12,12 +12,33 @@ function [ theta ] = m_21_flexb_9p_3s_parameter_ranges( )
 % understanding. Water Resources Research, 44(6), 1–13. 
 % http://doi.org/10.1029/2007WR006386
 
-theta = [1,2000;        % Maximum soil moisture storage [mm]
-         0, 10;         % Unsaturated zone shape parameter [-]
-         0, 1;          % Fast/slow runoff distribution parameter [-]
-         0, 20;         % Maximum percolation rate [mm/d]
-         0.05, 0.95;    % Wilting point as fraction of s1max [-]
-         1, 5;          % Flow delay before fast runoff [d]
-         1, 15;         % Flow delay before slow runoff [d]
-         0, 1;          % Fast runoff coefficient [d-1]
-         0, 1];         % Slow runoff coefficient [d-1]
+theta = [1,2000;        % URmax, Maximum soil moisture storage [mm]
+         0, 10;         % beta, Unsaturated zone shape parameter [-]
+         0, 1;          % D, Fast/slow runoff distribution parameter [-]
+         0, 20;         % PERCmax, Maximum percolation rate [mm/d]
+         0.05, 0.95;    % Lp, Wilting point as fraction of s1max [-]
+         1, 5;          % Nlagf, Flow delay before fast runoff [d]
+         1, 15;         % Nlags, Flow delay before slow runoff [d]
+         0, 1;          % Kf, Fast runoff coefficient [d-1]
+         0, 1];         % Ks, Slow runoff coefficient [d-1]
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'URmax, Maximum soil moisture storage [mm]' ...
+                           'beta, Unsaturated zone shape parameter [-]' ...
+                           'D, Fast/slow runoff distribution parameter [-]' ...
+                           'PERCmax, Maximum percolation rate [mm/d]' ...
+                           'Lp, Wilting point as fraction of s1max [-]' ...
+                           'Nlagf, Flow delay before fast runoff [d]' ...
+                           'Nlags, Flow delay before slow runoff [d]' ...
+                           'Kf, Fast runoff coefficient [d-1]' ...
+                           'Ks, Slow runoff coefficient [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)

@@ -21,3 +21,19 @@ theta = [
         0, 1;       % phi, Fraction of direct runoff [-]
         0, 1;       % gam, Evaporation reduction in lower zone [-]
         0, 1];      % k1, Runoff coefficient [d-1]
+       
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'smax, Maximum soil moisture storage [mm]' ...
+                           'phi, Fraction of direct runoff [-]' ...
+                           'gam, Evaporation reduction in lower zone [-]' ...
+                           'k1, Runoff coefficient [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)

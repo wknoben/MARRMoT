@@ -20,3 +20,22 @@ theta = [-3  , 3;       % tcrit, Snowfall & snowmelt temperature [oC]
          0   , 1 ;      % tu, Slow flow routing response time [d-1]
          1   , 2000;    % se, Root zone storage capacity [mm]
          0   , 1];      % tc, Mean residence time [d-1]
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'tcrit, Snowfall & snowmelt temperature [oC]' ...
+                           'ddf, Degree-day factor for snowmelt [mm/oC/d]' ...
+                           'Sb1, Maximum soil moisture storage [mm]' ...
+                           'tw, Groundwater leakage time [d-1]' ...
+                           'tu, Slow flow routing response time [d-1]' ...
+                           'se, Root zone storage capacity [mm]' ...
+                           'tc, Mean residence time [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)

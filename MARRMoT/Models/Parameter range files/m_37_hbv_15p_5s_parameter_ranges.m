@@ -12,7 +12,7 @@ function [ theta ] = m_37_hbv_15p_5s_parameter_ranges( )
 % Journal of Hydrology, 201, 272–288. 
 % https://doi.org/https://doi.org/10.1016/S0022-1694(97)00041-3
 
-theta = [-3 ,   5;      % TT, threshold temperature for snowfall [oC]. 
+theta = [-3 ,   5;      % TT, threshold temperature for snowfall [oC] 
           0 ,   17;     % TTI, interval length of rain-snow spectrum [oC]
          -3 ,   3;      % TTM, threshold temperature for snowmelt [oC]
           0 ,   1;      % CFR, coefficient of refreezing of melted snow [-]
@@ -22,25 +22,35 @@ theta = [-3 ,   5;      % TT, threshold temperature for snowfall [oC].
           1 ,   2000;   % FC, maximum soil moisture storage [mm]
           0.05,    0.95;% LP, wilting point as fraction of FC [-]
           0 ,   10;     % BETA, non-linearity coefficient of upper zone recharge [-]
-          0 ,   1;      % K0, runoff coefficient from upper zone [d-1], 
+          0 ,   1;      % K0, runoff coefficient from upper zone [d-1] 
           0 ,   4;      % ALPHA, non-linearity coefficient of runoff from upper zone [-]
           0 ,   20;     % PERC, maximum rate of percolation to lower zone [mm/d]
           0 ,   1;      % K1, runoff coefficient from lower zone [d-1]
           1 ,   120];   % MAXBAS, flow routing delay [d]
-      
-      
-% theta = [-3   ,   3;         x % TT [oC].          Def = 
-%           0   ,   7 ;        x % TTI [oC].         Def = 2.00
-%          -x   ,   x ;        x % TTM [oC].         Def = 
-%           0   ,   1;         x % CFR [-].          Def = 0.05
-%           0   ,   20;        x % CFMAX [mm/oC/d].  Def = 3.50
-%           0   ,   0.5;       x % WHC [-].          Def = 0.10
-%           0   ,   4;         x % CFLUX [mm/d].     Def = 1.00
-%           1   ,   2000;      x % FC [mm].          Def = 
-%           0.1 ,   1;          % LP [-].           Def = 
-%           1   ,   6;          % BETA [-].         Def = 2.00
-%           0.0005 ,0.3;       x % K0 [d-1].         Def = 0.0005
-%           0   ,   3;          % ALPHA [-].        Def = 
-%           0   ,   6;         x % PERC [mm/d].      Def = 
-%           0.0005 ,0.3;       x % K1 [d-1].         Def = 
-%           0   ,   x];        x % MAXBAS [d].       Def = 
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'TT, threshold temperature for snowfall [oC]' ...
+                           'TTI, interval length of rain-snow spectrum [oC]' ...
+                           'TTM, threshold temperature for snowmelt [oC]' ...
+                           'CFR, coefficient of refreezing of melted snow [-]' ...
+                           'CFMAX, degree-day factor of snowmelt and refreezing [mm/oC/d]' ...
+                           'WHC, maximum water holding content of snow pack [-]' ...
+                           'CFLUX, maximum rate of capillary rise [mm/d]' ...
+                           'FC, maximum soil moisture storage [mm]' ...
+                           'LP, wilting point as fraction of FC [-]' ...
+                           'BETA, non-linearity coefficient of upper zone recharge [-]' ...
+                           'K0, runoff coefficient from upper zone [d-1]' ...
+                           'ALPHA, non-linearity coefficient of runoff from upper zone [-]' ...
+                           'PERC, maximum rate of percolation to lower zone [mm/d]' ...
+                           'K1, runoff coefficient from lower zone [d-1]' ...
+                           'MAXBAS, flow routing delay [d]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)      

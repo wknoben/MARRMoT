@@ -33,3 +33,22 @@ theta = [1, 2000;    % suzmax, Maximum soil moisture storage in unsatured zone [
          0,1;        % m, Baseflow coefficient [mm-1]
          1, 7.5;     % chi, Gamma distribution parameter [-]
          0.1, 5];    % phi, Gamma distribution parameter [-]
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'suzmax, Maximum soil moisture storage in unsatured zone [mm]' ...
+                           'st, Threshold for flow generation and evap change as fraction of suzmax [-]' ...
+                           'kd, Leakage to saturated zone flow coefficient [mm/d]' ...
+                           'q0, Zero deficit base flow speed [mm/d]' ...
+                           'm, Baseflow coefficient [mm-1]' ...
+                           'chi, Gamma distribution parameter [-]' ...
+                           'phi, Gamma distribution parameter [-]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)     

@@ -23,3 +23,23 @@ theta = [   0,   1;     % h, Maximum fraction of direct runoff [-]
             0,   1;     % kg, Groundwater time parameter [d-1]
             1,  10;     % n, Number of Nash cascade reservoirs [-]
             1, 120];    % n*k, Routing delay [d]
+        
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'h, Maximum fraction of direct runoff [-] ' ...
+                           'y, Infiltration rate [mm/d] ' ...
+                           'smax, Maximum soil moisture storage [mm]' ...
+                           'c, Evaporation reduction coefficient [-]' ...
+                           'g, Groundwater recharge coefficient [-]' ...
+                           'kg, Groundwater time parameter [d-1]' ...
+                           'n, Number of Nash cascade reservoirs [-]' ...
+                           'n*k, Routing delay [d]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)

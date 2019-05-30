@@ -18,15 +18,39 @@ function [ theta ] = m_34_flexis_12p_5s_parameter_ranges( )
 % change? Hydrology and Earth System Sciences Discussions, 20(August), 
 % 4775–4799. http://doi.org/10.5194/hess-2016-427
 
-theta = [1,2000;        % Maximum soil moisture storage [mm]
-         0, 10;         % Unsaturated zone shape parameter [-]
-         0, 1;          % Fast/slow runoff distribution parameter [-]
-         0, 20;         % Maximum percolation rate [mm/d]
-         0.05, 0.95;    % Wilting point as fraction of s1max [-]
-         1, 5;          % Flow delay before fast runoff [d]
-         1, 15;         % Flow delay before slow runoff [d]
-         0, 1;          % Fast runoff coefficient [d-1]
-         0, 1;          % Slow runoff coefficient [d-1]
-         0, 5;          % Maximum interception storage [mm]
-        -3, 5;          % Threshold temperature for snowfall/snowmelt [oC]
-         0, 20];        % Degree-day factor for snowmelt [mm/d/oC]
+theta = [1,2000;        % URmax, Maximum soil moisture storage [mm]
+         0, 10;         % beta, Unsaturated zone shape parameter [-]
+         0, 1;          % D, Fast/slow runoff distribution parameter [-]
+         0, 20;         % PERCmax, Maximum percolation rate [mm/d]
+         0.05, 0.95;    % Lp, Wilting point as fraction of s1max [-]
+         1, 5;          % Nlagf, Flow delay before fast runoff [d]
+         1, 15;         % Nlags, Flow delay before slow runoff [d]
+         0, 1;          % Kf, Fast runoff coefficient [d-1]
+         0, 1;          % Ks, Slow runoff coefficient [d-1]
+         0, 5;          % Imax, Maximum interception storage [mm]
+        -3, 5;          % TT, Threshold temperature for snowfall/snowmelt [oC]
+         0, 20];        % ddf, Degree-day factor for snowmelt [mm/d/oC]
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'URmax, Maximum soil moisture storage [mm]' ...
+                           'beta, Unsaturated zone shape parameter [-]' ...
+                           'D, Fast/slow runoff distribution parameter [-]' ...
+                           'PERCmax, Maximum percolation rate [mm/d]' ...
+                           'Lp, Wilting point as fraction of s1max [-]' ...
+                           'Nlagf, Flow delay before fast runoff [d]' ...
+                           'Nlags, Flow delay before slow runoff [d]' ...
+                           'Kf, Fast runoff coefficient [d-1]' ...
+                           'Ks, Slow runoff coefficient [d-1]' ...
+                           'Imax, Maximum interception storage [mm]' ...
+                           'TT, Threshold temperature for snowfall/snowmelt [oC]' ...
+                           'ddf, Degree-day factor for snowmelt [mm/d/oC]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)     

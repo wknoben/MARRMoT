@@ -24,3 +24,23 @@ theta = [
             0, 1;           % dpf, Baseflow time coefficient [d-1]
             1, 300];        % sdrmax, Threshold before baseflow can occur [mm]
 
+   
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'c, Recharge time coeffcient [d-1]' ...
+                           'ndc, Threshold fraction of Smax [-]' ...
+                           'smax, Maximum soil moisture storage [mm]' ...
+                           'emax, Maximum evaporation flux [mm/d]' ...
+                           'frate, Maximum infiltration rate [mm/d]' ...
+                           'b, Fraction of subsurface flow that is baseflow [-]' ...
+                           'dpf, Baseflow time coefficient [d-1]' ...
+                           'sdrmax, Threshold before baseflow can occur [mm]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)

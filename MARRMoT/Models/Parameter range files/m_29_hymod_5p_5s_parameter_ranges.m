@@ -14,8 +14,25 @@ function [ theta ] = m_29_hymod_5p_5s_parameter_ranges( )
 % V., & Sorooshian, S. (2001). A framework for development and application 
 % of hydrological models. Hydrology and Earth System Sciences, 5, 13–26.
 
-theta = [1  , 2000;     % Smax, Maximum soil moisture storage     [mm], 
+theta = [1  , 2000;     % Smax, Maximum soil moisture storage [mm], 
          0  , 10;       % b, Soil depth distribution parameter [-]
          0  , 1;        % a, Runoff distribution fraction [-]
          0  , 1;        % kf, base flow time parameter [d-1]
          0  , 1];       % ks, base flow time parameter [d-1]
+     
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'Smax, Maximum soil moisture storage [mm], ' ...
+                           'b, Soil depth distribution parameter [-]' ...
+                           'a, Runoff distribution fraction [-]' ...
+                           'kf, base flow time parameter [d-1]' ...
+                           'ks, base flow time parameter [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)

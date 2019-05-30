@@ -23,6 +23,25 @@ theta = [1   , 2000;    % lp, Wilting point [mm]
          1   , 2000;    % d, Threshold for flow generation [mm]
          0   , 10;      % p, Flow response non-linearity [-]
          0   , 1;       % alpha, Fast/slow flow division [-]
-         1   , 5;       % tau_q, Fast flow routing delay [d]
-         1   , 15;      % tau_s, Slow flow routing delay [d]
+         1   , 700;     % tau_q, Fast flow routing delay [d]
+         1   , 700;     % tau_s, Slow flow routing delay [d]
          0   , 119];    % tau_d, flow delay [d]
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'lp, Wilting point [mm]' ...
+                           'd, Threshold for flow generation [mm]' ...
+                           'p, Flow response non-linearity [-]' ...
+                           'alpha, Fast/slow flow division [-]' ...
+                           'tau_q, Fast flow routing delay [d]' ...
+                           'tau_s, Slow flow routing delay [d]' ...
+                           'tau_d, flow delay [d]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)     

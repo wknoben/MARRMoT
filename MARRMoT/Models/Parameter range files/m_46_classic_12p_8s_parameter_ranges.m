@@ -13,13 +13,37 @@ function [ theta ] = m_46_classic_12p_8s_parameter_ranges( )
 
 theta = [   0, 1;       % fap, Fraction of catchment area that has permeable soils [-]
             0.01, 0.99; % fdp, Fraction of depth of permeable soil that is store Px [-]
-            1, 2000;    % Depth of permeable soil [mm]
-            0, 1;       % Runoff coefficient for permeable soil [d-1]
-            0, 1;       % Fraction of Ps that infiltrates into semi-permeable soil [-]
-            0, 1;       % Fraction of (1-fap) that is fas [-]
+            1, 2000;    % dp, Depth of permeable soil [mm]
+            0, 1;       % cq, Runoff coefficient for permeable soil [d-1]
+            0, 1;       % d1, Fraction of Ps that infiltrates into semi-permeable soil [-]
+            0, 1;       % fas, Fraction of (1-fap) that is fas [-]
             0.01, 0.99; % fds, Fraction of depth of semi-permeable soil that is store Sx [-]
-            1, 2000;    % Depth of semi-permeable soil [mm]
-            0, 1;       % Fraction effective precipitation in semi-permeable soils that goes to quick flow [-]
-            0, 1;       % Quick runoff coefficient for semi-permeable soil [d-1]
-            0, 1;       % Slow runoff coefficient for semi-permeable soil [d-1]
-            0, 1];      % Runoff coefficient for impermeable soil [d-1]
+            1, 2000;    % ds, Depth of semi-permeable soil [mm]
+            0, 1;       % d2, Fraction effective precipitation in semi-permeable soils that goes to quick flow [-]
+            0, 1;       % cxq, Quick runoff coefficient for semi-permeable soil [d-1]
+            0, 1;       % cxs, Slow runoff coefficient for semi-permeable soil [d-1]
+            0, 1];      % cu, Runoff coefficient for impermeable soil [d-1]
+        
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'fap, Fraction of catchment area that has permeable soils [-]' ...
+                           'fdp, Fraction of depth of permeable soil that is store Px [-]' ...
+                           'dp, Depth of permeable soil [mm]' ...
+                           'cq, Runoff coefficient for permeable soil [d-1]' ...
+                           'd1, Fraction of Ps that infiltrates into semi-permeable soil [-]' ...
+                           'fas, Fraction of (1-fap) that is fas [-]' ...
+                           'fds, Fraction of depth of semi-permeable soil that is store Sx [-]' ...
+                           'ds, Depth of semi-permeable soil [mm]' ...
+                           'd2, Fraction effective precipitation in semi-permeable soils that goes to quick flow [-]' ...
+                           'cxq, Quick runoff coefficient for semi-permeable soil [d-1]' ...
+                           'cxs, Slow runoff coefficient for semi-permeable soil [d-1]' ...
+                           'cu, Runoff coefficient for impermeable soil [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)

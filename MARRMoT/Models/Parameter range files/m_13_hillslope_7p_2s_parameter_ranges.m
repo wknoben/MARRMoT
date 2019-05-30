@@ -18,3 +18,22 @@ theta = [0   , 5;      % Dw, interception capacity [mm]
          1   , 120;    % th, time delay for routing [d]
          0   , 4;      % c, capillary rise [mm/d]
          0   , 1];     % kw, base flow time parameter [d-1]
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'Dw, interception capacity [mm]' ...
+                           'Betaw, soil misture distribution parameter [-]' ...
+                           'Swmax, soil misture depth [mm]' ...
+                           'a, surface/groundwater division [-]' ...
+                           'th, time delay for routing [d]' ...
+                           'c, capillary rise [mm/d]' ...
+                           'kw, base flow time parameter [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)     

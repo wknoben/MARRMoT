@@ -15,5 +15,22 @@ function [ theta ] = m_08_us1_5p_2s_parameter_ranges( )
 theta = [0   , 1;       % Alpha_ei, Fraction of intercepted rainfall [-]
          0.05, 0.95;    % M, Fraction forest [-]
          1   , 2000;    % Smax, Maximum soil moisture [mm]
-         0.01, 1;       % fc, Field capacity as fraction of Smax [-]
+         0.05, 0.95;    % fc, Field capacity as fraction of Smax [-]
          0   , 1];      % Alpha_ss, Subsurface routing delay [d-1]
+
+% Display an overview and warning      
+txt = array2table(theta);
+txt.Properties.VariableNames = {'min' 'max'};
+txt.Properties.RowNames = {'Alpha_ei, Fraction of intercepted rainfall [-]' ...
+                           'M, Fraction forest [-]' ...
+                           'Smax, Maximum soil moisture [mm]' ...
+                           'fc, Field capacity as fraction of Smax [-]' ...
+                           'Alpha_ss, Subsurface routing delay [d-1]'};
+str = mfilename;                       
+str(end-16:end) = [];
+
+disp('---')
+disp(['Overview of currently used parameter ranges for ',str,'.'])
+disp('In the model parameter range files you can: (1) disable this warning, (2) adjust these ranges.')
+disp('Please note that the MARRMoT default ranges are optional and not necessarily appropriate for your problem.')
+disp(txt)     

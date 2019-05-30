@@ -80,6 +80,7 @@ In addition to a range of unnamed models, the following models provided inspirat
 MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for details.
 
 ## DOIs of previous releases
+- v1.1: dx.doi.org/10.5281/zenodo.2677728 
 - v1.0: dx.doi.org/10.5281/zenodo.2482542 
 
 ## Acknowledgements

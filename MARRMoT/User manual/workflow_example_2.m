@@ -1,5 +1,5 @@
 % This file is part of the Modular Assessment of Rainfall-Runoff Models 
-% Toolbox (MARRMoT) – User manual. It contains an example application of a
+% Toolbox (MARRMoT) â€“ User manual. It contains an example application of a
 % single model to a single catchment. See section 3 in the User Manual 
 % for details.
 % 
@@ -46,7 +46,7 @@ model_range = feval([model,'_parameter_ranges']);                           % Ca
 
 % Initial storage values
 % NOTE: see the model function for the order in which stores are given. For
-% HyMOD, this is on lines 65-69.
+% HyMOD, this is on lines 86-91.
 
 input_s0       = [ 1;                                                       % Initial soil moisture storage [mm]
                    7;                                                       % Initial fast flow 1 storage [mm]

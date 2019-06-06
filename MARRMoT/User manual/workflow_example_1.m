@@ -1,5 +1,5 @@
 % This file is part of the Modular Assessment of Rainfall-Runoff Models 
-% Toolbox (MARRMoT) – User manual. It contains an example application of a
+% Toolbox (MARRMoT) â€“ User manual. It contains an example application of a
 % single model to a single catchment. See section 3 in the User Manual 
 % for details.
 % 
@@ -44,7 +44,7 @@ model = 'm_29_hymod_5p_5s';
 % descriptions (supplementary materials to the main paper). Alternatively,
 % the parameters are described in each model function. Right-click the
 % model name above (i.e. 'm_29_hymod_5p_5s') and click 
-% "Open 'm_29_hymod_5p_5s'". Parameters are listed on lines 58-62.
+% "Open 'm_29_hymod_5p_5s'". Parameters are listed on lines 44-50.
 
 input_theta     = [ 35;                                                     % Soil moisture depth [mm]
                      3.7;                                                   % Soil depth distribution parameter [-]
@@ -54,7 +54,7 @@ input_theta     = [ 35;                                                     % So
 
 % Initial storage values
 % NOTE: see the model function for the order in which stores are given. For
-% HyMOD, this is on lines 65-69.
+% HyMOD, this is on lines 86-91.
 
 input_s0       = [15;                                                       % Initial soil moisture storage [mm]
                    7;                                                       % Initial fast flow 1 storage [mm]

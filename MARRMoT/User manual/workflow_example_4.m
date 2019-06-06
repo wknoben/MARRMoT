@@ -87,7 +87,7 @@ of_name      = 'of_KGE';                                                    % Th
 % after which the objective function is calculated. For brevity, this step 
 % is ignored in this example and the full calibration and evaluation 
 % periods are used to calculate the objective function. Initial storages
-% are estimated as 0 (see line 57 of this script).
+% are estimated as 0 (see line 60 of this script).
 time_cal_start  = 1;
 time_cal_end    = 730;
 time_eval_start = 731;
@@ -101,7 +101,7 @@ time_eval_end   = 1461;
 % output.Q. The auxiliary function 'workflow_calibrationAssist' takes our
 % specified model, inputs and a parameter set, runs the model and returns
 % just simulated flow. The returned variable is used to optimize the
-% parameter values. See lines 110-139.
+% parameter values. See lines 113-142.
 
 % Create temporary calibration time series
 input_climate_cal.precip  = input_climatology.precip(time_cal_start:time_cal_end);

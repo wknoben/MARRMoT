@@ -46,7 +46,7 @@ This paper, its Supporting Material and the User Manual cover the following topi
 - **Supporting Material (section 3)**: translation of constitutive functions (fluxes) to Matlab code
 - **Supporting Material (section 4)**: overview of Unit Hydrograph code
 - **Supporting Material (section 5)**: rationale behind generalised parameter ranges (use of these ranges is optional)
-- **User Manual**: covers a variety of topics including (i) understanding model files, (ii) application examples, (iii) creating a new model or flux function, and (iv) Octave-specific instructions. https://github.com/wknoben/MARRMoT/blob/master/User%20Manual%20v1.2.pdf
+- **User Manual**: covers a variety of topics including (i) understanding model files, (ii) application examples, (iii) creating a new model or flux function, and (iv) Octave-specific instructions. https://github.com/wknoben/MARRMoT/blob/master/MARRMoT%20User%20manual%20v1.2.pdf
 
 ## Model structure summary
 MARRMoT model structures are based on a wide variety of different models. 

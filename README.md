@@ -40,13 +40,13 @@ The User Manual provides further details.
 The article describing MARRMoT development will soon be submitted to the scientific journal 'Geoscientific Model Development'.
 This paper, its Supporting Material and the User Manual cover the following topics:
 
-- **Paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. https://doi.org/10.5194/gmd-2018-332
-- **Supporting Material (full)**: https://www.geosci-model-dev-discuss.net/gmd-2018-332/gmd-2018-332-supplement.pdf
+- **Paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. https://doi.org/10.5194/gmd-12-2463-2019
+- **Supporting Material (full)**: https://www.geosci-model-dev.net/12/2463/2019/gmd-12-2463-2019-supplement.pdf
 - **Supporting Material (section 2)**: detailed description of each model structure, giving Ordinary Differential Equations and constitutive functions for each model store
 - **Supporting Material (section 3)**: translation of constitutive functions (fluxes) to Matlab code
 - **Supporting Material (section 4)**: overview of Unit Hydrograph code
 - **Supporting Material (section 5)**: rationale behind generalised parameter ranges (use of these ranges is optional)
-- **User Manual**: covers a variety of topics including (i) understanding model files, (ii) application examples, (iii) creating a new model or flux function, and (iv) Octave-specific instructions. https://github.com/wknoben/MARRMoT/blob/master/User%20Manual%20v1.0.pdf
+- **User Manual**: covers a variety of topics including (i) understanding model files, (ii) application examples, (iii) creating a new model or flux function, and (iv) Octave-specific instructions. https://github.com/wknoben/MARRMoT/blob/master/User%20Manual%20v1.2.pdf
 
 ## Model structure summary
 MARRMoT model structures are based on a wide variety of different models. 
@@ -80,6 +80,7 @@ In addition to a range of unnamed models, the following models provided inspirat
 MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for details.
 
 ## DOIs of previous releases
+- v1.1: dx.doi.org/10.5281/zenodo.2677728
 - v1.0: dx.doi.org/10.5281/zenodo.2482542 
 
 ## Acknowledgements

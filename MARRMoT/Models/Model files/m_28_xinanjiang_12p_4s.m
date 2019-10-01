@@ -9,10 +9,10 @@ function [ fluxOutput, fluxInternal, storeInternal, waterBalance ] = ...
 % Model reference
 % Jayawardena, A. W., & Zhou, M. C. (2000). A modified spatial soil moisture
 % storage capacity distribution curve for the Xinanjiang model. Journal of 
-% Hydrology, 227(1-4), 93–113. http://doi.org/10.1016/S0022-1694(99)00173-0
+% Hydrology, 227(1-4), 93â€“113. http://doi.org/10.1016/S0022-1694(99)00173-0
 % 
 % Zhao, R.-J. (1992). The Xinanjiang model applied in China. Journal of 
-% Hydrology, 135(1-4), 371–381. http://doi.org/10.1016/0022-1694(92)90096-E
+% Hydrology, 135(1-4), 371â€“381. http://doi.org/10.1016/0022-1694(92)90096-E
 
 
 % Steps
@@ -53,7 +53,7 @@ flm  = theta(6);     % Fraction of wmax that is LM [-]
 c    = theta(7);     % Fraction of LM for second evaporation change [-]
 ex   = theta(8);     % Free water distribution shape parameter [-]
 ki   = theta(9);     % Free water interflow parameter [d-1]
-fkg  = theta(10);    % Fraction of (1-ki) that is kg [-] (prevents overdraining of store)
+kg   = theta(10);    % Free water baseflow parameter [d-1]
 ci   = theta(11);    % Interflow time coefficient [d-1]
 cg   = theta(12);    % Baseflow time coefficient [d-1]
 
@@ -61,7 +61,6 @@ cg   = theta(12);    % Baseflow time coefficient [d-1]
 wmax = fwmx*stot;    % Maximum tension water depth [mm]
 smax = (1-fwmx)*stot;% Maximum free water depth [mm]
 lm   = flm*wmax;     % Tension water threshold for evaporation change [mm]
-kg   = fkg*(1-ki);   % Free water baseflow paramete [d-1]
 
 %%INITIALISE MODEL STORES
 S10  = storeInitial(1);       % Initial tension water storage

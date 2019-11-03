@@ -18,7 +18,7 @@ function [func] = interflow_9(~)
 %
 % WK, 09/10/2018
 
-func = @(S,p1,p2,p3,dt)  min((S-p2)/dt,(p1.*max(S-p2,0)).^p3);
+func = @(S,p1,p2,p3,dt)  min(max((S-p2)/dt,0),(p1.*max(S-p2,0)).^p3);
 
 end
 

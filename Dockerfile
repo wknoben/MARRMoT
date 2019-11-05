@@ -1,9 +1,8 @@
 FROM python:3
 LABEL maintainer="Stefan Verhoeven <s.verhoeven@esciencecenter.nl>"
 
-# Install octave 4.4.x, Octave packages from Octave forge
-RUN echo deb http://deb.debian.org/debian stretch-backports main > /etc/apt/sources.list.d/stretch-backports.list && \
-apt update && apt install -t stretch-backports -y python3-pip octave liboctave-dev libnetcdf-dev && \
+# Install octave 4.4.x and MARRMoT dependencies
+RUN apt update && apt install -y python3-pip octave liboctave-dev libnetcdf-dev && \
 octave --eval 'pkg install -verbose -forge netcdf io struct statistics optim' && \
 echo 'pkg load optim' >> /usr/share/octave/site/m/startup/octaverc
 

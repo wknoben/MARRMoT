@@ -127,19 +127,22 @@ classdef marrmotBMI_oct < handle
                 case 'Ep'
                     output = obj.forcing.pet;
                 case 'S(t)'
-                    output = obj.store_cur;
-                case 'mod'
-                    output = obj.model_name;
+                    output = [obj.store_cur];
                 case 'par'
-                    output = obj.parameters;
-                case 'sol'
-                    output = obj.solver;
-                case 'flux_out'
-                    output = obj.output_externalFluxes;
-                case 'flux_in'
-                    output = obj.output_internalFluxes;
+                    output = [obj.parameters];
+                case 'sol_resnorm_tolerance'
+                    output = [obj.solver.resnorm_tolerance];
+                case 'sol_resnorm_maxiter'
+                    output = [obj.solver.resnorm_maxiter];
+                case 'flux_out_Q'
+                    output = [obj.output_externalFluxes.Q];
+                case 'flux_out_Ea'
+                    output = [obj.output_externalFluxes.Ea];
+                % TODO: this model has no internal fluxes, to be implemented for other models
+                % case 'flux_in_tmp'
+                    % output = [obj.output_internalFluxes.tmp];
                 case 'wb'
-                    output = obj.output_waterBalance;
+                    output = [obj.output_waterBalance];
                 otherwise
                     error('unkown variable');
             end
@@ -163,19 +166,21 @@ classdef marrmotBMI_oct < handle
                 case 'Ep'
                     obj.forcing.pet = src;
                 case 'S(t)'
-                    obj.store_cur = src;
-                case 'mod'
-                    obj.model_name = src;
+                    obj.store_cur = src(1);
                 case 'par'
-                    obj.parameters = src;
-                case 'sol'
-                    obj.solver = src;
-                case 'flux_out'
-                    obj.output_externalFluxes = src;
-                case 'flux_in'
-                    obj.output_internalFluxes = src;
+                    obj.parameters = src(1);
+                case 'sol_tolerance'
+                    obj.solver.resnorm_tolerance = src(1);
+                case 'sol_maxiter'
+                    obj.solver.resnorm_maxiter = src(1);
+                case 'Q'
+                    obj.output_externalFluxes.Q = src(1);
+                case 'Ea'
+                    obj.output_externalFluxes.Ea = src(1);
+                case 'tmp'
+                    obj.output_internalFluxes.tmp = src(1);
                 case 'wb'
-                    obj.output_waterBalance = src;
+                    obj.output_waterBalance = src(1);
                 otherwise
                     error('unkown variable');
             end
@@ -212,7 +217,7 @@ classdef marrmotBMI_oct < handle
         
         % Model components
         function output = get_component_name(obj)
-            output=['BMI implemented for MARRMoT models, currently running ',obj.model_name];
+            output=["MARRMoT ", obj.model_name, " ", obj.solver.name];
         end
         
 %% Time functions        

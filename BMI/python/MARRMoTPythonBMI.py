@@ -75,12 +75,15 @@ class MARRMoTPythonBMI(BMI):
 
     def get_value(self, varName):
         commandString = 'model.get_value("' + varName + '")'
-        return octave.eval(commandString)
-    
+        value = octave.eval(commandString)
+        if type(value) is np.ndarray:
+            return value
+        else:
+            return np.array([value])
+            
     def get_value_ptr(self, varName):
-        commandString = 'model.get_value_ptr("' + varName + '")'
-        return octave.eval(commandString)
-
+        raise NotImplementedError("Reference cannot be transmitted from Octave to Python")
+        
     def get_value_at_indices(self, varName, indices):
         # temporary fix since get_value_at_indices doesn't work with indices input and MARRMoT do not have grids
         if str(indices) != '[0, 0]':

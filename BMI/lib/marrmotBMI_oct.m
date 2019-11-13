@@ -169,16 +169,17 @@ classdef marrmotBMI_oct < handle
                     obj.store_cur = src(1);
                 case 'par'
                     obj.parameters = src(1);
-                case 'sol_tolerance'
+                case 'sol_resnorm_tolerance'
                     obj.solver.resnorm_tolerance = src(1);
-                case 'sol_maxiter'
+                case 'sol_resnorm_maxiter'
                     obj.solver.resnorm_maxiter = src(1);
-                case 'Q'
+                case 'flux_out_Q'
                     obj.output_externalFluxes.Q = src(1);
-                case 'Ea'
+                case 'flux_out_Ea'
                     obj.output_externalFluxes.Ea = src(1);
-                case 'tmp'
-                    obj.output_internalFluxes.tmp = src(1);
+                % TODO: this model has no internal fluxes, to be implemented for other models    
+                % case 'tmp'
+                %     obj.output_internalFluxes.tmp = src(1);
                 case 'wb'
                     obj.output_waterBalance = src(1);
                 otherwise
@@ -198,13 +199,18 @@ classdef marrmotBMI_oct < handle
         
         % Get input variable names
         function output = get_input_var_names(obj)
-            output={'Precipitation time series > P',... 
-                    'Temperature time series > T',...
-                    'Potential evapotranspiration time series > Ep',...
-                    'Storages (time = t) > S(t)',...
-                    'Model function name > mod',...
-                    'Parameters > par',...
-                    'Solver > sol'};
+            % output={'Precipitation time series > P',... 
+            %         'Temperature time series > T',...
+            %         'Potential evapotranspiration time series > Ep',...
+            %         'Storages (time = t) > S(t)',...
+            %         'Model function name > mod',...
+            %         'Parameters > par',...
+            %         'Solver > sol'};
+            output={
+                'P', 'T', 'Ep', 'S(t)', 'par', 'sol_resnorm_tolerance',...
+                'sol_resnorm_maxiter', 'flux_out_Q', 'flux_out_Ea',...
+                'wb'
+            }
         end
         
         % Get output variable names

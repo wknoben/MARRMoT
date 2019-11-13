@@ -327,20 +327,22 @@ classdef marrmotBMI_oct < handle
                     output = ['mm ',obj.time_unit];
                 case 'S(t)'
                     output = 'mm';
-                case 'mod'
-                    output = '-';
                 case 'par'
                     output = 'see model documentation';
-                case 'sol'
+                case 'sol_resnorm_tolerance'
                     output = '-';
-                case 'flux_out'
+                case 'sol_resnorm_maxiter'
+                    output = '-';
+                case 'flux_out_Q'
                     output = ['mm ',obj.time_unit];
-                case 'flux_in'
+                case 'flux_out_Ea'
+                    output = ['mm ',obj.time_unit];
+                case 'flux_in_tmp'
                     output = ['mm ',obj.time_unit];
                 case 'wb'
                     output = 'mm';
                 otherwise
-                    error('unkown variable. please use one of the following variables: P, T, Ep, S, mod, par, sol, f;ux_out, flux_in, wb');
+                    error('unkown variable');
             end
         end
         

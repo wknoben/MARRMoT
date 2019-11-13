@@ -469,24 +469,28 @@ classdef marrmotBMI_oct < handle
                     tmp = obj.store_cur;
                     tmp = whos('tmp');
                     output = tmp.bytes;
-                case 'mod'
-                    tmp = obj.model_name;
-                    tmp = whos('tmp');
-                    output = tmp.bytes;
                 case 'par'
                     tmp = obj.parameters;
                     tmp = whos('tmp');
                     output = tmp.bytes;
-                case 'sol'
-                    tmp = obj.solver;
+                case 'sol_resnorm_tolerance'
+                    tmp = obj.solver.resnorm_tolerance;
                     tmp = whos('tmp');
                     output = tmp.bytes;
-                case 'flux_out'
-                    tmp = obj.output_externalFluxes;
+                case 'sol_resnorm_maxiter'
+                    tmp = obj.solver.resnorm_maxiter;
                     tmp = whos('tmp');
                     output = tmp.bytes;
-                case 'flux_in'
-                    tmp = obj.output_internalFluxes;
+                case 'flux_out_Q'
+                    tmp = obj.output_externalFluxes.Q;
+                    tmp = whos('tmp');
+                    output = tmp.bytes;
+                case 'flux_out_Ea'
+                    tmp = obj.output_externalFluxes.Ea;
+                    tmp = whos('tmp');
+                    output = tmp.bytes;
+                case 'flux_in_tmp'
+                    tmp = obj.output_internalFluxes.tmp;
                     tmp = whos('tmp');
                     output = tmp.bytes;
                 case 'wb'

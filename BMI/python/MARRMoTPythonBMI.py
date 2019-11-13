@@ -32,7 +32,7 @@ class MARRMoTPythonBMI(BMI):
         return octave.eval('model.get_input_var_names()')
 
     def get_output_var_names(self):
-        return octave.eval('model.get_output_var_names()')
+        return octave.eval('model.get_output_var_names()').tolist()[0]
 
     def get_var_grid(self, gridType):
         commandString = 'model.get_var_grid("' + gridType + '")'

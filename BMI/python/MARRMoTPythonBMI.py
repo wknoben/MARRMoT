@@ -93,11 +93,11 @@ class MARRMoTPythonBMI(BMI):
             return octave.eval(commandString)
  
     def set_value(self, varName, src):
-        commandString = "model.set_value(" + varName + "," + np.array2string(src) + ")"
+        commandString = "model.set_value('" + varName + "'," + np.array2string(src) + ")"
         return octave.eval(commandString)
 
     def set_value_at_indices(self, varName, indices, src):
-        commandString = "model.set_value_at_indices(" + varName + "," + np.array2string(indices) + "," + np.array2string(src)+ ")"
+        commandString = "model.set_value_at_indices('" + varName + "'," + np.array2string(indices) + "," + np.array2string(src)+ ")"
         return octave.eval(commandString)
 
     # Grid information

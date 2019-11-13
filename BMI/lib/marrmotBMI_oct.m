@@ -281,22 +281,22 @@ classdef marrmotBMI_oct < handle
 
         % Grid rank
         function output = get_grid_rank(~)
-            output = 2;                             % Fixed for all MARRMoT models
+            output = int32(2);                             % Fixed for all MARRMoT models
         end
         
         % Grid size
         function output = get_grid_size(~)
-            output = 1;                             % Fixed for all MARRMoT models
+            output = int32(1);                             % Fixed for all MARRMoT models
         end
         
         % Grid shape
         function output = get_grid_shape(~)
-            output = [1,1];                         % Fixed for all MARRMoT models
+            output = [int32(1), int32(1)];                         % Fixed for all MARRMoT models
         end
         
         % Grid origin
         function output = get_grid_origin(obj)
-            output = [obj.lat,obj.lon];             
+            output = [obj.lon,obj.lat];
         end
         
         % Grid spacing
@@ -305,18 +305,18 @@ classdef marrmotBMI_oct < handle
         end
         
         % Grid X
-        function output = get_grid_x(~)
-            output = 1;                              % Fixed for all MARRMoT models
+        function output = get_grid_x(obj)
+            output = [obj.lon];
         end
         
         % Grid Y
-        function output = get_grid_y(~)
-            output = 1;                              % Fixed for all MARRMoT models
+        function output = get_grid_y(obj)
+            output = [obj.lat];
         end
         
         % Grid Z
         function output = get_grid_z(~)
-            output = 1;                              % Fixed for all MARRMoT models
+            output = [];                              % Fixed for all MARRMoT models
         end
 
  
@@ -379,7 +379,7 @@ classdef marrmotBMI_oct < handle
                     tmp = obj.solver.resnorm_tolerance;
                     tmp = whos('tmp');
                     output = tmp.class;
-                case 'resnorm_maxiter'
+                case 'sol_resnorm_maxiter'
                     tmp = obj.solver.resnorm_maxiter;
                     tmp = whos('tmp');
                     output = tmp.class;
@@ -392,7 +392,7 @@ classdef marrmotBMI_oct < handle
                     tmp = whos('tmp');
                     output = tmp.class;
                 case 'flux_in_tmp'
-                    tmp = obj.output_internalFluxes;
+                    tmp = obj.output_internalFluxes.tmp;
                     tmp = whos('tmp');
                     output = tmp.class;
                 case 'wb'
@@ -510,7 +510,7 @@ classdef marrmotBMI_oct < handle
 
         % Grid
         function output = get_var_grid(obj,long_var_name)
-            output = 1;                 % Grid size is 1 for all models, so arbitrary values
+            output = int32(1);                 % Grid size is 1 for all models, so arbitrary values
         end
         
         % Location

@@ -6,8 +6,6 @@ from BMI import BMI
 import numpy as np
 
 
-
-
 class MARRMoTPythonBMI(BMI):
     def __init__(self,MARRMoTLoc=None):
         self._name = "MARRMoTPythonBMI"
@@ -34,8 +32,8 @@ class MARRMoTPythonBMI(BMI):
     def get_output_var_names(self):
         return octave.eval('model.get_output_var_names()').tolist()[0]
 
-    def get_var_grid(self, gridType):
-        commandString = 'model.get_var_grid("' + gridType + '")'
+    def get_var_grid(self, varName):
+        commandString = 'model.get_var_grid("' + varName + '")'
         return octave.eval(commandString)
 
     def get_var_type(self, varName):
@@ -48,11 +46,11 @@ class MARRMoTPythonBMI(BMI):
 
     def get_var_itemsize(self, itemName):
         commandString = 'model.get_var_itemsize("' + itemName + '")'
-        return octave.eval(commandString)
+        return int(octave.eval(commandString))
 
     def get_var_nbytes(self, varName):
         commandString = 'model.get_var_nbytes("' + varName + '")'
-        return octave.eval(commandString)
+        return int(octave.eval(commandString))
 
     def get_var_location(self, varName):
         commandString = 'model.get_var_location("' + varName + '")'
@@ -101,53 +99,61 @@ class MARRMoTPythonBMI(BMI):
         return octave.eval(commandString)
 
     # Grid information
-    def get_grid_rank(self):
-        return octave.eval('model.get_grid_rank()')
+    def get_grid_rank(self, grid_id):
+        return octave.eval('model.get_grid_rank(' + str(grid_id) + ')')
 
 
-    def get_grid_size(self):
-        return octave.eval('model.get_grid_size()')
+    def get_grid_size(self, grid_id):
+        return octave.eval('model.get_grid_size(' + str(grid_id) + ')')
 
 
-    def get_grid_type(self):
-        return octave.eval('model.get_grid_type()')
+    def get_grid_type(self, grid_id):
+        return octave.eval('model.get_grid_type(' + str(grid_id) + ')')
 
     # Uniform rectilinear
-    def get_grid_shape(self):
-        return octave.eval('model.get_grid_shape()')
+    def get_grid_shape(self, grid_id):
+        return octave.eval('model.get_grid_shape(' + str(grid_id) + ')').flatten()
 
-    def get_grid_spacing(self):
-        return octave.eval('model.get_grid_spacing()')
+    def get_grid_spacing(self, grid_id):
+        return octave.eval('model.get_grid_spacing(' + str(grid_id) + ')').flatten()
 
-    def get_grid_origin(self):
-        return octave.eval('model.get_grid_origin()')
+    def get_grid_origin(self, grid_id):
+        return octave.eval('model.get_grid_origin(' + str(grid_id) + ')').flatten()
 
     # Non-uniform rectilinear, curvilinear
-    def get_grid_x(self):
-        return octave.eval('model.get_grid_x()')
+    def get_grid_x(self, grid_id):
+        value = octave.eval('model.get_grid_x(' + str(grid_id) + ')')
+        # oct2py converts single value vectors to scalars, while bmi expects list
+        if type(value) is float:
+            return [value]
+        return value
 
-    def get_grid_y(self):
-        return octave.eval('model.get_grid_y()')
+    def get_grid_y(self, grid_id):
+        value = octave.eval('model.get_grid_y(' + str(grid_id) + ')')
+        # oct2py converts single value vectors to scalars, while bmi expects list
+        if type(value) is float:
+            return [value]
+        return value
 
-    def get_grid_z(self):
-        return octave.eval('model.get_grid_z()')
+    def get_grid_z(self, grid_id):
+        return octave.eval('model.get_grid_z(' + str(grid_id) + ')')
 
    #not implemented in MARRMoT (all MARRMoT models have no grid)
 
-    def get_grid_node_count(self):
+    def get_grid_node_count(self, grid_id):
         return "grids not implemented yet"
 
-    def get_grid_edge_count(self):
+    def get_grid_edge_count(self, grid_id):
         return "grids not implemented yet"
 
-    def get_grid_face_count(self):
+    def get_grid_face_count(self, grid_id):
         return "grids not implemented yet"
 
-    def get_grid_edge_nodes(self):
+    def get_grid_edge_nodes(self, grid_id):
         return "grids not implemented yet"
 
-    def get_grid_face_nodes(self):
+    def get_grid_face_nodes(self, grid_id):
         return "grids not implemented yet"
 
-    def get_grid_nodes_per_face(self):
+    def get_grid_nodes_per_face(self, grid_id):
         return "grids not implemented yet"

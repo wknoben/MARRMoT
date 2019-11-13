@@ -29,7 +29,7 @@ class MARRMoTPythonBMI(BMI):
         return octave.eval('model.get_component_name()')
 
     def get_input_var_names(self):
-        return octave.eval('model.get_input_var_names()')
+        return octave.eval('model.get_input_var_names()').tolist()[0]
 
     def get_output_var_names(self):
         return octave.eval('model.get_output_var_names()').tolist()[0]

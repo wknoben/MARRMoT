@@ -1,5 +1,10 @@
 This file highlights the most important changes made during version updates. The changes listed here are limited to those changes that directly impact model code. Changes to comments or workflow example files are not included.
 
+=== v1.3 ===
+Updated from v1.2 to v1.3 to incorporate a bug fix in 'interflow_9'. Main changes:
+
+- Added a missing constraint for non-negativity to 'interflow_9'.
+
 === v1.2 ===
 Updated from v1.1 to v1.2 to incorporate some important user feedback about communication of parameter ranges. Main changes:
 

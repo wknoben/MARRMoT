@@ -1,8 +1,6 @@
 # MARRMoT
 Modular Assessment of Rainfall-Runoff Models Toolbox - Matlab code for 46 conceptual hydrologic models.
 
-Please note that the master branch of this repo has been updated compared to the peer-reviewed MARRMoT v1.1. Of note is a recent bug fix in the flux-file 'interflow_9'. See history: https://github.com/wknoben/MARRMoT/commit/fd81bb5a68d56c513e87185afe831d85e3be9755
-
 <p align="center">
 <img src="Figures/logo.jpg" alt="MARRMoT logo" width="200"/>
 </p>

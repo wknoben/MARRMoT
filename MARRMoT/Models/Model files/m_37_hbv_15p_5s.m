@@ -286,22 +286,22 @@ end
 
 %% 6. Generate outputs
     % --- Fluxes leaving the model ---
-    fluxOutput.Ea     = flux_ea;
-    fluxOutput.Q      = flux_qt;
+    fluxOutput.Ea     = flux_ea * delta_t;
+    fluxOutput.Q      = flux_qt * delta_t;
     
     % --- Fluxes internal to the model ---
-    fluxInternal.sf   = flux_sf;
-    fluxInternal.refr = flux_refr;
-    fluxInternal.melt = flux_melt;
-    fluxInternal.rf   = flux_rf;
-    fluxInternal.in   = flux_in;
-    fluxInternal.se   = flux_se;
-    fluxInternal.cf   = flux_cf;
-    fluxInternal.ea   = flux_ea;
-    fluxInternal.r    = flux_r;
-    fluxInternal.q0   = flux_q0;
-    fluxInternal.perc = flux_perc;
-    fluxInternal.q1   = flux_q1;
+    fluxInternal.sf   = flux_sf * delta_t;
+    fluxInternal.refr = flux_refr * delta_t;
+    fluxInternal.melt = flux_melt * delta_t;
+    fluxInternal.rf   = flux_rf * delta_t;
+    fluxInternal.in   = flux_in * delta_t;
+    fluxInternal.se   = flux_se * delta_t;
+    fluxInternal.cf   = flux_cf * delta_t;
+    fluxInternal.ea   = flux_ea * delta_t;
+    fluxInternal.r    = flux_r * delta_t;
+    fluxInternal.q0   = flux_q0 * delta_t;
+    fluxInternal.perc = flux_perc * delta_t;
+    fluxInternal.q1   = flux_q1 * delta_t;
 
     % --- Stores ---
     storeInternal.S1  = store_S1;
@@ -312,12 +312,12 @@ end
     
 % Check water balance
 if nargout == 4
-    waterBalance = checkWaterBalance(P,...              % Incoming precipitation
-                                     fluxOutput,...     % Fluxes Q and Ea leaving the model
-                                     storeInternal,...  % Time series of storages ...
-                                     storeInitial,...   % And initial store values to calculate delta S
-                                     tmp_Qt_old);       % Whether the model uses a routing scheme that
-                                                        % still contains water. Use '0' for no routing
+    waterBalance = checkWaterBalance(P.*delta_t,...         % Incoming precipitation
+                                     fluxOutput,...         % Fluxes Q and Ea leaving the model
+                                     storeInternal,...      % Time series of storages ...
+                                     storeInitial,...       % And initial store values to calculate delta S
+                                     tmp_Qt_old.*delta_t);  % Whether the model uses a routing scheme that
+                                                            % still contains water. Use '0' for no routing
 end                                                         
 
 

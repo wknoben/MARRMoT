@@ -215,7 +215,7 @@ end
 % Check water balance
 if nargout == 4
     
-    waterBalance =  sum(P) - ...                    % Incoming precipitation
+    waterBalance =  sum(P).*delta_t - ...           % Incoming precipitation
                     sum(fluxOutput.Q) - ...         % Outgoing flow
                     sum(fluxOutput.Ea) - ...        % Outgoing evaporation
                     (store_S1(end)-S10) + ...       % Store change

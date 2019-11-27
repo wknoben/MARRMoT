@@ -260,7 +260,7 @@ end
 % or abstractions. Thus manual calculation is needed
 if nargout == 4
     waterBalance = ...
-            sum(P) - ...                    % Incoming precipitation
+            sum(P).*delta_t - ...           % Incoming precipitation
             sum(fluxOutput.Ea) - ...        % Outgoing evaporation
             sum(fluxOutput.A) - ...         % Outgoing abstractions
             sum(fluxOutput.Q) - ...         % Outgoing runoff
@@ -269,7 +269,7 @@ if nargout == 4
             (store_S3(end)-S30) - ...       % Store change
             (store_S4(end)-S40);            % Store change
 
-    disp(['Total P  = ',num2str(sum(P)),'mm.'])
+    disp(['Total P  = ',num2str(sum(P).*delta_t),'mm.'])
     disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])
     disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])
     disp(['Total A  = ',num2str(sum(fluxOutput.A)),'mm.'])

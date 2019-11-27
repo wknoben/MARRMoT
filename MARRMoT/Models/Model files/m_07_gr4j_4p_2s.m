@@ -280,21 +280,21 @@ end
 % Check water balance
 if nargout == 4
 
-waterBalance =  sum(P) - ...                                                % Precipitation
+waterBalance =  sum(P).*delta_t - ...                                       % Precipitation
                 sum(fluxOutput.Ea) - ...                                    % Evaporation
                 sum(fluxOutput.Q) - ...                                     % Runoff
                 (store_S1(end)-S10) - ...                                   % Store 1 change
                 (store_S2(end)-S20) - ...                                   % Store 2 change
-                (sum(tmp_Q9_old) + sum(tmp_Q1_old)) + ...                   % Still being routed
-                (sum(flux_fr) +sum(max(0,flux_q1+flux_fq))-sum(flux_q1));   % Water exchange 
+                (sum(tmp_Q9_old) + sum(tmp_Q1_old)).*delta_t + ...          % Still being routed
+                (sum(flux_fr).*delta_t +sum(max(0,flux_q1+flux_fq).*delta_t)-sum(flux_q1).*delta_t);   % Water exchange 
 
-    disp(['Total P  = ',num2str(sum(P)),'mm.'])
+    disp(['Total P  = ',num2str(sum(P).*delta_t),'mm.'])
     disp(['Total Peff  = ',num2str(sum(flux_pn)),'mm.'])
     disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])
     disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])
     disp(['Delta S1 = ',num2str((store_S1(end)-S10)),'mm.'])
     disp(['Delta S2 = ',num2str((store_S2(end)-S20)),'mm.'])
-    disp(['On route = ',num2str(sum(tmp_Q9_old)+sum(tmp_Q1_old)),'mm.'])
+    disp(['On route = ',num2str((sum(tmp_Q9_old)+sum(tmp_Q1_old)).*delta_t),'mm.'])
     disp(['Water exchange = ',num2str(sum(flux_fr)+sum(flux_fq)),'mm.'])
     disp(['Water balance = sum(P) - (sum(Q) + sum(E_a) + sum(routing)) - exchange - delta S = ',num2str(waterBalance)]);
 end

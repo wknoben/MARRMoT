@@ -231,7 +231,7 @@ end
 
 % Check water balance
 if nargout == 4
-    waterBalance = checkWaterBalance(P,...              % Incoming precipitation
+    waterBalance = checkWaterBalance(P.*delta_t,...     % Incoming precipitation
                                      fluxOutput,...     % Fluxes Q and Ea leaving the model
                                      storeInternal,...  % Time series of storages ...
                                      storeInitial,...   % And initial store values to calculate delta S
@@ -239,7 +239,6 @@ if nargout == 4
                                                         % still contains water. Use '0' for no routing
 end
 
-                       % delta S
 
 
  

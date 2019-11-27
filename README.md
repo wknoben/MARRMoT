@@ -1,8 +1,6 @@
 # MARRMoT
 Modular Assessment of Rainfall-Runoff Models Toolbox - Matlab code for 46 conceptual hydrologic models.
 
-Please note that the master branch of this repo and release 1.3 have been updated compared to the peer-reviewed MARRMoT v1.2. Of note is a recent bug fix in the flux-file 'interflow_9'. See history: https://github.com/wknoben/MARRMoT/commit/fd81bb5a68d56c513e87185afe831d85e3be9755
-
 <p align="center">
 <img src="Figures/logo.jpg" alt="MARRMoT logo" width="200"/>
 </p>
@@ -15,6 +13,13 @@ MARRMoT is based around individual flux functions and aggregated model functions
 If you have any questions about using or running the code, or are willing to contribute, please contact w.j.m.knoben[-at-]bristol.ac.uk. 
 
 [![DOI](https://zenodo.org/badge/161804123.svg)](https://zenodo.org/badge/latestdoi/161804123)
+
+## Notes on versions
+MARRMoT v1.2 has been accepted through peer review. Since then, users have found various bugs which are corrected on the current master branch. Summary:
+
+- 'interflow_9' was missing a non-negativity constraint. This has been added and included in MARRMoT v1.3
+- water balance calculations did not properly account for time step sizes different than 1 day. This has been corrected on the master branch but not been released yet.
+- models m05, m15, m37 and m44 did not properly account for time step size in certain flux calculations. This has been corrected on the master branch but not been released yet.
 
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases. 

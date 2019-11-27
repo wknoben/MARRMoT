@@ -20,7 +20,8 @@
 
 %% 1. Specify model and prepare some auxiliary variables
 % Select model
-model  = 'm_nn_example_7p_3s';                     % Model function
+%model  = 'm_nn_example_7p_3s';                     % Model function
+model  = 'm_01_collie1_1p_1s';                     % Model function
 
 % Extract parameters from model parameter function
 theta  = feval([model,'_parameter_ranges']);   
@@ -44,7 +45,7 @@ load MARRMoT_example_data.mat
 input_climatology.precip  = data_MARRMoT_examples.precipitation(1:365); 
 input_climatology.temp    = data_MARRMoT_examples.temperature(1:365);
 input_climatology.pet     = data_MARRMoT_examples.potential_evapotranspiration(1:365);
-input_climatology.delta_t = 1;                                              % [d]
+input_climatology.delta_t = 0.5;                                              % [d]
 
 %% 3. Run a parameter extreme crash test
 % Find all possible permutations of min/max parameter values

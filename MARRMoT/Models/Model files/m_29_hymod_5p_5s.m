@@ -242,7 +242,7 @@ end
 
 % Check water balance
 if nargout == 4
-    waterBalance = checkWaterBalance(P,...              % Incoming precipitation
+    waterBalance = checkWaterBalance(P.*delta_t,...     % Incoming precipitation in original time step size
                                      fluxOutput,...     % Fluxes Q and Ea leaving the model
                                      storeInternal,...  % Time series of storages ...
                                      storeInitial,...   % And initial store values to calculate delta S

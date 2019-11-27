@@ -339,11 +339,11 @@ if nargout == 4
     end
     
     % Do the water balance check
-    waterBalance = checkWaterBalance(P,...              % Incoming precipitation
+    waterBalance = checkWaterBalance(P.*delta_t,...     % Incoming precipitation
                                      fluxOutput,...     % Fluxes Q and Ea leaving the model
                                      storeInternal,...  % Time series of storages ...
                                      storeInitial,...   % And initial store values to calculate delta S
-                                     tmp_rout);         % Whether the model uses a routing scheme that
+                                     tmp_rout.*delta_t);% Whether the model uses a routing scheme that
                                                         % still contains water. Use '0' for no routing
 end
 

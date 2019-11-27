@@ -6,11 +6,11 @@ function [ out ] = checkWaterBalance( P,fluxes,stores,sini,R )
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
 % Input:
-% P         - time series of (precipitation) input              [mm]
-% fluxes.Q  - time series of streamflow output                  [mm]
-% fluxes.Ea - time series of evaporation                        [mm]
+% P         - time series of (precipitation) input              [mm/delta_t]
+% fluxes.Q  - time series of streamflow output                  [mm/delta_t]
+% fluxes.Ea - time series of evaporation                        [mm/delta_t]
 % stores.Sn - structure with time series of n stores            [mm]
-% R         - time series of water still in the routing module  [mm]
+% R         - time series of water still in the routing module  [mm/delta_t]
 %
 % Note: R is not always present. Input value 0 to indicate this.
 

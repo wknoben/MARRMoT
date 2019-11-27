@@ -389,7 +389,7 @@ if nargout == 4
     
     % Manual water balance on account of deficit stores
     waterBalance = ...
-        sum(P) - ...                    % Incoming precipitation
+        sum(P).*delta_t - ...           % Incoming precipitation
         sum(fluxOutput.Ea) - ...        % Outgoing evaporation
         sum(fluxOutput.Q) - ...         % Outgoing flow
         (store_S1(end)-S10) + ...       % Storage change
@@ -401,7 +401,7 @@ if nargout == 4
         (store_S7(end)-S70) - ...
         (store_S8(end)-S80);
 
-    disp(['Total P  = ',num2str(sum(P)),'mm.'])
+    disp(['Total P  = ',num2str(sum(P).*delta_t),'mm.'])
     disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])
     disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])
     disp(['Delta S1 = ',num2str((store_S1(end)-S10)),'mm.'])

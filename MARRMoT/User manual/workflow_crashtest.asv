@@ -1,5 +1,5 @@
 % This file is part of the Modular Assessment of Rainfall-Runoff Models 
-% Toolbox (MARRMoT) – User manual. It contains an example of crash tests 
+% Toolbox (MARRMoT) â€“ User manual. It contains an example of crash tests 
 % that can be used to quality control a newly create model function. See 
 % section 4 in the manual for details.
 % 
@@ -20,8 +20,7 @@
 
 %% 1. Specify model and prepare some auxiliary variables
 % Select model
-%model  = 'm_nn_example_7p_3s';                     % Model function
-model  = 'm_05_ihacres_7p_3s';                     % Model function
+model  = 'm_nn_example_7p_3s';                     % Model function
 
 % Extract parameters from model parameter function
 theta  = feval([model,'_parameter_ranges']);   

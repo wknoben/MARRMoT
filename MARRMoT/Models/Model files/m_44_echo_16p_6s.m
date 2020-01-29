@@ -145,7 +145,7 @@ FS = refreeze_1;
 % GS(gmax,S2,delta_t): melt due to ground-heat flux
 GS = melt_2;
 
-% MW(PR(PN(P(t),S1,rho),T(t),ts)+MS(as,tm,T(t),S2),S3,the*S2): overflow 
+% MW(PR(PN(P(t),S1,rho),T(t),ts)+MS(as,tm,T(t),S2,delta_t),S3,the*S2): overflow 
 % from snowpack storage
 MW = saturation_1;
 
@@ -173,8 +173,8 @@ ET = evap_22;
 % L(ksat,c,S4,delta_t): leakage from soil moisture
 L = recharge_6;
 
-% LS(lmax,L(ksat,c,S4),delta_t): leakage to slow routing
-LS = recharge_4;
+% LS(lmax,L(ksat,c,S4)): leakage to slow routing
+LS = recharge_7;
 
 % LF(L(ksat,c,S4),LS(lmax,L(ksat,c,S4))): leakage to fast routing
 LF = effective_1;
@@ -249,11 +249,11 @@ for t = 1:t_end
                 L(ksat,c,S4,delta_t));
 
     tmpf_S5 = @(S1,S2,S3,S4,S5,S6) ...
-               (LF(L(ksat,c,S4,delta_t),LS(lmax,L(ksat,c,S4,delta_t),delta_t)) - ...
+               (LF(L(ksat,c,S4,delta_t),LS(lmax,L(ksat,c,S4,delta_t))) - ...
                 RF(kf,S5));
 
     tmpf_S6 = @(S1,S2,S3,S4,S5,S6) ...
-               (LS(lmax,L(ksat,c,S4,delta_t),delta_t) - ...
+               (LS(lmax,L(ksat,c,S4,delta_t)) - ...
                 RS(ks,S6));
     
     % Call the numerical scheme function to create the ODE approximations
@@ -313,7 +313,7 @@ for t = 1:t_end
     flux_et(t) = ET(sw,sm,tmp_sFlux(4),flux_eps(t),delta_t);
     flux_rd(t) = RD(flux_fi(t),tmp_sFlux(4),smax);
     flux_l(t)  = L(ksat,c,tmp_sFlux(4),delta_t);
-    flux_ls(t) = LS(lmax,flux_l(t),delta_t);
+    flux_ls(t) = LS(lmax,flux_l(t));
     flux_lf(t) = LF(flux_l(t),flux_ls(t));
     flux_rf(t) = RF(kf,tmp_sFlux(5));
     flux_rs(t) = RS(ks,tmp_sFlux(6));
@@ -366,7 +366,7 @@ end
 
 % Check water balance
 if nargout == 4
-    waterBalance = checkWaterBalance(P,...              % Incoming precipitation
+    waterBalance = checkWaterBalance(P.*delta_t,...     % Incoming precipitation
                                      fluxOutput,...     % Fluxes Q and Ea leaving the model
                                      storeInternal,...  % Time series of storages ...
                                      storeInitial,...   % And initial store values to calculate delta S

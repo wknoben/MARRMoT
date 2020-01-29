@@ -371,11 +371,11 @@ if nargout == 4
     tmp_rout(1:length(tmp_Qr_old)) = tmp_rout(1:length(tmp_Qr_old)) + tmp_Qr_old;
     
     % Calculate water balance
-    waterBalance = checkWaterBalance(P,...              % Incoming precipitation
+    waterBalance = checkWaterBalance(P.*delta_t,...     % Incoming precipitation
                                      fluxOutput,...     % Fluxes Q and Ea leaving the model
                                      storeInternal,...  % Time series of storages ...
                                      storeInitial,...   % And initial store values to calculate delta S
-                                     tmp_rout);         % Whether the model uses a routing scheme that
+                                     tmp_rout.*delta_t);% Whether the model uses a routing scheme that
                                                         % still contains water. Use '0' for no routing
 end
 

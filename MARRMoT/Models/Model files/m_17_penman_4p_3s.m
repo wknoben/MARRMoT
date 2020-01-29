@@ -225,14 +225,14 @@ end
 % Check water balance
 if nargout == 4
     
-    waterBalance = sum(P)-...                   % Incoming precipitation                                                 
+    waterBalance = sum(P).*delta_t-...          % Incoming precipitation                                                 
                    sum(fluxOutput.Ea) - ...     % Outgoing evaporation
                    sum(fluxOutput.Q) - ...      % Outgoing flow
                    (store_S1(end)-S10) + ...    % Storage change 
                    (store_S2(end)-S20) - ...    % Storage change (deficit store)
                    (store_S3(end)-S30);         % Storage change
     
-    disp(['Total P  = ',num2str(sum(P)),'mm.'])
+    disp(['Total P  = ',num2str(sum(P).*delta_t),'mm.'])
     disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])
     disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])
     disp(['Delta S1 = ',num2str((store_S1(end)-S10)),'mm.'])

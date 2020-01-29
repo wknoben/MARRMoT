@@ -212,13 +212,13 @@ end
 
 % Check water balance
 if nargout == 4
-    waterBalance =  sum(P) - ...                                    % Incoming precipitation 
+    waterBalance =  sum(P).*delta_t - ...                           % Incoming precipitation 
                     sum(fluxOutput.Q) - ...                         % Flux Q leaving the model
                     sum(fluxOutput.Ea) - ...                        % Flux Ea leaving the model
                     sum(fluxOutput.Qr) - ...                        % Groundwater sink term
                     ((store_S1(end)-S10) + (store_S2(end)-S20));    % Storage change 
         
-    disp(['Total P  = ',num2str(sum(P)),'mm.'])
+    disp(['Total P  = ',num2str(sum(P).*delta_t),'mm.'])
     disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])
     disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])
     disp(['Total Q_sink  = ',num2str(sum(fluxOutput.Qr)),'mm.'])

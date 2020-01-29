@@ -341,8 +341,8 @@ end
 if nargout == 4
     
     % Manual water balance on account of the infinite glacier depth
-    waterBalance =  sum(P) + ...                % Incoming precipitation
-                    sum(flux_mii) - ...         % Incoming glacier melt
+    waterBalance =  sum(P).*delta_t + ...       % Incoming precipitation
+                    sum(flux_mii).*delta_t - ...% Incoming glacier melt
                     sum(fluxOutput.Q) - ...     % Outgoing flow
                     sum(fluxOutput.Ea) - ...    % Outgoing evaporation
                     (store_S1(end)-S10) - ...   % Storage change
@@ -353,13 +353,13 @@ if nargout == 4
                     (store_S6(end)-S60);
     
     % Add the glacier melt flux to the water balance
-    disp(['Total P  = ',num2str(sum(P)),'mm.'])
-    disp(['Glacier melt = ',num2str(sum(flux_mii)),' mm.'])
+    disp(['Total P  = ',num2str(sum(P).*delta_t),'mm.'])
+    disp(['Glacier melt = ',num2str(sum(flux_mii).*delta_t),' mm.'])
     disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])
     disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])
     disp(['Delta S1 = ',num2str((store_S1(end)-S10)),'mm.'])
     disp(['Delta S2 = ',num2str((store_S2(end)-S20)),'mm.'])
-    disp(['Water balance = sum(P) +sum(glacier melt) - (sum(Q) + sum(E_a)) - delta S = ',num2str(waterBalance)]);  
+    disp(['Water balance = sum(P) + sum(glacier melt) - (sum(Q) + sum(E_a)) - delta S = ',num2str(waterBalance)]);  
 
 end
 

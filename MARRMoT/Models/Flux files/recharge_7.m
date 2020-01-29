@@ -8,8 +8,7 @@ function [func] = recharge_7(~)
 % Anonymous function
 % ------------------
 % Description:  Constant recharge limited by incoming flux
-% Constraints:  f <= S/dt
-%               S >= 0      prevents complex numbers
+% Constraints:  -
 % @(Inputs):    p1   - maximum recharge rate [mm/d]
 %               fin  - incoming flux [mm/d]
 %

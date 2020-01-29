@@ -174,7 +174,7 @@ for t = 1:t_end
     flux_us(t)   = US(1-alpha,flux_u(t));
     
     % Update the stores
-    store_S1(t) = S1old - P(t) + flux_ea(t) + flux_u(t);
+    store_S1(t) = S1old - (P(t) - flux_ea(t) - flux_u(t)).*delta_t;
 
     % Apply routing of fast and slow flow
     tmp_xq_cur      = flux_uq(t).*uh_q;                                     % find how the runoff of this time step will be distributed in time
@@ -217,18 +217,18 @@ end
 if nargout == 4
     
     % Water balance
-    waterBalance = sum(P) - ...                                             % Incoming precipitation
-                   sum(fluxOutput.Q) - ...                                  % Flux Q leaving the model
-                   sum(fluxOutput.Ea) + ...                                 % Flux Ea leaving the model
-                   (store_S1(end)-S10) - ...                                % Deficit change
-                   (sum(tmp_xq_old)+sum(tmp_xs_old)+sum(tmp_qt_old));       % Water still in routing schemes
+    waterBalance = sum(P.*delta_t) - ...                                        % Incoming precipitation
+                   sum(fluxOutput.Q) - ...                                      % Flux Q leaving the model
+                   sum(fluxOutput.Ea) + ...                                     % Flux Ea leaving the model
+                   (store_S1(end)-S10) - ...                                    % Deficit change
+                   (sum(tmp_xq_old)+sum(tmp_xs_old)+sum(tmp_qt_old)).*delta_t;  % Water still in routing schemes
 
     % Display
-    disp(['Total P  = ',num2str(sum(P)),'mm.'])                             
+    disp(['Total P  = ',num2str(sum(P).*delta_t),'mm.'])                             
     disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])                  
     disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])                 
     disp(['Delta S1 = ',num2str((store_S1(end)-S10)),'mm.'])                
-    disp(['On route = ',num2str(sum(tmp_xq_old)+sum(tmp_xs_old)),'mm.'])    
+    disp(['On route = ',num2str((sum(tmp_xq_old)+sum(tmp_xs_old)+sum(tmp_qt_old)).*delta_t),'mm.'])    
     disp(['Water balance = sum(P) - (sum(Q) + sum(E_a) + sum(routing)) + delta S = ',num2str(waterBalance)]);   
 
 end                                            

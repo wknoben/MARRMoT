@@ -195,8 +195,8 @@ for t = 1:t_end
     Qpieo_old(end) = 0;                                                     % update the 'still-to-flow-out' vector
    
     % Update the stores
-    store_S1(t) = S1old + flux_pi(t) + flux_c(t) - flux_et(t) - flux_r(t); 
-    store_S2(t) = S2old + flux_r(t) - flux_c(t) - flux_qpgw(t);
+    store_S1(t) = S1old + (flux_pi(t) + flux_c(t) - flux_et(t) - flux_r(t)) * delta_t; 
+    store_S2(t) = S2old + (flux_r(t) - flux_c(t) - flux_qpgw(t)) * delta_t;
 
 end
 
@@ -220,12 +220,12 @@ end
 
 % Check water balance
 if nargout == 4
-    waterBalance = checkWaterBalance(P,...              % Incoming precipitation
-                                     fluxOutput,...     % Fluxes Q and Ea leaving the model
-                                     storeInternal,...  % Time series of storages ...
-                                     storeInitial,...   % And initial store values to calculate delta S
-                                     Qpieo_old);        % Whether the model uses a routing scheme that
-                                                        % still contains water. Use '0' for no routing
+    waterBalance = checkWaterBalance(P.*delta_t,...         % Incoming precipitation
+                                     fluxOutput,...         % Fluxes Q and Ea leaving the model
+                                     storeInternal,...      % Time series of storages ...
+                                     storeInitial,...       % And initial store values to calculate delta S
+                                     Qpieo_old.*delta_t);   % Whether the model uses a routing scheme that
+                                                            % still contains water. Use '0' for no routing
 end
 
 

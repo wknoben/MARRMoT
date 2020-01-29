@@ -14,6 +14,13 @@ If you have any questions about using or running the code, or are willing to con
 
 [![DOI](https://zenodo.org/badge/161804123.svg)](https://zenodo.org/badge/latestdoi/161804123)
 
+## Changes after peer review
+MARRMoT v1.2 has been accepted through peer review. Since then, users have found various bugs which are corrected on the current master branch. Summary:
+
+- 'interflow_9' was missing a non-negativity constraint. This has been added and included in MARRMoT v1.3
+- Water balance calculations did not properly account for time step sizes different than 1 day. This has been corrected on the master branch but not been released yet.
+- Models m05, m15, m37 and m44 did not properly account for time step size in certain flux calculations. This has been corrected on the master branch but not been released yet.
+
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases. 
 
@@ -80,8 +87,9 @@ In addition to a range of unnamed models, the following models provided inspirat
 MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for details.
 
 ## DOIs of previous releases
+- v1.2: dx.doi.org/10.5281/zenodo.3235664
 - v1.1: dx.doi.org/10.5281/zenodo.2677728
 - v1.0: dx.doi.org/10.5281/zenodo.2482542 
 
 ## Acknowledgements
-MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged.
+MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged. Special thanks are extended to Philip Kraft for finding a bug in the flux smoothing code during peer review, to Sebastian Gnann for suggesting various quality of life fixes and to Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations.

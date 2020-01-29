@@ -88,6 +88,7 @@ classdef marrmotBMI_oct < handle
             [output_ex,...                                                  % Fluxes leaving the model: simulated flow (Q) and evaporation (Ea)
              output_in,...                                                  % Internal model fluxes
              output_ss,...                                                  % Internal storages
+             output_wb,...                                                  % Water balance
              ] = ...                                                        % Water balance check
                                 feval(obj.model_name,...                    % Model function name
                                       input_forcing,...                     % Time series of climatic fluxes in simulation period
@@ -100,7 +101,7 @@ classdef marrmotBMI_oct < handle
             obj.output_externalFluxes = output_ex;
             obj.output_internalFluxes = output_in;
             obj.output_modelStorages  = output_ss;
-%            obj.output_waterBalance   = output_wb;
+            obj.output_waterBalance   = output_wb;
             obj.time                  = obj.time + obj.dt;
         end
         

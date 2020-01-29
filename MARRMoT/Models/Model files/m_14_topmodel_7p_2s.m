@@ -221,12 +221,12 @@ if nargout == 4
                     (store_S1(end)-S10) + ...       % Store change
                     (store_S2(end)-S20);            % Store change (deficit store)
 
-    disp(['Total P  = ',num2str(sum(P)),'mm.'])
-    disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])
-    disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])
-    disp(['Delta S1 = ',num2str((store_S1(end)-S10)),'mm.'])
-    disp(['Delta S2 = ',num2str((store_S2(end)-S20)),'mm (deficit).'])
-    disp(['Water balance = sum(P) - (sum(Q) + sum(E_a) + sum(routing)) + delta S = ',num2str(waterBalance)]); 
+    % disp(['Total P  = ',num2str(sum(P)),'mm.'])
+    % disp(['Total Q  = ',num2str(sum(fluxOutput.Q)),'mm.'])
+    % disp(['Total E  = ',num2str(sum(fluxOutput.Ea)),'mm.'])
+    % disp(['Delta S1 = ',num2str((store_S1(end)-S10)),'mm.'])
+    % disp(['Delta S2 = ',num2str((store_S2(end)-S20)),'mm (deficit).'])
+    % disp(['Water balance = sum(P) - (sum(Q) + sum(E_a) + sum(routing)) + delta S = ',num2str(waterBalance)]); 
 end
 
 

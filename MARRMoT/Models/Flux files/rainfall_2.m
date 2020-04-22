@@ -11,7 +11,7 @@ function [func] = rainfall_2(varargin)
 % Constraints:  -
 % @(Inputs):    In   - incoming precipitation flux [mm/d]
 %               T    - current temperature [oC]
-%               p1   - temperature threshold above which rainfall occurs [oC]
+%               p1   - midpoint of the combined rain/snow interval [oC]
 %               p2   - length of the mixed snow/rain interval [oC]
 %
 % WK, 08/10/2018

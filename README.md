@@ -92,4 +92,8 @@ MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for deta
 - v1.0: dx.doi.org/10.5281/zenodo.2482542 
 
 ## Acknowledgements
-MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged. Special thanks are extended to Philip Kraft for finding a bug in the flux smoothing code during peer review, to Sebastian Gnann for suggesting various quality of life fixes and to Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations.
+MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged. Special thanks are extended to:
+- Philip Kraft for finding a bug in the flux smoothing code during peer review; 
+- Sebastian Gnann for suggesting various quality of life fixes; 
+- Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations;
+- Koen Jansen for suggesting various improvements and correcting parameter descriptions.

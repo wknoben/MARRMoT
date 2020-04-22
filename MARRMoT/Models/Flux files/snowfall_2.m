@@ -9,7 +9,7 @@ function [func] = snowfall_2(~)
 % ------------------
 % Description:  Snowfall based on a temperature threshold interval
 % Constraints:  -
-% @(Inputs):    p1   - temperature threshold below which snowfall occurs [oC]
+% @(Inputs):    p1   - midpoint of the combined rain/snow interval [oC]
 %               p2   - length of the mixed snow/rain interval [oC]
 %               T    - current temperature [oC]
 %               In   - incoming precipitation flux [mm/d]

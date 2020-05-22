@@ -10,7 +10,7 @@ The framework provides Matlab code for 46 unique model structures, standardized 
 The framework is provided with extensive documentation, a User Manual and several workflow scripts that give examples of how to use the framework.
 MARRMoT is based around individual flux functions and aggregated model functions, allowing a wide range of possible applications.
 
-If you have any questions about using or running the code, or are willing to contribute, please contact w.j.m.knoben[-at-]bristol.ac.uk. 
+If you have any questions about using or running the code, or are willing to contribute, please contact wouter.knoben[-at-]usask.ca. 
 
 [![DOI](https://zenodo.org/badge/161804123.svg)](https://zenodo.org/badge/latestdoi/161804123)
 

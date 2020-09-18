@@ -79,7 +79,10 @@ sim = sim(1+warmup:end);
 %% check for missing values
 % -999 is used to denote missing values in observed data, but this is later
 % scaled by area. Therefore we check for all negative values, and ignore those.
-idx = find(obs >= 0);                                                    
+idx = find(obs >= 0);  
+
+obs = obs(idx);
+sim = sim(idx);                                            
 
 %% invert the time series and add a small constant to avoid issues with 0 flows
 % Pushpalatha et al (2012) suggests to set e at 1/100th of the mean of the
@@ -94,9 +97,9 @@ obs = 1./(obs+e);
 sim = 1./(sim+e);
 
 %% calculate components
-c(1) = corr(obs(idx),sim(idx));                                             % r: linear correlation
-c(2) = std(sim(idx))/std(obs(idx));                                         % alpha: ratio of standard deviations
-c(3) = mean(sim(idx))/mean(obs(idx));                                       % beta: bias 
+c(1) = corr(obs,sim);                                             % r: linear correlation
+c(2) = std(sim)/std(obs);                                         % alpha: ratio of standard deviations
+c(3) = mean(sim)/mean(obs);                                       % beta: bias 
 
 %% calculate value
 val = 1-sqrt((w(1)*(c(1)-1))^2 + (w(2)*(c(2)-1))^2 + (w(3)*(c(3)-1))^2);    % weighted KGE

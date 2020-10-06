@@ -14,7 +14,7 @@ function [ theta ] = m_07_gr4j_4p_2s_parameter_ranges( )
 theta = [1   , 2000;    % x1 [mm]
         -10  , 15;      % x2 [mm/d]
          1   , 300;     % x3 [mm]
-         1   , 15];     % x4 [d]
+         .5  , 15];     % x4 [d]
 
 % Display an overview and warning      
 txt = array2table(theta);

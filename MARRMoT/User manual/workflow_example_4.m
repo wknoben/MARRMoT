@@ -12,6 +12,10 @@
 % NOTE: this file does not work very well in Octave. Octave users might 
 % need to consider alternative parameter optimisation methods.
 %
+% Update:   Compatability with Ocatve, line 82
+% Author:   Mustafa Kemal Türkeri
+% Date:     18-10-2020
+%
 % Author:   Wouter J.M. Knoben
 % Date:     26-09-2018
 % Contact:  w.j.m.knoben@bristol.ac.uk
@@ -74,7 +78,8 @@ optim_settings = optimset(...                                               % Us
                     'MaxIter',1000,...                                      % Stop after this many iterations (default = 200*numPar)
                     'MaxFunEvals',1000,...                                  % Stop after this many function evaluations (default = 200*numPar)
                     'TolFun',1e-4,...                                       % Stop if objective function change is below this tolerance (default = 1e-4)
-                    'TolX',1e-4);                                           % Stop if changes in parameter values is below this tolerance (default = 1e-4)
+                    'TolX',1e-4,...                                         % Stop if changes in parameter values is below this tolerance (default = 1e-4)
+                    'OutputFcn',[]);                                        % This set 'OutputFcn' do its default '[]'. Strictly not needed for Matlab runs but prevents issues with Octave.
 
 % Choose the objective function
 of_name      = 'of_KGE';                                                    % This function is provided as part of MARRMoT. See ./MARRMoT/Functions/Objective functions

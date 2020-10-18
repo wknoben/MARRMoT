@@ -17,16 +17,17 @@ If you have any questions about using or running the code, or are willing to con
 ## Changes after peer review
 MARRMoT v1.2 has been accepted through peer review. Since then, users have found various bugs which are corrected on the current master branch. Summary:
 
-- 'interflow_9' was missing a non-negativity constraint. This has been added and included in MARRMoT v1.3
+- 'interflow_9' was missing a non-negativity constraint. This has been added and included in MARRMoT v1.3.
 - Water balance calculations did not properly account for time step sizes different than 1 day. This has been corrected on the master branch but not been released yet.
 - Models m05, m15, m37 and m44 did not properly account for time step size in certain flux calculations. This has been corrected on the master branch but not been released yet.
+- Workflow_example_4 now works under Octave, after Octave update 5.2.0 and code contribution by Mustafa Kemal Türkeri. This has been integrated on the master branch but not been released yet.
 
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases. 
 
 ### Requirements
 MARRMoT was developed on Matlab version 9.2.0.538062 (R2017a) and the Optimization Toolbox is required (tested with version 7.6). 
-If using Octave, MARRMoT was tested on Octave 4.4.1 and requires the 'optim' package. 
+If using Octave, MARRMoT was tested on Octave 4.4.1 and requires the 'optim' package.  
 The following instructions assume that MARRMoT will be used with Matlab. 
 
 ### Install
@@ -96,4 +97,5 @@ MARRMoT could not have been made without the effort that many hydrologists have 
 - Philip Kraft for finding a bug in the flux smoothing code during peer review; 
 - Sebastian Gnann for suggesting various quality of life fixes; 
 - Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations;
-- Koen Jansen for suggesting various improvements and correcting parameter descriptions.
+- Koen Jansen for suggesting various improvements and correcting parameter descriptions;
+- Mustafa Kemal Türkeri for making workflow_example_4 operational in Octave.

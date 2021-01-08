@@ -53,8 +53,15 @@ classdef MARRMoT_model < handle
         % SOLVE_STORES solves the stores ODEs 
         function Snew = solve_stores(obj, solver_opts)
 
+            [Snew, fval, exitflag] = NewtonRaphson(@obj.solve_fun_IE,...
+                                                   obj.Sold,...
+                                                   solver_opts.NewtonRaphson);
+            resnorm = sum(fval.^2);
+            
+            % if NewtonRaphson doesn't find a good enough solution, run FSOLVE
+            if exitflag <= 0 || resnorm > solver_opts.resnorm_tolerance
                 [Snew,fval,exitflag] = fsolve(@obj.solve_fun_IE,...        % system of storage equations
-                                              obj.Sold,...                 % storage values at previous step
+                                              Snew,...                     % storage values at the end of NewtonRaphson solver
                                               solver_opts.fsolve);         % solver options
                 resnorm = sum(fval.^2);
                 
@@ -70,6 +77,7 @@ classdef MARRMoT_model < handle
                         obj.store_min, ...                                 % lower bounds
                         obj.store_max);                                    % upper bounds 
                 end
+            end
         end
         
         % RUN runs the model with a given climate input, initial stores,

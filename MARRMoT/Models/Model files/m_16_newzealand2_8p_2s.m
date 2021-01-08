@@ -1,238 +1,137 @@
-function [ fluxOutput, fluxInternal, storeInternal, waterBalance  ] = ...
-        m_16_newzealand2_8p_2s( fluxInput, storeInitial, theta, solver )
-% Hydrologic conceptual model: New Zealand model v2 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
-% WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%   
-% Model reference
-% Atkinson, S. E., Sivapalan, M., Woods, R. A., & Viney, N. R. (2003). 
-% Dominant physical controls on hourly flow predictions and the role of 
-% spatial variability: Mahurangi catchment, New Zealand. Advances in Water 
-% Resources, 26(3), 219–235. http://doi.org/10.1016/S0309-1708(02)00183-5
-
-
-% Steps
-% --- Practical ---
-% 0. Handle inputs
-%
-% --- Model setup ---
-% 1. Set out ODE
-% 2. Set out constitutive functions
-% 3. Determine smoothing
-% 4. Determine numerical scheme
-
-% --- Model use ---
-% 5. Solve 
-
-% --- Practical ---
-% 6. Handle outputs
-
-%% Setup
-%%INPUTS
-% Time step size 
-delta_t = fluxInput.delta_t;
-
-% Data
-P     = fluxInput.precip./delta_t;          % [mm/delta_t] -> [mm/d]       
-Ep    = fluxInput.pet./delta_t;             % [mm/delta_t] -> [mm/d]       
-T     = fluxInput.temp;
-t_end = length(P);
-
-% Parameters
-% [name in documentation] = theta(order in which specified in parameter file)
-s1max   = theta(1);     % Maximum interception storage [mm] 
-s2max   = theta(2);     % Maximum soil moisture storage [mm] 
-sfc     = theta(3);     % Field capacity as fraction of maximum soil moisture [-]
-m       = theta(4);     % Fraction forest [-]
-a       = theta(5);     % Subsurface runoff coefficient [d-1]
-b       = theta(6);     % Runoff non-linearity [-]
-tcbf    = theta(7);     % Baseflow runoff coefficient [d-1]
-d       = theta(8);     % Routing time delay [d]
-
-%%INITIALISE MODEL STORES
-S10         = storeInitial(1);       % Initial interception storage
-S20         = storeInitial(2);       % Initial soil moisture storage
-
-%%DEFINE STORE BOUNDARIES
-store_min = [0,0];                   % lower bounds of stores
-store_upp = [];                      % optional higher bounds
-
-%%INITIALISE STORAGE VECTORS
-store_S1 = zeros(1,t_end);
-store_S2 = zeros(1,t_end);
-
-flux_eint = zeros(1,t_end);
-flux_qtf  = zeros(1,t_end);
-flux_veg  = zeros(1,t_end);
-flux_ebs  = zeros(1,t_end);
-flux_qse  = zeros(1,t_end);
-flux_qss  = zeros(1,t_end);
-flux_qbf  = zeros(1,t_end);
-flux_qt   = zeros(1,t_end);
-
-%%PREPARE UNIT HYDROGRAPH
-[~,uh_full] = uh_4_full(1,d,delta_t);
-
-%%INITIALISE ROUTING VECTORS
-tmp_Qt_old  = zeros(1,length(uh_full));      % temporary vector needed to deal with routing
-
-%% 1. ODEs
-% Given in the documentation.
-
-%% 2. Constitutive functions
-% Given in the documentation
-
-%% 3. Specify and smooth model functions
-% Store numbering:
-% S1. Interception
-% S2. Soil moisture
-
-% EINT(S1,Ep(t),delta_t): evaporation from interception
-EINT = evap_1;
-
-% QTF(P(t),S1,s1max):
-QTF = interception_1;
-
-% EVEG(m,sfc,S2,s2max,Ep(t),delta_t): transpiration through vegetation
-EVEG = evap_6;
-
-% EBS(m,S2,s2max,Ep(t),delta_t): bare soil evaporation
-EBS = evap_5;
-
-% QSE(QTF(P(t),S1,s1max),S2,s2max): saturation excess overland flow
-QSE = saturation_1;
-
-% QSS(S2,a,sfc*s2max,b,delta_t): subsurface flow
-QSS = interflow_9;
-
-% QBF(tcbf,S2): baseflow
-QBF = baseflow_1;
-
-%% 4. Determine numerical scheme and solver settings
-% Function name of the numerical scheme
-scheme  = solver.name;                                                      
-
-% Define which storage values should be used to update fluxes
-[~,store_fun]     = feval(scheme,storeInitial,delta_t);                     % storeInitial is used to find the number of stores, actual values are irrelevant here
-
-% Root-finding options
-fsolve_options = optimoptions('fsolve','Display','none',...                 % [1+n stores] settings of the root finding method
-                              'JacobPattern', [1,0;
-                                               1,1]);                       % Specify the Jacobian pattern                                               
-lsqnonlin_options = optimoptions('lsqnonlin',...                            % lsqnonlin settings for cases when fsolve fails
-                                 'Display','none',...
-                                 'JacobPattern', [1,0;
-                                                  1,1],...
-                                 'MaxFunEvals',1000);
-
-%% 5. Solve the system for the full time series
-for t = 1:t_end
-
-% Model setup -------------------------------------------------------------
-    % Determine the old storages
-    if t == 1; S1old = S10; else; S1old = store_S1(t-1); end                % store 1 at t-1
-    if t == 1; S2old = S20; else; S2old = store_S2(t-1); end                % store 2 at t-1
-
-    % Create temporary store ODE's that need to be solved
-    tmpf_S1 = @(S1,S2) (P(t) - ...
-                        EINT(S1,Ep(t),delta_t) - ...
-                        QTF(P(t),S1,s1max));                                % store 1 function with current flux values
-    tmpf_S2 = @(S1,S2) (QTF(P(t),S1,s1max) - ...
-                        EVEG(m,sfc,S2,s2max,Ep(t),delta_t) - ...
-                        EBS(m,S2,s2max,Ep(t),delta_t) - ...
-                        QSE(QTF(P(t),S1,s1max),S2,s2max) - ...
-                        QSS(S2,a,sfc*s2max,b,delta_t) - ...
-                        QBF(tcbf,S2));                                      % store 2 function
-    
-    % Call the numerical scheme function to create the ODE approximations
-    solve_fun = feval(scheme,...
-                      [S1old,S2old],...
-                      delta_t,...
-                      tmpf_S1,tmpf_S2);                                     % this returns a new anonymous function that we solve in the next step
-
-% Model solving -----------------------------------------------------------            
-    % --- Use the specified numerical scheme to solve storages ---
-    [tmp_sNew,tmp_fval] = fsolve(@(eq_sys) solve_fun(...
-                        eq_sys(1),eq_sys(2)),...                            % system of storage equations
-                        [S1old,S2old],...                                   % storage values on previous time step
-                        fsolve_options);                                    % solver options
-    
-    % --- Check if the solver has found an acceptable solution and re-run
-    % if not. The re-run uses the 'lsqnonlin' solver which is slower but 
-    % more robust. It runs solver.resnorm_iterations times, with different
-    % starting points for the solver on each iteration ---
-    tmp_resnorm = sum(tmp_fval.^2);
-     
-    if tmp_resnorm > solver.resnorm_tolerance
-        [tmp_sNew,~,~] = rerunSolver('lsqnonlin', ...                       % [tmp_sNew,tmp_resnorm,flag]
-                                        lsqnonlin_options, ...              % solver options
-                                        @(eq_sys) solve_fun(...             % system of ODEs
-                                                    eq_sys(1),eq_sys(2)), ...
-                                        solver.resnorm_maxiter, ...         % maximum number of re-runs
-                                        solver.resnorm_tolerance, ...       % convergence tolerance
-                                        tmp_sNew, ...                       % recent estimates
-                                        [S1old,S2old], ...                  % storages ate previous time step
-                                        store_min, ...                      % lower bounds
-                                        store_upp);                         % upper bounds              
+classdef m_16_newzealand2_8p_2s < MARRMoT_model
+    % Class for newzealand2 model
+    properties
+        % in case the model has any specific properties (eg derived theta,
+        % add it here)
     end
+    methods
+        
+        % this function runs once as soon as the model object is created
+        % and sets all the static properties of the model
+        function obj = m_16_newzealand2_8p_2s(delta_t, theta)
+            obj.numStores = 2;                                             % number of model stores
+            obj.numFluxes = 8;                                             % number of model fluxes
+            obj.numParams = 8;
+            
+            obj.JacobPattern  = [1,0;
+                                 1,1];                                     % Jacobian matrix of model store ODEs
+                             
+            obj.parRanges = [0   , 5;      % Maximum interception storage [mm] 
+                             1   , 2000;   % Smax, Maximum soil moisture storage [mm]
+                             0.05, 0.95;   % sfc, Field capacity as fraction of maximum soil moisture [-]
+                             0.05, 0.95 ;  % m, Fraction forest [-]
+                             0   , 1;      % a, Subsurface runoff coefficient [d-1]
+                             1   , 5;      % b, Runoff non-linearity [-]
+                             0   , 1;      % tcbf, Baseflow runoff coefficient [d-1]
+                             1   , 120];   % Routing time delay [d]
+            
+            obj.StoreNames = ["S1" "S2"];                                  % Names for the stores
+            obj.FluxNames  = ["eint", "qtf", "veg", "ebs",...
+                              "qse",  "qss", "qbf", "qt"];                 % Names for the fluxes
+            
+            obj.Flux_Ea_idx = [1 3 4];                                     % Index or indices of fluxes to add to Actual ET
+            obj.Flux_Q_idx  = 8;                                           % Index or indices of fluxes to add to Streamflow
+            
+            % setting delta_t and theta triggers the function obj.init()
+            if nargin > 0 && ~isempty(delta_t)
+                obj.delta_t = delta_t;
+            end
+            if nargin > 1 && ~isempty(theta)
+                obj.theta = theta;
+            end
+        end
+        
+        % INIT is run automatically as soon as both theta and delta_t are
+        % set (it is therefore ran only once at the beginning of the run. 
+        % Use it to initialise all the model parameters (in case there are
+        % derived parameters) and unit hydrographs and set minima and
+        % maxima for stores based on parameters.
+        function obj = init(obj)
+            theta   = obj.theta;
+            delta_t = obj.delta_t;
+            
+            d = theta(8);     % Routing delay [d]
+            
+            % min and max of stores
+            obj.store_min = zeros(1,obj.numStores);
+            obj.store_max = inf(1,obj.numStores);
+            
+            % initialise the unit hydrographs and still-to-flow vectors            
+            uh = uh_4_full(d,delta_t);
+            
+            obj.uhs        = {uh};
+            obj.fluxes_stf = arrayfun(@(n) zeros(1, n), cellfun(@length, obj.uhs), 'UniformOutput', false);
+        end
+        
+        % MODEL_FUN are the model governing equations in state-space formulation
+        function [dS, fluxes] = model_fun(obj, S)
+            % parameters
+            theta   = obj.theta;
+            s1max   = theta(1);     % Maximum interception storage [mm] 
+            s2max   = theta(2);     % Maximum soil moisture storage [mm] 
+            sfc     = theta(3);     % Field capacity as fraction of maximum soil moisture [-]
+            m       = theta(4);     % Fraction forest [-]
+            a       = theta(5);     % Subsurface runoff coefficient [d-1]
+            b       = theta(6);     % Runoff non-linearity [-]
+            tcbf    = theta(7);     % Baseflow runoff coefficient [d-1]
+            
+            % delta_t
+            delta_t = obj.delta_t;
+            
+            % unit hydrographs and still-to-flow vectors
+            uhs = obj.uhs; stf = obj.fluxes_stf;
+            uh = uhs{1}; stf = stf{1};
+            
+            % stores
+            S1 = S(1);
+            S2 = S(2);
+            
+            % climate input
+            climate_in = obj.input_climate;
+            P  = climate_in(1);
+            Ep = climate_in(2);
+            T  = climate_in(3);
+            
+            % fluxes functions
+            flux_eint = evap_1(S1,Ep,delta_t);
+            flux_qtf  = interception_1(P,S1,s1max);
+            flux_veg  = evap_6(m,sfc,S2,s2max,Ep,delta_t);
+            flux_ebs  = evap_5(m,S2,s2max,Ep,delta_t);
+            flux_qse  = saturation_1(flux_qtf,S2,s2max);
+            flux_qss  = interflow_9(S2,a,sfc*s2max,b,delta_t);
+            flux_qbf  = baseflow_1(tcbf,S2);
+            flux_qt   = uh(1) * (flux_qse + flux_qss + flux_qbf) + stf(1);
 
-% Model states and fluxes -------------------------------------------------    
-    % Calculate the fluxes
-    flux_eint(t) = EINT(tmp_sNew(1),Ep(t),delta_t);
-    flux_qtf(t)  = QTF(P(t),tmp_sNew(1),s1max);
-    flux_veg(t)  = EVEG(m,sfc,tmp_sNew(2),s2max,Ep(t),delta_t);
-    flux_ebs(t)  = EBS(m,tmp_sNew(2),s2max,Ep(t),delta_t);
-    flux_qse(t)  = QSE(QTF(P(t),tmp_sNew(1),s1max),tmp_sNew(2),s2max);
-    flux_qss(t)  = QSS(tmp_sNew(2),a,sfc*s2max,b,delta_t);
-    flux_qbf(t)  = QBF(tcbf,tmp_sNew(2));
-    
-    % Update the stores
-    store_S1(t) = S1old + (P(t) - flux_eint(t) - flux_qtf(t)) * delta_t;
-    store_S2(t) = S2old + (flux_qtf(t) -flux_veg(t) -flux_ebs(t) - ...
-                           flux_qse(t) -flux_qss(t) -flux_qbf(t)) * delta_t;
-
-    % Apply the routing scheme
-    tmp_Qt_cur    = (flux_qse(t) + flux_qss(t) + flux_qbf(t)).*uh_full;     % find how the runoff of this time step will be distributed in time
-    tmp_Qt_old    = tmp_Qt_old + tmp_Qt_cur;                                % update the 'still-to-flow-out' vector
-    flux_qt(t)    = tmp_Qt_old(1);                                          % the first value in 'still-to-flow-out' vector leaves the model this time step
-    tmp_Qt_old = circshift(tmp_Qt_old,-1);                                  % shift the 'still-to-flow-out' vector so that the next value is now at location 1
-    tmp_Qt_old(end) = 0;                                                    % remove the now last value (the one that we just routed to flux_qt(t) and is now shifted to the end of the 'still-to-flow-out' vector)
+            % stores ODEs
+            dS1 = P - flux_eint - flux_qtf;
+            dS2 = flux_qtf - flux_veg - flux_ebs -...
+                  flux_qse - flux_qss - flux_qbf;
+            
+            % outputs
+            dS = [dS1 dS2];
+            fluxes = [flux_eint, flux_qtf, flux_veg, flux_ebs,...
+                      flux_qse,  flux_qss, flux_qbf, flux_qt];
+        end
+        
+        % STEP runs at the end of every timestep, use it to update
+        % still-to-flow vectors from unit hydrographs
+        function step(obj, fluxes)
+            % unit hydrographs and still-to-flow vectors
+            uhs = obj.uhs; stf = obj.fluxes_stf;
+            uh = uhs{1}; stf = stf{1};
+            
+            % input fluxes to the unit hydrographs
+            flux_qse = fluxes(5);
+            flux_qss = fluxes(6);
+            flux_qbf = fluxes(7);
+            
+            % update still-to-flow vectors using fluxes at current step and
+            % unit hydrographs
+            stf      = (uh .* (flux_qse + flux_qss + flux_qbf)) + stf;
+            stf      = circshift(stf,-1);
+            stf(end) = 0;
+            
+            obj.fluxes_stf = {stf};
+        end
+    end
 end
-
-%% 6. Generate outputs
-    % --- Fluxes leaving the model ---
-    % 'Ea' and 'Q' are used outside the funcion and should NOT be renamed
-    fluxOutput.Ea     = (flux_eint + flux_veg + flux_ebs) * delta_t;
-    fluxOutput.Q      = flux_qt * delta_t;
-    
-    % --- Fluxes internal to the model ---
-    fluxInternal.eint = flux_eint * delta_t;
-    fluxInternal.qtf  = flux_qtf * delta_t;
-    fluxInternal.eveg = flux_veg * delta_t;
-    fluxInternal.ebs  = flux_ebs * delta_t;
-    fluxInternal.qse  = flux_qse * delta_t;
-    fluxInternal.qss  = flux_qss * delta_t;
-    fluxInternal.qbf  = flux_qbf * delta_t;
-
-    % --- Stores ---
-    storeInternal.S1  = store_S1;
-    storeInternal.S2  = store_S2;
-
-% Check water balance
-if nargout == 4
-    waterBalance = checkWaterBalance(P.*delta_t,...         % Incoming precipitation
-                                     fluxOutput,...         % Fluxes Q and Ea leaving the model
-                                     storeInternal,...      % Time series of storages ...
-                                     storeInitial,...       % And initial store values to calculate delta S
-                                     tmp_Qt_old.*delta_t);  % Whether the model uses a routing scheme that
-                                                            % still contains water. Use '0' for no routing
-end
-
-
- 
-
-
-
-

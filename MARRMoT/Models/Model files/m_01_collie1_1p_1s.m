@@ -1,173 +1,80 @@
-function [ fluxOutput, fluxInternal, storeInternal, waterBalance ] = ...
-    m_01_collie1_1p_1s( fluxInput, storeInitial, theta, solver )
-% Hydrologic conceptual model: Collie River 1 (traditional bucket model)
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
-% WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%   
-% Model reference
-% Jothityangkoon, C., M. Sivapalan, and D. Farmer (2001), Process controls
-% of water balance variability in a large semi-arid catchment: downward 
-% approach to hydrological model development. Journal of Hydrology, 254,
-% 174198. doi: 10.1016/S0022-1694(01)00496-6.
-
-% Steps
-% --- Practical ---
-% 0. Handle inputs
-%
-% --- Model setup ---
-% 1. Set out ODE
-% 2. Set out constitutive functions
-% 3. Determine smoothing
-% 4. Determine numerical scheme
-
-% --- Model use ---
-% 5. Solve 
-
-% --- Practical ---
-% 6. Handle outputs
-
-%% Setup
-%%INPUTS
-% Time step size 
-delta_t = fluxInput.delta_t;                                                
-
-% Data: adjust the units so that all fluxes (rates) inside this model
-% function are calculated in [mm/d]
-P     = fluxInput.precip./delta_t;          % [mm/delta_t] -> [mm/d]
-Ep    = fluxInput.pet./delta_t;             % [mm/delta_t] -> [mm/d]
-T     = fluxInput.temp;
-t_end = length(P);
-
-% Parameters
-% [name in documentation] = theta(order in which specified in parameter file)
-S1max   = theta(1);                         % Maximum soil moisture storage [mm]
-
-%%INITIALISE MODEL STORES
-S10     = storeInitial(1);                  % Initial soil moisture storage
-
-%%DEFINE STORE BOUNDARIES
-store_min = [0];                            % lower bounds of stores
-store_upp = [];                             % optional higher bounds
-
-%%INITIALISE STORAGE VECTORS
-store_S1 = zeros(1,t_end);
-
-flux_ea   = zeros(1,t_end);
-flux_qse  = zeros(1,t_end);
-
-%% 1. ODEs
-% Given in the documentation.
-
-%% 2. Constitutive functions
-% Given in the documentation
-
-%% 3. Specify and smooth model functions
-% Store numbering:
-% S1. Soil moisture
-
-% EA(S1,Smax,Ep,delta_t): evaporation from soil moisture
-EA = evap_7;
-
-% QSE(P,S1,Smax): Saturation excess flow
-QSE = saturation_1;
-
-%% 4. Determine numerical scheme and solver settings
-% Function name of the numerical scheme
-scheme            = solver.name;                                            
-
-% Define which storage values should be used to update fluxes
-[~,store_fun]     = feval(scheme,storeInitial,delta_t);                     % storeInitial is used to find the number of stores, actual values are irrelevant here
-
-% Root-finding options
-fzero_options     = optimset('Display','off');                              % [1 store] settings of the root finding method
-lsqnonlin_options = optimoptions('lsqnonlin',...                            % lsqnonlin settings for cases when fsolve fails
-                                 'Display','none',...
-                                 'MaxFunEvals',1000);
-
-%% 5. Solve the system for the full time series
-for t = 1:t_end
-
-% Model setup -------------------------------------------------------------
-    % Determine the old storages
-    if t == 1; S1old = S10; else; S1old = store_S1(t-1); end                % store 1 at t-1
-
-    % Create temporary store ODE's that need to be solved
-    tmpf_S1 = @(S1)    (P(t) - ...
-                        EA(S1,S1max,Ep(t),delta_t) - ...
-                        QSE(P(t),S1,S1max));                                % store 1 function with current flux values
-    
-    % Call the numerical scheme function to create the ODE approximations. 
-    % This returns a new anonymous function that we solve in the next step.
-    solve_fun = feval(scheme,...
-                      [S1old],...
-                      delta_t,...
-                      tmpf_S1);        
-
-% Model solving -----------------------------------------------------------            
-    % --- Use the specified numerical scheme to solve storages ---
-    [tmp_sNew,tmp_fval] = fzero(solve_fun,...
-                                S1old,...
-                                fzero_options);                             % 1 store solver
-                                
-    % --- Check if the solver has found an acceptable solution and re-run
-    % if not. The re-run uses the 'lsqnonlin' solver which is slower but 
-    % more robust. It runs solver.resnorm_iterations times, with different
-    % starting points for the solver on each iteration ---
-    tmp_resnorm = sum(tmp_fval.^2);
-   
-    if tmp_resnorm > solver.resnorm_tolerance
-        [tmp_sNew,~,~] = rerunSolver('lsqnonlin', ...                       % [tmp_sNew,tmp_resnorm,flag]
-                                        lsqnonlin_options, ...              % solver options
-                                        @(eq_sys) solve_fun(...             % system of ODEs
-                                                    eq_sys(1)), ...
-                                        solver.resnorm_maxiter, ...         % maximum number of re-runs
-                                        solver.resnorm_tolerance, ...       % convergence tolerance
-                                        tmp_sNew, ...                       % recent estimates
-                                        [S1old], ...                        % storages ate previous time step
-                                        store_min, ...                      % lower bounds
-                                        store_upp);                         % upper bounds              
+classdef m_01_collie1_1p_1s < MARRMoT_model
+    % Class for collie1 model
+    properties
+        % in case the model has any specific properties (eg derived theta,
+        % add it here)
     end
-    
-% Model states and fluxes -------------------------------------------------    
-    % Find the storages needed to update fluxes: update 'tmp_sFlux'
-    eval(store_fun);                                                        % creates/updates tmp_sFlux 
-    
-    % Calculate the fluxes
-    flux_ea(t)   = EA(tmp_sFlux(1),S1max,Ep(t),delta_t);
-    flux_qse(t)  = QSE(P(t),tmp_sFlux(1),S1max);
-    
-    % Update the stores
-    store_S1(t) = S1old + (P(t) - flux_ea(t) - flux_qse(t)) * delta_t;
-   
+    methods
+        
+        % this function runs once as soon as the model object is created
+        % and sets all the static properties of the model
+        function obj = m_01_collie1_1p_1s(delta_t, theta)
+            obj.numStores = 1;                                             % number of model stores
+            obj.numFluxes = 2;                                             % number of model fluxes
+            obj.numParams = 1;
+            
+            obj.JacobPattern  = [1];                                       % Jacobian matrix of model store ODEs
+            
+            obj.parRanges = [1   , 2000];      % Smax [mm]
+            
+            obj.StoreNames = ["S1"];                                       % Names for the stores
+            obj.FluxNames  = ["ea", "qse"];                                % Names for the fluxes
+            
+            obj.Flux_Ea_idx = 1;                                           % Index or indices of fluxes to add to Actual ET
+            obj.Flux_Q_idx  = 2;                                           % Index or indices of fluxes to add to Streamflow
+            
+            % setting delta_t and theta triggers the function obj.init()
+            if nargin > 0 && ~isempty(delta_t)
+                obj.delta_t = delta_t;
+            end
+            if nargin > 1 && ~isempty(theta)
+                obj.theta = theta;
+            end
+        end
+        
+        % INIT is run automatically as soon as both theta and delta_t are
+        % set (it is therefore ran only once at the beginning of the run. 
+        % Use it to initialise all the model parameters (in case there are
+        % derived parameters) and unit hydrographs and set minima and
+        % maxima for stores based on parameters.
+        function obj = init(obj)
+            % min and max of stores
+            obj.store_min = zeros(1,obj.numStores);
+            obj.store_max = inf(1,obj.numStores);
+        end
+        
+        % MODEL_FUN are the model governing equations in state-space formulation        
+        function [dS, fluxes] = model_fun(obj, S)
+            % parameters
+            theta   = obj.theta;
+            S1max   = theta(1);                         % Maximum soil moisture storage [mm]
+            
+            % delta_t
+            delta_t = obj.delta_t;
+            
+            % stores
+            S1 = S(1);
+
+            % climate input
+            climate_in = obj.input_climate;
+            P  = climate_in(1);
+            Ep = climate_in(2);
+            
+            % fluxes functions
+            flux_ea   = evap_7(S1, S1max, Ep, delta_t);
+            flux_qse  = saturation_1(P,S1,S1max);
+            
+            % stores ODEs
+            dS1 = P - flux_ea  - flux_qse;
+            
+            % outputs
+            dS = [dS1];
+            fluxes = [flux_ea, flux_qse];
+        end
+        
+        % STEP runs at the end of every timestep, use it to update
+        % still-to-flow vectors from unit hydrographs
+        function step(obj, fluxes)
+        end
+    end
 end
-
-%% 6. Generate outputs
-    % --- Fluxes leaving the model ---
-    % 'Ea' and 'Q' are used outside the funcion and should NOT be renamed
-    fluxOutput.Ea     = flux_ea  * delta_t;
-    fluxOutput.Q      = flux_qse * delta_t;
-    
-    % --- Fluxes internal to the model ---
-    fluxInternal.noInternalFluxes = NaN;
-
-    % --- Stores ---
-    storeInternal.S1  = store_S1;
-
-% Check water balance
-if nargout == 4
-    waterBalance = ...
-     checkWaterBalance(...
-      P.*delta_t,...     % Incoming precipitation
-      fluxOutput,...     % Fluxes Q and Ea leaving the model
-      storeInternal,...  % Time series of storages ...
-      storeInitial,...   % And initial store values to calculate delta S
-      0);                % Whether the model uses a routing scheme that
-                         % still contains water. Use '0' for no routing
-end
- 
-
-
-
-

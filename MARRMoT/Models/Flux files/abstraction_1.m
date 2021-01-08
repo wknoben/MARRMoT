@@ -1,4 +1,4 @@
-function [func] = abstraction_1(~)
+function [out] = abstraction_1(p1)
 %abstraction_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -13,7 +13,7 @@ function [func] = abstraction_1(~)
 %
 % WK, 05/10/2018
 
-func = @(p1) p1;
+out = p1;
 
 end
 

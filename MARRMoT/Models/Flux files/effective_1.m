@@ -1,4 +1,4 @@
-function [func] = effective_1(~)
+function [out] = effective_1(In1,In2)
 %effective_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,7 +14,7 @@ function [func] = effective_1(~)
 %
 % WK, 08/10/2018
 
-func = @(In1,In2) max(In1-In2,0);
+out = max(In1-In2,0);
 
 end
 

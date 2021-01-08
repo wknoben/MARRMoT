@@ -1,4 +1,4 @@
-function [func] = evap_22(~)
+function [out] = evap_22(p1,p2,S,Ep,dt)
 %evap_22 Creates 3-part piece-wise evaporation
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = evap_22(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S,Ep,dt) min(S/dt,max(0,min((S-p1)./(p2-p1).*Ep,Ep)));
+out = min(S/dt,max(0,min((S-p1)./(p2-p1).*Ep,Ep)));
 
 
 end

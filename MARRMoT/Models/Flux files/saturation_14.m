@@ -1,4 +1,4 @@
-function [func] = saturation_14(~)
+function [out] = saturation_14(p1,p2,S,Smax,In)
 %saturation_14 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,8 +18,7 @@ function [func] = saturation_14(~)
 %
 % WK, 09/10/2018
 
-func = @(p1,p2,S,Smax,In) ...
-        ((  (0.5-p1)^(1-p2).*max(0,  S./Smax).^p2).*(S./Smax <= 0.5-p1) + ...
+out = ((  (0.5-p1)^(1-p2).*max(0,  S./Smax).^p2).*(S./Smax <= 0.5-p1) + ...
          (1-(0.5+p1)^(1-p2).*max(0,1-S./Smax).^p2).*(S./Smax >  0.5-p1)).*In;
 
 end

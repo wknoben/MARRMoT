@@ -1,4 +1,4 @@
-function [func] = baseflow_7(~)
+function [out] = baseflow_7(p1,p2,S,dt)
 %baseflow_7 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = baseflow_7(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S,dt) min(S/dt,p1.*max(0,S).^p2);
+out = min(S/dt,p1.*max(0,S).^p2);
 
 end
 

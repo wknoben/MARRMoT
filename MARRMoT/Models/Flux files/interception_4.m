@@ -1,4 +1,4 @@
-function [func] = interception_4(~)
+function [out] = interception_4(p1,p2,t,tmax,In,dt)
 %interception_4 Creates function for effective rainfall through interception
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = interception_4(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,t,tmax,In,dt) max(0,p1+(1-p1)*cos(2*pi*(t*dt-p2)/tmax))*In;
+out = max(0,p1+(1-p1)*cos(2*pi*(t*dt-p2)/tmax))*In;
 
 end
 

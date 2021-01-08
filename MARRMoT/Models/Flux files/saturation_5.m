@@ -1,4 +1,4 @@
-function [func] = saturation_5(~)
+function [out] = saturation_5(S,p1,p2,In)
 %saturation_5 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = saturation_5(~)
 %
 % WK, 09/10/2018
 
-func = @(S,p1,p2,In) (1-min(1,(max(S,0)/p1).^p2)).*In;
+out = (1-min(1,(max(S,0)/p1).^p2)).*In;
 
 end
 

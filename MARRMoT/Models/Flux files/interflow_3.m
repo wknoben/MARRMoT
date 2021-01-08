@@ -1,4 +1,4 @@
-function [func] = interflow_3(~)
+function [out] = interflow_3(p1,p2,S,dt)
 %interflow_3 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = interflow_3(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,S,dt) min(p1*max(S,0)^(p2),max(S/dt,0));
+out = min(p1*max(S,0)^(p2),max(S/dt,0));
 
 end
 

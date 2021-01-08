@@ -1,4 +1,4 @@
-function [func] = exchange_1(~)
+function [out] = exchange_1(p1,p2,p3,S,fmax,dt)
 %exchange_1 Creates function for two-way channel exchange: linear and exponential.
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = exchange_1(~)
 %
 % WK, 07/10/2018
 
-func = @(p1,p2,p3,S,fmax,dt) max((p1*abs(S/dt) + p2*(1-exp(-1*p3*abs(S/dt)))).*sign(S),-1*fmax);
+out = max((p1*abs(S/dt) + p2*(1-exp(-1*p3*abs(S/dt)))).*sign(S),-1*fmax);
 
 end
 

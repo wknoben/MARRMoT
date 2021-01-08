@@ -1,4 +1,4 @@
-function [func] = evap_5(~)
+function [out] = evap_5(p1,S,Smax,Ep,dt)
 %evap_5 Creates function for evaporation: evaporates based on scaled
 %current water storage, for a fraction of the surface
 %
@@ -19,7 +19,7 @@ function [func] = evap_5(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,S,Smax,Ep,dt) min((1-p1).*S./Smax.*Ep,S/dt);
+out = min((1-p1).*S./Smax.*Ep,S/dt);
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = percolation_6(~)
+function [out] = percolation_6(p1,p2,S,dt)
 %percolation_6 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = percolation_6(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,S,dt) min(S/dt,p1.*min(1,max(0,S)./p2));
+out = min(S/dt,p1.*min(1,max(0,S)./p2));
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = phenology_2(~)
+function [out] = phenology_2(p1,p2,p3,t,tmax,dt)
 %phenology_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = phenology_2(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,p3,t,tmax,dt) p1*(1+p2*sin(2*pi*(t*dt-p3)/tmax));
+out = p1*(1+p2*sin(2*pi*(t*dt-p3)/tmax));
 
 end
 

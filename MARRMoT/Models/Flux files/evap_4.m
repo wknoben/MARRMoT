@@ -1,4 +1,4 @@
-function [func] = evap_4(~)
+function [out] = evap_4(Ep,p1,S,p2,Smax,dt)
 %evap_4 Creates function for evaporation: evaporates based on scaled
 %current water storage, a walting point, a constraining factor and limited 
 %by potential rate.
@@ -20,7 +20,7 @@ function [func] = evap_4(~)
 %
 % WK, 05/10/2018
 
-func = @(Ep,p1,S,p2,Smax,dt) min(Ep.*max(0,p1*(S-p2.*Smax)./(Smax-p2.*Smax)),S/dt);
+out = min(Ep.*max(0,p1*(S-p2.*Smax)./(Smax-p2.*Smax)),S/dt);
 
 end
 

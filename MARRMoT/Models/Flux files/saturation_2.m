@@ -1,4 +1,4 @@
-function [func] = saturation_2(~)
+function [out] = saturation_2(S,Smax,p1,In)
 %saturation_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -21,7 +21,7 @@ function [func] = saturation_2(~)
 % exponent can push this function into regions where no feasible solutions
 % exist. The min(max()) combination prevents this from happening. 
 
-func = @(S,Smax,p1,In) (1- min(1,max(0,(1-S./Smax))).^p1) .*In;
+out = (1- min(1,max(0,(1-S./Smax))).^p1) .*In;
 
 end
 

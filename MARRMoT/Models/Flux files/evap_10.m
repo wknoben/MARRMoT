@@ -1,4 +1,4 @@
-function [func] = evap_10(~)
+function [out] = evap_10(p1,S,Smax,Ep,dt)
 %evap_10 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = evap_10(~)
 %               dt   - time step size [d]
 %
 % WK, 05/10/2018
-func = @(p1,S,Smax,Ep,dt) min(p1.*S./Smax.*Ep,S/dt);
+out = min(p1.*S./Smax.*Ep,S/dt);
 
 end
 

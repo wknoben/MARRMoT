@@ -1,4 +1,4 @@
-function [func] = baseflow_3(~)
+function [out] = baseflow_3(S,Smax)
 %baseflow_3 
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,7 +14,7 @@ function [func] = baseflow_3(~)
 %
 % WK, 05/10/2018
 
-func = @(S,Smax) Smax^(-4)/4*(S^5);
+out = Smax^(-4)/4*(S^5);
 
 end
 

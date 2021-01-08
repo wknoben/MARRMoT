@@ -1,4 +1,4 @@
-function [func] = interflow_8(~)
+function [out] = interflow_8(S,p1,p2)
 %interflow_8 
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = interflow_8(~)
 %
 % WK, 09/10/2018
 
-func = @(S,p1,p2)  max(0,p1*(S-p2));
+out =  max(0,p1*(S-p2));
 
 end
 

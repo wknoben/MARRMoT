@@ -1,4 +1,4 @@
-function [func] = infiltration_2(~)
+function [out] = infiltration_2(p1,p2,S1,S1max,flux,S2,dt)
 %infiltration_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -20,7 +20,7 @@ function [func] = infiltration_2(~)
 %
 % WK, 07/10/2018
 
-func = @(p1,p2,S1,S1max,flux,S2,dt) max(min((p1.*exp(-1*p2*S1./S1max))-flux,S2/dt),0);
+out = max(min((p1.*exp(-1*p2*S1./S1max))-flux,S2/dt),0);
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = saturation_7(~)
+function [out] = saturation_7(p1,p2,p3,p4,p5,S,In)
 %saturation_7 
 %
 % Copyright (C) 2018 W. Knoben
@@ -21,9 +21,9 @@ function [func] = saturation_7(~)
 %
 % WK, 09/10/2018
 
-func = @(p1,p2,p3,p4,p5,S,In) integral(@(x)...
-    1./(p1.*gamma(p2)).*(max(x-p3,0)./p1).^(p2-1).*exp(-1.*max(x-p3,0)./p1),...
-    p5.*max(S,0)+p4,Inf).*In;
+out = integral(@(x)...
+        1./(p1.*gamma(p2)).*(max(x-p3,0)./p1).^(p2-1).*exp(-1.*max(x-p3,0)./p1),...
+        p5.*max(S,0)+p4,Inf).*In;
 
 end
 

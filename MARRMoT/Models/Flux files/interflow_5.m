@@ -1,4 +1,4 @@
-function [func] = interflow_5(~)
+function [out] = interflow_5(p1,S)
 %interflow_5 
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,7 +14,7 @@ function [func] = interflow_5(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,S) p1.*S;
+out = p1.*S;
 
 end
 

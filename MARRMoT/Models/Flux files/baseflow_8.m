@@ -1,4 +1,4 @@
-function [func] = baseflow_8(~)
+function [out] = baseflow_8(p1,p2,S,Smax)
 %baseflow_8 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = baseflow_8(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S,Smax) p1.*(exp(p2.*min(1,max(S,0)./Smax))-1);
+out = p1.*(exp(p2.*min(1,max(S,0)./Smax))-1);
 
 end
 

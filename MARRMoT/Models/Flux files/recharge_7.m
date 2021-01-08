@@ -1,4 +1,4 @@
-function [func] = recharge_7(~)
+function [out] = recharge_7(p1,fin)
 %recharge_7 
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,7 +14,7 @@ function [func] = recharge_7(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,fin) min(p1,fin);
+out = min(p1,fin);
 
 end
 

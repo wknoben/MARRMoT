@@ -1,4 +1,4 @@
-function [func] = capillary_1(~)
+function [out] = capillary_1(p1,S1,S1max,S2,dt)
 %capillary_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = capillary_1(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,S1,S1max,S2,dt) min(p1.*(1-S1/S1max),S2/dt);
+out = min(p1.*(1-S1/S1max),S2/dt);
 
 end
 

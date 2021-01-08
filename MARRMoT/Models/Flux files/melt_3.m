@@ -1,4 +1,4 @@
-function [func] = melt_3(varargin)
+function [out] = melt_3(p1,p2,T,S1,S2,St,dt,varargin)
 %melt_3 
 %
 % Copyright (C) 2018 W. Knoben
@@ -24,11 +24,11 @@ function [func] = melt_3(varargin)
 
 
 if size(varargin,2) == 0
-    func = @(p1,p2,T,S1,S2,St,dt) min(max(p1*(T-p2),0),S1/dt).*smoothThreshold_storage_logistic(S2,St);
+    out = min(max(p1*(T-p2),0),S1/dt).*smoothThreshold_storage_logistic(S2,St);
 elseif size(varargin,2) == 1
-    func = @(p1,p2,T,S1,S2,St,dt) min(max(p1*(T-p2),0),S1/dt).*smoothThreshold_storage_logistic(S2,St,varargin(1));
+    out = min(max(p1*(T-p2),0),S1/dt).*smoothThreshold_storage_logistic(S2,St,varargin(1));
 elseif size(varargin,2) == 2
-    func = @(p1,p2,T,S1,S2,St,dt) min(max(p1*(T-p2),0),S1/dt).*smoothThreshold_storage_logistic(S2,St,varargin(1),varargin(2));    
+    out = min(max(p1*(T-p2),0),S1/dt).*smoothThreshold_storage_logistic(S2,St,varargin(1),varargin(2));    
 end
 
 end

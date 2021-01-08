@@ -1,4 +1,4 @@
-function [func] = baseflow_9(~)
+function [out] = baseflow_9(p1,p2,S)
 %baseflow_9 Linear flow above a threshold
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = baseflow_9(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S) p1.*max(0,S-p2);
+out = p1.*max(0,S-p2);
 
 end
 

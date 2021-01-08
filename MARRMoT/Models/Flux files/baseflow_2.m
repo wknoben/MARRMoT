@@ -1,4 +1,4 @@
-function [func] = baseflow_2(~)
+function [out] = baseflow_2(S,p1,p2,dt)
 %baseflow_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = baseflow_2(~)
 %
 % WK, 05/10/2018
 
-func = @(S,p1,p2,dt) min((1./p1*max(S,0)).^(1./p2),max(S,0)/dt);
+out = min((1./p1*max(S,0)).^(1./p2),max(S,0)/dt);
 
 end
 

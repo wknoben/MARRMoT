@@ -1,4 +1,4 @@
-function [func] = infiltration_4(~)
+function [out] = infiltration_4(fluxIn,p1)
 %infiltration_4 
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,7 +14,7 @@ function [func] = infiltration_4(~)
 %
 % WK, 07/10/2018
 
-func = @(fluxIn,p1) min(fluxIn,p1);
+out = min(fluxIn,p1);
 
 end
 

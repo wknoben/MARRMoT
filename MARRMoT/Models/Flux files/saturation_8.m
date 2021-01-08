@@ -1,4 +1,4 @@
-function [func] = saturation_8(~)
+function [out] = saturation_8(p1,p2,S,Smax,In)
 %saturation_8 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = saturation_8(~)
 %
 % WK, 09/10/2018
 
-func = @(p1,p2,S,Smax,In)  (p1+(p2-p1)*S/Smax)*In;
+out = (p1+(p2-p1)*S/Smax)*In;
 
 end
 

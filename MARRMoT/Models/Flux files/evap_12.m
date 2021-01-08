@@ -1,4 +1,4 @@
-function [func] = evap_12(~)
+function [out] = evap_12(S,p1,Ep)
 %evap_11 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = evap_12(~)
 %
 % WK, 05/10/2018
 
-func = @(S,p1,Ep) min(1,exp(2*(1-S/p1)))*Ep;
+out = min(1,exp(2*(1-S/p1)))*Ep;
 
 end
 

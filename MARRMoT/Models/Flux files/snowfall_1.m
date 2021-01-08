@@ -1,4 +1,4 @@
-function [func] = snowfall_1(varargin)
+function [out] = snowfall_1(In,T,p1,varargin)
 %snowfall_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -7,7 +7,7 @@ function [func] = snowfall_1(varargin)
 %
 % varargin(1): value of smoothing variable r (default 0.01)
 %
-% Anonymous function
+% Anonymous outtion
 % ------------------
 % Description:  Snowfall based on temperature threshold
 % Constraints:  -
@@ -18,9 +18,9 @@ function [func] = snowfall_1(varargin)
 % WK, 08/10/2018
 
 if size(varargin,2) == 0
-    func = @(In,T,p1) In.*(smoothThreshold_temperature_logistic(T,p1));
+    out = In.*(smoothThreshold_temperature_logistic(T,p1));
 elseif size(varargin,2) == 1
-    func = @(In,T,p1) In.*(smoothThreshold_temperature_logistic(T,p1,varargin(1)));   
+    out = In.*(smoothThreshold_temperature_logistic(T,p1,varargin(1)));   
 end
 
 

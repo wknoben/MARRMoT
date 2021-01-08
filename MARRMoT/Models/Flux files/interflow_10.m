@@ -1,4 +1,4 @@
-function [func] = interflow_10(~)
+function [out] = interflow_10(S,p1,p2,p3)
 %interflow_10 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = interflow_10(~)
 %
 % WK, 09/10/2018
 
-func = @(S,p1,p2,p3)  p1*max(0,S-p2)/(p3);
+out = p1*max(0,S-p2)/(p3);
 
 end
 

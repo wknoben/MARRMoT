@@ -1,4 +1,4 @@
-function [func] = saturation_10(~)
+function [out] = saturation_10(p1,p2,p3,S,In)
 %saturation_10 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = saturation_10(~)
 %
 % WK, 09/10/2018
 
-func = @(p1,p2,p3,S,In) min(p1,p2+p2.*exp(p3.*S)).*In;
+out = min(p1,p2+p2.*exp(p3.*S)).*In;
 
 
 end

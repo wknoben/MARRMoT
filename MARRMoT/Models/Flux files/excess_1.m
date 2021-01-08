@@ -1,4 +1,4 @@
-function [func] = excess_1(~)
+function [out] = excess_1(So,Smax,dt)
 %excess_1
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = excess_1(~)
 %
 % WK, 08/10/2018
 
-func = @(So,Smax,dt) max((So-Smax)/dt,0);
+out = max((So-Smax)/dt,0);
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = saturation_13(~)
+function [out] = saturation_13(p1,p2,S,In)
 %saturation_13 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = saturation_13(~)
 %
 % WK, 09/10/2018
 
-func = @(p1,p2,S,In) In.*normcdf(log10(max(0,S)./p1)./log10(p1./p2));
+out = In.*normcdf(log10(max(0,S)./p1)./log10(p1./p2));
 
 end
 

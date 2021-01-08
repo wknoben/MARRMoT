@@ -1,4 +1,4 @@
-function [func] = rainfall_2(varargin)
+function [out] = rainfall_2(In,T,p1,p2)
 %rainfall_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = rainfall_2(varargin)
 %
 % WK, 08/10/2018
 
-func = @(In,T,p1,p2) min(In,max(0,In.*(T-(p1-0.5*p2))/p2));
+out = min(In,max(0,In.*(T-(p1-0.5*p2))/p2));
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = exchange_2(~)
+function [out] = exchange_2(p1,S1,S1max,S2,S2max)
 %exchange_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = exchange_2(~)
 %
 % WK, 07/10/2018
 
-func = @(p1,S1,S1max,S2,S2max) p1*(S1/S1max - S2/S2max); 
+out = p1*(S1/S1max - S2/S2max); 
 
 end
 

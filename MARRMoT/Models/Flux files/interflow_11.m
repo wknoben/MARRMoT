@@ -1,4 +1,4 @@
-function [func] = interflow_11(varargin)
+function [out] = interflow_11(p1,p2,S,dt,varargin)
 %interflow_11 
 %
 % Copyright (C) 2018 W. Knoben
@@ -20,11 +20,11 @@ function [func] = interflow_11(varargin)
 % WK, 09/10/2018
 
 if size(varargin,2) == 0
-    func = @(p1,p2,S,dt) min(p1,(S-p2)/dt).*(1-smoothThreshold_storage_logistic(S,p2));
+    out = min(p1,(S-p2)/dt).*(1-smoothThreshold_storage_logistic(S,p2));
 elseif size(varargin,2) == 1
-    func = @(p1,p2,S,dt) min(p1,(S-p2)/dt).*(1-smoothThreshold_storage_logistic(S,p2,varargin(1)));
+    out = min(p1,(S-p2)/dt).*(1-smoothThreshold_storage_logistic(S,p2,varargin(1)));
 elseif size(varargin,2) == 2
-    func = @(p1,p2,S,dt) min(p1,(S-p2)/dt).*(1-smoothThreshold_storage_logistic(S,p2,varargin(1),varargin(2)));    
+    out = min(p1,(S-p2)/dt).*(1-smoothThreshold_storage_logistic(S,p2,varargin(1),varargin(2)));    
 end
 
 end

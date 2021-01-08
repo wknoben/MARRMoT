@@ -1,4 +1,4 @@
-function [func] = interflow_6(~)
+function [out] = interflow_6(p1,p2,S1,S2,S2max)
 %interflow_6 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = interflow_6(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,S1,S2,S2max) p1.*S1.*(min(1,S2./S2max)-p2)./(1-p2).*...
+out = p1.*S1.*(min(1,S2./S2max)-p2)./(1-p2).*...
                             (1-smoothThreshold_storage_logistic(S2./S2max,p2));
 
 end

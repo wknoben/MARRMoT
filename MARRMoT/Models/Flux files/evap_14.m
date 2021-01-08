@@ -1,4 +1,4 @@
-function [func] = evap_14(~)
+function [out] = evap_14(p1,p2,Ep,S1,S2,S2min,dt)
 %evap_14 
 %
 % Copyright (C) 2018 W. Knoben
@@ -20,7 +20,7 @@ function [func] = evap_14(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,Ep,S1,S2,S2min,dt) min((p1^p2)*Ep,S1/dt).*smoothThreshold_storage_logistic(S2,S2min);
+out = min((p1^p2)*Ep,S1/dt).*smoothThreshold_storage_logistic(S2,S2min);
 
 end
 

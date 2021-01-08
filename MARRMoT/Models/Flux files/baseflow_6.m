@@ -1,4 +1,4 @@
-function [func] = baseflow_6(~)
+function [out] = baseflow_6(p1,p2,S,dt)
 %baseflow_6 Creates function for quadratic baseflow
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = baseflow_6(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S,dt) min(S/dt,p1.*S.^2).*(1-smoothThreshold_storage_logistic(S,p2));
+out = min(S/dt,p1.*S.^2).*(1-smoothThreshold_storage_logistic(S,p2));
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = saturation_3(~)
+function [out] = saturation_3(S,Smax,p1,In)
 %saturation_3 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = saturation_3(~)
 %
 % WK, 09/10/2018
 
-func = @(S,Smax,p1,In) (1-(1/(1+exp((S/Smax + 0.5)/p1)))).*In;
+out = (1-(1/(1+exp((S/Smax + 0.5)/p1)))).*In;
 
 end
 

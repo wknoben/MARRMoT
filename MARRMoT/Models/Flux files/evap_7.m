@@ -1,4 +1,4 @@
-function [func] = evap_7(~)
+function [out] = evap_7(S,Smax,Ep,dt)
 %evap_7 Creates function for evaporation: evaporates based on scaled
 %current water storage, limited by potential rate.
 %
@@ -17,7 +17,7 @@ function [func] = evap_7(~)
 %
 % WK, 05/10/2018
 
-func = @(S,Smax,Ep,dt) min(S./Smax.*Ep,S/dt);
+out = min(S./Smax.*Ep,S/dt);
 
 end
 

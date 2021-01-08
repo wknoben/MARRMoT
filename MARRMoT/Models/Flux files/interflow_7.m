@@ -1,4 +1,4 @@
-function [func] = interflow_7(~)
+function [out] = interflow_7(S,Smax,p1,p2,p3,dt)
 %interflow_7 
 %
 % Copyright (C) 2018 W. Knoben
@@ -20,7 +20,7 @@ function [func] = interflow_7(~)
 %
 % WK, 09/10/2018
 
-func = @(S,Smax,p1,p2,p3,dt)  min(max(0,(S-p1.*Smax)/dt),(max(0,S-p1.*Smax)./p2).^(1/p3));
+out = min(max(0,(S-p1.*Smax)/dt),(max(0,S-p1.*Smax)./p2).^(1/p3));
 
 end
 

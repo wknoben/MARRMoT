@@ -1,4 +1,4 @@
-function [func] = percolation_3(~)
+function [out] = percolation_3(S,Smax)
 %percolation_3 
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,7 +14,7 @@ function [func] = percolation_3(~)
 %
 % WK, 08/10/2018
 
-func = @(S,Smax) Smax^(-4)./(4)*(4/9)^(-4)*S^5;
+out = Smax^(-4)./(4)*(4/9)^(-4)*S^5;
 
 end
 

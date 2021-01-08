@@ -1,4 +1,4 @@
-function [func] = interception_1(varargin)
+function [out] = interception_1(In,S,Smax,varargin)
 %interception_1 Creates function for store overflow: uses logistic smoother.
 % varargin(1): value of smoothing variable r (default 0.01)
 % varargin(2): value of smoothing variable e (default 5.00)
@@ -18,11 +18,11 @@ function [func] = interception_1(varargin)
 % WK, 07/10/2018
 
 if size(varargin,2) == 0
-    func = @(In,S,Smax) In.*(1-smoothThreshold_storage_logistic(S,Smax));
+    out = In.*(1-smoothThreshold_storage_logistic(S,Smax));
 elseif size(varargin,2) == 1
-    func = @(In,S,Smax) In.*(1-smoothThreshold_storage_logistic(S,Smax,varargin(1)));
+    out = In.*(1-smoothThreshold_storage_logistic(S,Smax,varargin(1)));
 elseif size(varargin,2) == 2
-    func = @(In,S,Smax) In.*(1-smoothThreshold_storage_logistic(S,Smax,varargin(1),varargin(2)));    
+    out = In.*(1-smoothThreshold_storage_logistic(S,Smax,varargin(1),varargin(2)));    
 end
 
 end

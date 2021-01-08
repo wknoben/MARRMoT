@@ -1,4 +1,4 @@
-function [func] = melt_1(~)
+function [out] = melt_1(p1,p2,T,S,dt)
 %melt_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = melt_1(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,T,S,dt) min(max(p1*(T-p2),0),S/dt);
+out = min(max(p1*(T-p2),0),S/dt);
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = interflow_4(~)
+function [out] = interflow_4(p1,p2,S)
 %interflow_4 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = interflow_4(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,S) min(max(S,0),p1*max(S,0)+p1*max(S,0)^2);
+out = min(max(S,0),p1*max(S,0)+p2*max(S,0)^2);
 
 end
 

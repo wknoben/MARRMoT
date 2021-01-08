@@ -1,4 +1,4 @@
-function [func] = split_1(~)
+function [out] = split_1(p1,In)
 %split_1 Creates function for flow splitting
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,7 +14,7 @@ function [func] = split_1(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,In) p1.*In;
+out = p1.*In;
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = interception_5(~)
+function [out] = interception_5(p1,p2,In)
 %interception_5 
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = interception_5(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,In) max(p1.*In-p2,0);
+out = max(p1.*In-p2,0);
 
 
 end

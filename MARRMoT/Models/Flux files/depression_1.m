@@ -1,4 +1,4 @@
-function [func] = depression_1(~)
+function [out] = depression_1(p1,p2,S,Smax,flux,dt)
 %depression_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = depression_1(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S,Smax,flux,dt) min(p1.*exp(-1.*p2.*S./max(Smax-S,0)).*flux,max((Smax-S)/dt,0));
+out = min(p1.*exp(-1.*p2.*S./max(Smax-S,0)).*flux,max((Smax-S)/dt,0));
 
 end
 

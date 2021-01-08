@@ -1,4 +1,4 @@
-function [func] = routing_1(~)
+function [out] = routing_1(p1,p2,p3,S,dt)
 %routing_1 Creates function for non-linear routing
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = routing_1(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,p3,S,dt) min([S/dt,p1.*(max(S,0).^p2),p3.*S/dt]);
+out = min([S/dt,p1.*(max(S,0).^p2),p3.*S/dt]);
 
 end
 

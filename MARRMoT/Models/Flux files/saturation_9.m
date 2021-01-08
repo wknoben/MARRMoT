@@ -1,4 +1,4 @@
-function [func] = saturation_9(varargin)
+function [out] = saturation_9(In,S,St,varargin)
 %saturation_9 
 %
 % Copyright (C) 2018 W. Knoben
@@ -21,11 +21,11 @@ function [func] = saturation_9(varargin)
 % WK, 09/10/2018
 
 if size(varargin,2) == 0
-    func = @(In,S,St) In.*smoothThreshold_storage_logistic(S,St);
+    out = In.*smoothThreshold_storage_logistic(S,St);
 elseif size(varargin,2) == 1
-    func = @(In,S,St) In.*smoothThreshold_storage_logistic(S,St,varargin(1));
+    out = In.*smoothThreshold_storage_logistic(S,St,varargin(1));
 elseif size(varargin,2) == 2
-    func = @(In,S,St) In.*smoothThreshold_storage_logistic(S,St,varargin(1),varargin(2));    
+    out = In.*smoothThreshold_storage_logistic(S,St,varargin(1),varargin(2));    
 end
 
 end

@@ -1,4 +1,4 @@
-function [func] = capillary_3(~)
+function [out] = capillary_3(p1,p2,S1,S2,dt)
 %capillary_3 Creates function for capillary rise: linear relation
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = capillary_3(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S1,S2,dt) min(S2,p1*(1-S1/p2)*smoothThreshold_storage_logistic(S1,p2));
+out = min(S2/dt,p1*(1-S1/p2)*smoothThreshold_storage_logistic(S1,p2));
 
 end
 

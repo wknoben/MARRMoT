@@ -1,4 +1,4 @@
-function [func] = evap_11(~)
+function [out] = evap_11(S,Smax,Ep)
 %evap_11 
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = evap_11(~)
 %
 % WK, 05/10/2018
 
-func = @(S,Smax,Ep) max(0,(2*S/Smax-(S/Smax)^2)*Ep);
+out = max(0,(2*S/Smax-(S/Smax)^2)*Ep);
 
 end
 

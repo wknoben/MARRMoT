@@ -1,4 +1,4 @@
-function [func] = refreeze_1(~)
+function [out] = refreeze_1(p1,p2,p3,T,S,dt)
 %refreeze_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = refreeze_1(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,p3,T,S,dt) min(max(0,p1*p2*(p3-T)),S/dt);
+out = min(max(0,p1*p2*(p3-T)),S/dt);
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = evap_3(~)
+function [out] = evap_3(p1,S,Smax,Ep,dt)
 %evap_3 Creates function for evaporation: 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = evap_3(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,S,Smax,Ep,dt) min([S/(p1*Smax)*Ep,Ep,S/dt]);
+out = min([S/(p1*Smax)*Ep,Ep,S/dt]);
 
 end
 

@@ -1,4 +1,4 @@
-function [ func ] = phenology_1( ~ )
+function [ out ] = phenology_1(T,p1,p2,Ep)
 %phenology_1 Corrects Ep for phenology effects.
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [ func ] = phenology_1( ~ )
 %
 % WK, 08/10/2018
 
-func = @(T,p1,p2,Ep) min(1,max(0,(T-p1)/(p2-p1)))*Ep;
+out = min(1,max(0,(T-p1)/(p2-p1)))*Ep;
 
 end
 

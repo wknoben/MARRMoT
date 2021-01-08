@@ -1,4 +1,4 @@
-function [func] = snowfall_2(~)
+function [out] = snowfall_2(In,T,p1,p2)
 %snowfall_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = snowfall_2(~)
 %
 % WK, 08/10/2018
 
-func = @(In,T,p1,p2) min(In,max(0,In.*(p1+0.5*p2-T)/p2));
+out = min(In,max(0,In.*(p1+0.5*p2-T)/p2));
 
 end
 

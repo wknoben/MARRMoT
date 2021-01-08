@@ -1,4 +1,4 @@
-function [func] = infiltration_5(~)
+function [out] = infiltration_5(p1,p2,S1,S1max,S2,S2max)
 %infiltration_5 
 %
 % Copyright (C) 2018 W. Knoben
@@ -19,7 +19,7 @@ function [func] = infiltration_5(~)
 %
 % WK, 07/10/2018
 
-func = @(p1,p2,S1,S1max,S2,S2max) max(0,min(10^9,p1.*(1-S1./S1max).*max(0,S2./S2max).^(-1.*p2)));
+out = max(0,min(10^9,p1.*(1-S1./S1max).*max(0,S2./S2max).^(-1.*p2)));
 
 end
 

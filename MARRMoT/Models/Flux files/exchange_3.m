@@ -1,4 +1,4 @@
-function [func] = exchange_3(~)
+function [out] = exchange_3(p1,S,p2)
 %exchange_3 
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = exchange_3(~)
 %
 % WK, 07/10/2018
 
-func = @(p1,S,p2) p1*(S-p2);
+out = p1*(S-p2);
 
 end
 

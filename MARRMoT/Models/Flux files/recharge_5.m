@@ -1,4 +1,4 @@
-function [func] = recharge_5(~)
+function [out] = recharge_5(p1,p2,S1,S2)
 %recharge_5 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = recharge_5(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,p2,S1,S2) p1.*S1.*(1-min(1,S2./p2));
+out = p1.*S1.*(1-min(1,S2./p2));
 
 end
 

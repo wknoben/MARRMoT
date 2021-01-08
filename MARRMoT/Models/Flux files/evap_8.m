@@ -1,4 +1,4 @@
-function [func] = evap_8(~)
+function [out] = evap_8(S1,S2,p1,p2,Ep,dt)
 %evap_8 Creates function for evaporation: evaporates based on scaled
 %current water storage, a wilting point, and a distribution factor.
 %
@@ -23,7 +23,7 @@ function [func] = evap_8(~)
 %
 % WK, 05/10/2018
 
-func = @(S1,S2,p1,p2,Ep,dt) max(min([S1/(S1+S2)*p1*Ep, S1/(S1+S2)*S1/p2*p1*Ep, S1/dt]),0);
+out = max(min([S1/(S1+S2)*p1*Ep, S1/(S1+S2)*S1/p2*p1*Ep, S1/dt]),0);
 
 
 

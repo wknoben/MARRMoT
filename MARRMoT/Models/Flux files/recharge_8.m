@@ -1,4 +1,4 @@
-function [func] = recharge_8(~)
+function [out] = recharge_8(p1,S,Smax,p2,dt)
 %recharge_8 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,7 +18,7 @@ function [func] = recharge_8(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,S,Smax,p2,dt) min(p2*((max(S,0)/Smax)^p1),max(S/dt,0));
+out = min(p2*((max(S,0)/Smax)^p1),max(S/dt,0));
 
 end
 

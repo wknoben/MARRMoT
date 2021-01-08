@@ -1,4 +1,4 @@
-function [func] = percolation_4(~)
+function [out] = percolation_4(p1,p2,p3,p4,p5,S,Smax,dt)
 %percolation_4 
 %
 % Copyright (C) 2018 W. Knoben
@@ -27,7 +27,7 @@ function [func] = percolation_4(~)
 % prevents this. Similarly, the first max(0,...) part prevents negative
 % percolation demands as a result of small numerical errors.
 
-func = @(p1,p2,p3,p4,p5,S,Smax,dt) max(0,min(S/dt,max(0,S./Smax).*(p1.*(1+p2.*(p4./p5).^(1+p3)))));
+out = max(0,min(S/dt,max(0,S./Smax).*(p1.*(1+p2.*(p4./p5).^(1+p3)))));
 
 end
 

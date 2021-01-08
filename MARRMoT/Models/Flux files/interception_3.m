@@ -1,4 +1,4 @@
-function [func] = interception_3(~)
+function [out] = interception_3(p1,In)
 %interception_3 
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,7 +14,7 @@ function [func] = interception_3(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,In) p1.*In;
+out = p1.*In;
 
 end
 

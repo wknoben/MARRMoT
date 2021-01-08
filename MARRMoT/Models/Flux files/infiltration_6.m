@@ -1,4 +1,4 @@
-function [func] = infiltration_6(~)
+function [out] = infiltration_6(p1,p2,S,Smax,fin)
 %infiltration_6 Creates scaled, non-linear infiltration
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = infiltration_6(~)
 %
 % WK, 07/10/2018
 
-func = @(p1,p2,S,Smax,fin) min([fin,p1.*max(0,S/Smax).^(p2).*fin]);
+out = min([fin,p1.*max(0,S/Smax).^(p2).*fin]);
 
 end
 

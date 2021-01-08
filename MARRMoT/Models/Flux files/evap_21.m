@@ -1,4 +1,4 @@
-function [func] = evap_21(~)
+function [out] = evap_21(p1,p2,S,Ep,dt)
 %evap_21 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = evap_21(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S,Ep,dt) min(max(p2,min(S./p1,1)).*Ep,S);
+out = min(max(p2,min(S./p1,1)).*Ep,S);
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = evap_9(~)
+function [out] = evap_9(S1,S2,p1,Smax,Ep,dt)
 %evap_9 
 %
 % Copyright (C) 2018 W. Knoben
@@ -21,7 +21,7 @@ function [func] = evap_9(~)
 %
 % WK, 05/10/2018
 
-func = @(S1,S2,p1,Smax,Ep,dt) max(min(S1/(S1+S2)*(1-p1)*S1/(Smax-S2)*Ep,S1/dt),0);
+out = max(min(S1/(S1+S2)*(1-p1)*S1/(Smax-S2)*Ep,S1/dt),0);
 
 end
 

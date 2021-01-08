@@ -1,4 +1,4 @@
-function [func] = baseflow_1(~)
+function [out] = baseflow_1(p1,S)
 %baseflow_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -14,6 +14,6 @@ function [func] = baseflow_1(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,S) p1.*S;
+out = p1.*S;
 
 end

@@ -1,4 +1,4 @@
-function [func] = soilmoisture_2(~)
+function [out] = soilmoisture_2(S1,S1max,S2,S2max,S3,S3max)
 %soilmoisture_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -18,8 +18,7 @@ function [func] = soilmoisture_2(~)
 %
 % WK, 09/10/2018
 
-func = @(S1,S1max,S2,S2max,S3,S3max) ...
-    (S2.*(S1.*(S2max+S3max)+S1max.*(S2+S3))./((S2max+S3max).*(S1max+S2max+S3max))).* ...
+out = (S2.*(S1.*(S2max+S3max)+S1max.*(S2+S3))./((S2max+S3max).*(S1max+S2max+S3max))).* ...
     smoothThreshold_storage_logistic(S1./S1max,(S2+S3)./(S2max+S3max));
 
 end

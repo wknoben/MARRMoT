@@ -1,4 +1,4 @@
-function [func] = recharge_2(~)
+function [out] = recharge_2(p1,S,Smax,flux)
 %recharge_2 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = recharge_2(~)
 %
 % WK, 08/10/2018
 
-func = @(p1,S,Smax,flux) flux*((max(S,0)/Smax)^p1);
+out = flux*((max(S,0)/Smax)^p1);
 
 end
 

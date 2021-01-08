@@ -1,4 +1,4 @@
-function [func] = baseflow_4(~)
+function [out] = baseflow_4(p1,p2,S)
 %baseflow_4 
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = baseflow_4(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S) p1*exp(-1*p2*S);
+out = p1*exp(-1*p2*S);
 
 end
 

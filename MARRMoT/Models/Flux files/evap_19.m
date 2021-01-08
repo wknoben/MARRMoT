@@ -1,4 +1,4 @@
-function [func] = evap_19(~)
+function [out] = evap_19(p1,p2,S,Smax,Ep,dt)
 %evap_19 Creates scaled, non-linear evaporation
 %
 % Copyright (C) 2018 W. Knoben
@@ -19,7 +19,7 @@ function [func] = evap_19(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,S,Smax,Ep,dt) min([S/dt,Ep,p1.*max(0,S/Smax).^(p2).*Ep]);
+out = min([S/dt,Ep,p1.*max(0,S/Smax).^(p2).*Ep]);
 
 end
 

@@ -1,4 +1,4 @@
-function [func] = saturation_4(~)
+function [out] = saturation_4(S,Smax,In)
 %saturation_4 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = saturation_4(~)
 %
 % WK, 09/10/2018
 
-func = @(S,Smax,In) max(0,(1-(S/Smax).^2).*In);
+out = max(0,(1-(S/Smax).^2).*In);
 
 end
 

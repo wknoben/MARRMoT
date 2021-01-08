@@ -1,4 +1,4 @@
-function [func] = saturation_12(varargin)
+function [out] = saturation_12(p1,p2,In)
 %saturation_12 
 %
 % Copyright (C) 2018 W. Knoben
@@ -16,7 +16,7 @@ function [func] = saturation_12(varargin)
 %
 % WK, 09/10/2018
 
-func = @(p1,p2,In) max(0,(p1-p2)./(1-p2)).*In;
+out = max(0,(p1-p2)./(1-p2)).*In;
 
 end
 

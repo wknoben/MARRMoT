@@ -1,4 +1,4 @@
-function [func] = area_1(varargin)
+function [out] = area_1(p1,p2,S,Smin,Smax,varargin)
 %area_1 
 %
 % Copyright (C) 2018 W. Knoben
@@ -22,17 +22,14 @@ function [func] = area_1(varargin)
 
 % Return a function based on the provided varargin
 if size(varargin,2) == 0
-    func = @(p1,p2,S,Smin,Smax) ...
-        min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
-        (1-smoothThreshold_storage_logistic(S,Smin));                       % default smoothing
+    out = min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
+            (1-smoothThreshold_storage_logistic(S,Smin));                       % default smoothing
 elseif size(varargin,2) == 1
-    func = @(p1,p2,S,Smin,Smax) ...
-        min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
-        (1-smoothThreshold_storage_logistic(S,Smin,varargin(1)));           % user-specified smoothing
+    out = min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
+            (1-smoothThreshold_storage_logistic(S,Smin,varargin(1)));           % user-specified smoothing
 elseif size(varargin,2) == 2
-     func = @(p1,p2,S,Smin,Smax) ...
-        min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
-        (1-smoothThreshold_storage_logistic(S,Smin,varargin(1),varargin(2))); % user-specified smoothing
+     out = min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
+            (1-smoothThreshold_storage_logistic(S,Smin,varargin(1),varargin(2))); % user-specified smoothing
 end
 
 end

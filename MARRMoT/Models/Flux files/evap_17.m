@@ -1,4 +1,4 @@
-function [func] = evap_17(~)
+function [out] = evap_17(p1,S,Ep)
 %evap_17 
 %
 % Copyright (C) 2018 W. Knoben
@@ -15,7 +15,7 @@ function [func] = evap_17(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,S,Ep) 1./(1+exp(-1.*p1.*S)).*Ep;
+out = 1./(1+exp(-1.*p1.*S)).*Ep;
 
 end
 

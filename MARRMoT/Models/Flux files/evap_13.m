@@ -1,4 +1,4 @@
-function [func] = evap_13(~)
+function [out] = evap_13(p1,p2,Ep,S,dt)
 %evap_13 
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,7 +17,7 @@ function [func] = evap_13(~)
 %
 % WK, 05/10/2018
 
-func = @(p1,p2,Ep,S,dt) min((p1^p2)*Ep,S/dt);
+out = min((p1^p2)*Ep,S/dt);
 
 end
 

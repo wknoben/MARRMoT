@@ -1,4 +1,4 @@
-function [ out,UH ] = uh_1_half( in, d_base, delta_t )
+function [ UH ] = uh_1_half( d_base, delta_t )
 %uh_1_half Unit Hydrograph [days] with half a bell curve. GR4J-based
 %
 % Copyright (C) 2018 W. Knoben
@@ -17,9 +17,6 @@ function [ out,UH ] = uh_1_half( in, d_base, delta_t )
 %   UH(2) = 0.17
 %   UH(3) = 0.35
 %   UH(4) = 0.45
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = d_base/delta_t;
@@ -40,9 +37,6 @@ for t = tt
     
     UH(t) = SH(t+1)-SH(t);
 end
-
-%%DISPERSE VOLUME
-out = in.*UH;
 
 end
 

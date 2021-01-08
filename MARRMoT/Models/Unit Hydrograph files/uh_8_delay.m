@@ -1,4 +1,4 @@
-function [ out,UH ] = uh_8_delay( in, t_delay, delta_t )
+function [ UH ] = uh_8_delay( t_delay, delta_t )
 %uh_8_delay Unit Hydrograph [days] with a pure delay (no transformation).
 %
 % Copyright (C) 2019 W. Knoben
@@ -6,7 +6,6 @@ function [ out,UH ] = uh_8_delay( in, t_delay, delta_t )
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
 %   Inputs
-%   in      - volume to be routed
 %   t_delay - flow delay [d]
 %   delta_t - time step size [d]    
 %
@@ -18,9 +17,6 @@ function [ out,UH ] = uh_8_delay( in, t_delay, delta_t )
 %   UH(3) = 0.00
 %   UH(4) = 0.20
 %   UH(5) = 0.80
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = t_delay/delta_t;
@@ -38,9 +34,6 @@ t_start = floor(delay);
 % Unit Hydrograph
 UH(1+t_start) = ord1;
 UH(1+t_start+1) = ord2;
-
-%%DISPERSE VOLUME
-out = in.*UH;
 
 end
 

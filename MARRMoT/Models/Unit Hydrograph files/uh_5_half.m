@@ -1,4 +1,4 @@
-function [ out,UH ] = uh_5_half( in, d_base, delta_t )
+function [ UH ] = uh_5_half( d_base, delta_t )
 %uh_5_half Unit Hydrograph [days] with half a triangle (exponential decay)
 %
 % Copyright (C) 2018 W. Knoben
@@ -6,7 +6,6 @@ function [ out,UH ] = uh_5_half( in, d_base, delta_t )
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
 %   Inputs
-%   in      - volume to be routed
 %   d_base  - time base of routing delay [d]
 %   delta_t - time step size [d]    
 %
@@ -17,9 +16,6 @@ function [ out,UH ] = uh_5_half( in, d_base, delta_t )
 %   UH(2) = 0.133
 %   UH(3) = 0.021
 %   UH(4) = 0.004
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = d_base/delta_t;
@@ -54,9 +50,6 @@ end
 %%ACCOUNT FOR <7,Inf> PART OF THE CURVE (i.e. add the missing tail end of 
 % the curve to the last delay step, to ensure that 100% of flow is routed).
 UH(end) = UH(end)+(1-sum(UH));
-
-%%DISPERSE VOLUME
-out = in.*UH;
 
 end
 

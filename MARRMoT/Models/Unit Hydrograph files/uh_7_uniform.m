@@ -1,4 +1,4 @@
-function [ out,UH ] = uh_7_uniform( in, d_base, delta_t )
+function [ UH ] = uh_7_uniform( d_base, delta_t )
 %uh_7_uniform Unit Hydrograph [days] with uniform spread
 %
 % Copyright (C) 2018 W. Knoben
@@ -6,7 +6,6 @@ function [ out,UH ] = uh_7_uniform( in, d_base, delta_t )
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
 %   Inputs
-%   in      - volume to be routed
 %   d_base  - time base of routing delay [d]
 %   delta_t - time step size [d]    
 %
@@ -16,9 +15,6 @@ function [ out,UH ] = uh_7_uniform( in, d_base, delta_t )
 %   UH(2) = 0.26
 %   UH(3) = 0.26
 %   UH(4) = 0.22
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = d_base/delta_t;
@@ -38,9 +34,6 @@ for t=1:ceil(delay)
         UH(t) = mod(delay,t-1)*ff;
     end
 end
-
-%%DISPERSE VOLUME
-out = in.*UH;
 
 end
 

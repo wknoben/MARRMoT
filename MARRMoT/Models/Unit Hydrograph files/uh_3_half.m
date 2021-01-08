@@ -1,4 +1,4 @@
-function [ out,UH ] = uh_3_half( in, d_base, delta_t )
+function [ UH ] = uh_3_half( d_base, delta_t )
 %uh_3_half Unit Hydrograph [days] with half a triangle (linear)
 %
 % Copyright (C) 2018 W. Knoben
@@ -6,7 +6,6 @@ function [ out,UH ] = uh_3_half( in, d_base, delta_t )
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
 %   Inputs
-%   in      - volume to be routed
 %   d_base  - time base of routing delay [d]
 %   delta_t - time step size [d]    
 %
@@ -17,9 +16,6 @@ function [ out,UH ] = uh_3_half( in, d_base, delta_t )
 %   UH(2) = 0.17
 %   UH(3) = 0.35
 %   UH(4) = 0.45
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = d_base/delta_t;
@@ -46,9 +42,6 @@ for t = 1:length(tt)
         UH(t) = ff.*(0.5*delay^2 - 0.5*(t-1)^2);
     end
 end
-
-%%DISPERSE VOLUME
-out = in.*UH;
 
 end
 

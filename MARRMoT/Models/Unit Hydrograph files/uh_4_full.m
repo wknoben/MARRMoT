@@ -1,4 +1,4 @@
-function [ out,UH ] = uh_4_full( in, d_base, delta_t )
+function [ UH ] = uh_4_full( d_base, delta_t )
 %uh_4_half Unit Hydrograph [days] with a triangle (linear)
 %
 % Copyright (C) 2018 W. Knoben
@@ -6,7 +6,6 @@ function [ out,UH ] = uh_4_full( in, d_base, delta_t )
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
 %   Inputs
-%   in      - volume to be routed
 %   d_base  - time base of routing delay [d]
 %   delta_t - time step size [d]    
 %
@@ -17,9 +16,6 @@ function [ out,UH ] = uh_4_full( in, d_base, delta_t )
 %   UH(2) = 0.41
 %   UH(3) = 0.36
 %   UH(4) = 0.09
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = d_base/delta_t;
@@ -52,9 +48,6 @@ end
 tmp_diff   = 1-sum(UH);
 tmp_weight = UH./sum(UH);
 UH         = UH + tmp_weight.*tmp_diff;
-
-%%DISPERSE VOLUME
-out = in.*UH;
 
 end
 

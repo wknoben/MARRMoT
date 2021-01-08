@@ -1,4 +1,4 @@
-function [ out, UH ] = uh_2_full( in,d_base,delta_t )
+function [ UH ] = uh_2_full( d_base,delta_t )
 %uh_2_full Unit Hydrograph [days] with a full bell curve. GR4J-based
 %
 % Copyright (C) 2018 W. Knoben
@@ -22,9 +22,6 @@ function [ out, UH ] = uh_2_full( in,d_base,delta_t )
 %   UH(7) = 0.05
 %   UH(8) = 0.00
 
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
-
 %%TIME STEP SIZE
 delay = d_base/delta_t;
 tt = 1:2*ceil(delay); % time series for which we need UH ordinates [days]
@@ -45,9 +42,6 @@ for t = tt
     
     UH(t) = SH(t+1)-SH(t);
 end
-
-%%DISPERSE VOLUME
-out = in.*UH;
 
 end
 

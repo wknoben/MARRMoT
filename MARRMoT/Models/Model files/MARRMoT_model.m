@@ -97,6 +97,11 @@ classdef MARRMoT_model < handle
             stores = zeros(t_end, obj.numStores);
             fluxes = zeros(t_end, obj.numFluxes);
             
+            % use default options for the solvers if they are not set
+            if nargin < 4 || isempty(solver_opts)
+                solver_opts = obj.default_solver_opts;
+            end
+            
             for t = 1:t_end
                obj.t = t;
                if t == 1; obj.Sold = S0; else; obj.Sold = stores(t-1,:); end
@@ -184,14 +189,17 @@ classdef MARRMoT_model < handle
              % start from random parameter set
              par_ini = obj.parRanges(:,1) + rand(obj.numParams,1).*(obj.parRanges(:,2)-obj.parRanges(:,1));
              
-             % set parameter ranges in cmaes options if not already set
-             % when calling the calibrate function
-             if isempty(cmaes_opts); cmaes_opts = struct(); end
+             % set default options for cmaes if options are empty
+             [def_cmaes_opts, def_cmaes_sigma0] = obj.default_cmaes_opts();
+             if isempty(cmaes_opts);   cmaes_opts   = def_cmaes_opts;   end
+             if isempty(cmaes_sigma0); cmaes_sigma0 = def_cmaes_sigma0; end
+             
+             % set parameter bounds if they are not set
              if ~isfield(cmaes_opts, 'LBounds') || isempty(cmaes_opts.LBounds)
                  cmaes_opts.LBounds = obj.parRanges(:,1);
              end
              if ~isfield(cmaes_opts, 'UBounds') || isempty(cmaes_opts.UBounds)
-                 cmaes_opts.LBounds = obj.parRanges(:,1);
+                 cmaes_opts.UBounds = obj.parRanges(:,2);
              end
              
              % run CMA-ES
@@ -202,6 +210,35 @@ classdef MARRMoT_model < handle
                                    par_ini,...
                                    cmaes_sigma0,...
                                    cmaes_opts);
+         end
+         
+         % function to return default solver options
+         function solver_opts = default_solver_opts(obj)
+            solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
+            solver_opts.resnorm_maxiter   = 6;                                         % Maximum number of re-runs
+            solver_opts.NewtonRaphson = optimset('MaxIter', obj.numStores * 10);
+            solver_opts.fsolve = optimoptions('fsolve',...
+                                              'Display','none',...                     % Disable display settings
+                                              'JacobPattern', obj.JacobPattern);
+            solver_opts.lsqnonlin = optimoptions('lsqnonlin',...                       % lsqnonlin settings for cases where fsolve fails
+                                                 'Display','none',...
+                                                 'JacobPattern',obj.JacobPattern,...
+                                                 'MaxFunEvals',1000);
+         end
+         
+         % function to return default CMA-ES options
+         function [cmaes_opts, cmaes_sigma0] = default_cmaes_opts(obj)
+            cmaes_opts.LBounds  = obj.parRanges(:,1);                      % lower bounds of parameters
+            cmaes_opts.UBounds  = obj.parRanges(:,2);                      % upper bounds of parameters
+            cmaes_opts.PopSize  = 2 * (4 + floor(3*log(obj.numParams)));   % population size is 2x the defaul
+            
+            % starting sigma
+            cmaes_sigma0 = .3*(obj.parRanges(:,2) - obj.parRanges(:,1));   % starting sigma (this is default)
+            
+            % stopping criteria
+            cmaes_opts.TolX       = 1e-3 * min(cmaes_sigma0);              % stopping criterion on changes to parameters 
+            cmaes_opts.TolFun     = 1e-4;                                  % stopping criterion on changes to fitness function
+            cmaes_opts.TolHistFun = 1e-5;                                  % stopping criterion on changes to fitness function
          end
     end
 end

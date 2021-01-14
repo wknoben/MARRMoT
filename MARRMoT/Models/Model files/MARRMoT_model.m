@@ -118,9 +118,9 @@ classdef MARRMoT_model < handle
                   storeInternal] = get_output(obj,...
                                               fluxInput,...
                                               storeInitial,...
-                                              solver)
+                                              solver_opts)
             
-            [fluxes, stores] = obj.run(fluxInput, storeInitial, solver);
+            [fluxes, stores] = obj.run(fluxInput, storeInitial, solver_opts);
             
             % --- Fluxes leaving the model ---
             fluxOutput.Ea     = sum(fluxes(:,obj.Flux_Ea_idx),2)';
@@ -138,6 +138,71 @@ classdef MARRMoT_model < handle
                 storeInternal.(obj.StoreNames(i)) = stores(:,i)';
             end
         end
+        
+        % CALC_PAR_FITNESS calculates the fitness of the set of parameters
+        % in obj.theta based on a given model inputs, objective function
+        % and observed streamflow
+        function fitness = calc_par_fitness(obj,...
+                                            fluxInput,...                  % struct of input fluxes
+                                            storeInitial,...               % initial values of stores
+                                            solver_opts,...                % solver options
+                                            Q_obs,...                      % observed streamflow
+                                            of_name,...                    % name of the objective function
+                                            varargin)                      % additional arguments to
+            
+            fluxes = obj.run(fluxInput, storeInitial, solver_opts);
+            Q_sim = sum(fluxes(:,obj.Flux_Q_idx),2)';
+            fitness = feval(of_name, Q_obs, Q_sim, varargin{:});
+        end
+        
+        % CALIBRATE uses CMA-ES to find the optimal parameter set given
+        % model inputs, objective function and observed streamflow                                           
+         function [par_opt,...                                             % optimal parameter set
+                   of_cal,...                                              % value of objective function at calibration
+                   n_feval,...                                             % number of function evaluations
+                   stopflag]= calibrate(obj,...
+                                        fluxInput,...                      % struct of input fluxes
+                                        storeInitial,...                   % initial values of stores
+                                        solver_opts,...                    % solver options
+                                        Q_obs,...                          % observed streamflow
+                                        cmaes_sigma0,...                   % initial sigma for CMA-ES
+                                        cmaes_opts,...                     % CMA-ES options
+                                        of_name,...                        % name of objective function to use
+                                        inverse_flag,...                   % should the OF be inversed?
+                                        varargin)                          % additional arguments to
+             
+             % helper function to calculate fitness given a set of
+             % parameters
+             function fitness = fitness_fun(par)
+                 obj.theta = par;
+                 fitness = (-1)^inverse_flag*...
+                           obj.calc_par_fitness(fluxInput, storeInitial,...
+                                                solver_opts, Q_obs,...
+                                                of_name, varargin{:});
+             end
+             
+             % start from random parameter set
+             par_ini = obj.parRanges(:,1) + rand(obj.numParams,1).*(obj.parRanges(:,2)-obj.parRanges(:,1));
+             
+             % set parameter ranges in cmaes options if not already set
+             % when calling the calibrate function
+             if isempty(cmaes_opts); cmaes_opts = struct(); end
+             if ~isfield(cmaes_opts, 'LBounds') || isempty(cmaes_opts.LBounds)
+                 cmaes_opts.LBounds = obj.parRanges(:,1);
+             end
+             if ~isfield(cmaes_opts, 'UBounds') || isempty(cmaes_opts.UBounds)
+                 cmaes_opts.LBounds = obj.parRanges(:,1);
+             end
+             
+             % run CMA-ES
+             [par_opt,...
+                 of_cal,...
+                 n_feval,...
+                 stopflag] = cmaes(@fitness_fun,...
+                                   par_ini,...
+                                   cmaes_sigma0,...
+                                   cmaes_opts);
+         end
     end
 end
         

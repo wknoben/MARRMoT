@@ -17,7 +17,7 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
                                  1,1];                                     % Jacobian matrix of model store ODEs
                              
             obj.parRanges = [1   , 2000;    % x1 [mm]
-                            -10  , 15;      % x2 [mm/d]
+                            -20  , 20;      % x2 [mm/d]
                              1   , 300;     % x3 [mm]
                              .5  , 15];     % x4 [d]
             
@@ -108,13 +108,13 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             flux_q9   = uh_q9(1).*.9.*(flux_pn - flux_ps + flux_perc) + stf_q9(1);
             flux_q1   = uh_q1(1).*.1.*(flux_pn - flux_ps + flux_perc) + stf_q1(1);
             flux_fr   = recharge_2(3.5,S2,x3,x2);
-            flux_fq   = recharge_2(3.5,S2,x3,x2);
+            flux_fq   = flux_fr;
             flux_qr   = baseflow_3(S2,x3);
             flux_qt   = flux_qr + max(flux_q1 + flux_fq,0);
 
             % stores ODEs
             dS1 = flux_ps - flux_es - flux_perc;
-            dS2 = flux_q9 - flux_fr - flux_qr;
+            dS2 = flux_q9 + flux_fr - flux_qr;
             
             % outputs
             dS = [dS1 dS2];

@@ -47,7 +47,7 @@ classdef MARRMoT_model < handle
         function err = solve_fun_IE(obj, S)
             S = S(:);
             delta_S = obj.model_fun(S);
-            err = (S - obj.Sold')/obj.delta_t - delta_S';
+            err = (S - obj.Sold)/obj.delta_t - delta_S';
         end 
         
         % SOLVE_STORES solves the stores ODEs 
@@ -104,14 +104,14 @@ classdef MARRMoT_model < handle
             
             for t = 1:t_end
                obj.t = t;
-               if t == 1; obj.Sold = S0; else; obj.Sold = stores(t-1,:); end
+               if t == 1; obj.Sold = S0(:); else; obj.Sold = stores(t-1,:)'; end
                obj.input_climate = [P(t) Ep(t) T(t)];
                Snew = obj.solve_stores(solver_opts);
                
                [dS, f] = obj.model_fun(Snew);
     
                fluxes(t,:) = f * obj.delta_t;
-               stores(t,:) = obj.Sold + dS * obj.delta_t;
+               stores(t,:) = obj.Sold + dS' * obj.delta_t;
                
                obj.step(f);
             end

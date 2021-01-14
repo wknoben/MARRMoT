@@ -180,14 +180,14 @@ classdef MARRMoT_model < handle
              % parameters
              function fitness = fitness_fun(par)
                  obj.theta = par;
-                 fitness = (-1)^inverse_flag*...
-                           obj.calc_par_fitness(fluxInput, storeInitial,...
-                                                solver_opts, Q_obs,...
-                                                of_name, varargin{:});
+                 fluxes = obj.run(fluxInput, storeInitial, solver_opts);
+                 Q_sim = sum(fluxes(:,obj.Flux_Q_idx),2)';
+                 fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, varargin{:});
              end
              
-             % start from random parameter set
-             par_ini = obj.parRanges(:,1) + rand(obj.numParams,1).*(obj.parRanges(:,2)-obj.parRanges(:,1));
+             % start from mean parameter set
+             %par_ini = obj.parRanges(:,1) + rand(obj.numParams,1).*(obj.parRanges(:,2)-obj.parRanges(:,1));
+             par_ini = mean(obj.parRanges,2);
              
              % set default options for cmaes if options are empty
              [def_cmaes_opts, def_cmaes_sigma0] = obj.default_cmaes_opts();

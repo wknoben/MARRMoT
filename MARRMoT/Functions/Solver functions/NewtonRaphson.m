@@ -74,20 +74,12 @@ function [x, F, exitflag] = NewtonRaphson(fun, x0, options)
 x0 = x0(:); % needs to be a column vector
 % set default options
 
-% defaultopt = struct('TolX', 1e-12, 'TolFun', 1e-6, 'MaxIter', 1000, 'Display', 'off');
+defaultopt = struct('TolX', 1e-12, 'TolFun', 1e-6, 'MaxIter', 1000);%, 'Display', 'off');
 
-% oldopts = optimset( ...
-%      'TolX', 1e-12, 'TolFun', 1e-6, 'MaxIter', 1000, 'Display', 'off');
- if nargin<3
-     options = []; % use defaults
-%  else
-%      options = optimset(oldopts, options); % update default with user options
- end
-%FUN = @(x)funwrapper(fun, x); % wrap FUN so it always returns J
 %% get options
-TOLX = optimget(options, 'TolX', 1e-12); % relative max step tolerance
-TOLFUN = optimget(options, 'TolFun', 1e-6); % function tolerance
-MAXITER = optimget(options, 'MaxIter', 1000); % max number of iterations
+TOLX = optimget(options, 'TolX', defaultopt, 'fast'); % relative max step tolerance
+TOLFUN = optimget(options, 'TolFun', defaultopt, 'fast'); % function tolerance
+MAXITER = optimget(options, 'MaxIter', defaultopt, 'fast'); % max number of iterations
 %TYPX = max(abs(x0), 1); % x scaling value, remove zeros
 ALPHA = 1e-4; % criteria for decrease
 MIN_LAMBDA = 0.1; % min lambda

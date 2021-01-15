@@ -144,6 +144,16 @@ classdef MARRMoT_model < handle
             end
         end
         
+        % GET_STREAMFLOW runs the model and only returns the streamflow, it
+        % is useful for calibration
+        function Q = get_streamflow(obj,...
+                                    fluxInput,...                  % struct of input fluxes
+                                    storeInitial,...               % initial values of stores
+                                    solver_opts)
+             fluxes = obj.run(fluxInput, storeInitial, solver_opts);
+             Q = sum(fluxes(:,obj.Flux_Q_idx),2);
+        end
+        
         % CALC_PAR_FITNESS calculates the fitness of the set of parameters
         % in obj.theta based on a given model inputs, objective function
         % and observed streamflow
@@ -154,9 +164,7 @@ classdef MARRMoT_model < handle
                                             Q_obs,...                      % observed streamflow
                                             of_name,...                    % name of the objective function
                                             varargin)                      % additional arguments to
-            
-            fluxes = obj.run(fluxInput, storeInitial, solver_opts);
-            Q_sim = sum(fluxes(:,obj.Flux_Q_idx),2)';
+            Q_sim = obj.get_streamflow(fluxInput, storeInitial, solver_opts);
             fitness = feval(of_name, Q_obs, Q_sim, varargin{:});
         end
         
@@ -180,8 +188,7 @@ classdef MARRMoT_model < handle
              % parameters
              function fitness = fitness_fun(par)
                  obj.theta = par;
-                 fluxes = obj.run(fluxInput, storeInitial, solver_opts);
-                 Q_sim = sum(fluxes(:,obj.Flux_Q_idx),2)';
+                 Q_sim = obj.get_streamflow(fluxInput, storeInitial, solver_opts);
                  fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, varargin{:});
              end
              

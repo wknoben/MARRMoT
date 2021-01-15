@@ -243,7 +243,7 @@ classdef MARRMoT_model < handle
             cmaes_sigma0 = .3*(obj.parRanges(:,2) - obj.parRanges(:,1));   % starting sigma (this is default)
             
             % stopping criteria
-            cmaes_opts.TolX       = 1e-3 * min(cmaes_sigma0);              % stopping criterion on changes to parameters 
+            cmaes_opts.TolX       = 1e-6 * min(cmaes_sigma0);              % stopping criterion on changes to parameters 
             cmaes_opts.TolFun     = 1e-4;                                  % stopping criterion on changes to fitness function
             cmaes_opts.TolHistFun = 1e-5;                                  % stopping criterion on changes to fitness function
          end

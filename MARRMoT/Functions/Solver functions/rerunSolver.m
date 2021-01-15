@@ -39,17 +39,17 @@ while resnorm > minX
         case 2
             problem.x0 = 2*10^4.*ones(numODE,1);                                    % 2. High values
         case 3
-            problem.x0 = initGuess;                                                 % 3. Location where solver got stuck
+            problem.x0 = initGuess(:);                                                 % 3. Location where solver got stuck
         case 4
-            problem.x0 = oldVal;                                                    % 4. Storages at t-1
+            problem.x0 = oldVal(:);                                                    % 4. Storages at t-1
         case 5
             if ~isempty(varargin{2}) && ~any(isinf(varargin{2}))
                 problem.x0 = varargin{2};                                           % 5. Store maximum values (not always provided)
             else
-                problem.x0 = max(zeros(1,numODE),oldVal+(rand(1,numODE)-0.5));      % 6. Randomized values close to starting location
+                problem.x0 = max(zeros(numODE,1),oldVal(:)+(rand(numODE,1)-0.5));      % 6. Randomized values close to starting location
             end
         otherwise
-            problem.x0 = max(zeros(1,numODE),oldVal+(rand(1,numODE)-0.5));          % 7. Randomized values close to starting location
+            problem.x0 = max(zeros(numODE,1),oldVal(:)+(rand(numODE,1)-0.5));          % 7. Randomized values close to starting location
     end
    
     % Re-run the solver

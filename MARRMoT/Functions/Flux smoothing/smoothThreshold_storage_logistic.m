@@ -37,7 +37,7 @@ elseif nargin == 3
 end
 
 % Calculate multiplier
-if Smax == 0
+if r*Smax == 0
     out = 1 ./ (1+exp((S-Smax+r*e*Smax)/(r)));
 else
     out = 1 ./ (1+exp((S-Smax+r*e*Smax)/(r*Smax)));

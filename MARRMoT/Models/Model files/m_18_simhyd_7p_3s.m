@@ -92,7 +92,7 @@ classdef m_18_simhyd_7p_3s < MARRMoT_model
 %             flux_Qt   = flux_SRUN + flux_INT + flux_BAS;
             
             flux_Ei   = min(S1/delta_t, Ep);
-            flux_EXC  = P.*(1-(1./(1+exp((S1-insc+.05*insc)/(.01*((insc==0)+insc))))));
+            flux_EXC  = P.*(1-(1./(1+exp((S1-insc+.05*insc)/(.01*((.01*insc==0)+insc))))));
             flux_INF  = min(coeff.*exp((-1*sq*S2)./smsc),flux_EXC);
             flux_INT  = sub*S2/smsc*flux_INF;
             flux_REC  = crak*S2/smsc*(flux_INF-flux_INT);
@@ -101,7 +101,7 @@ classdef m_18_simhyd_7p_3s < MARRMoT_model
             %MARRMoT, so it's not reported here either to maintain results
             %comparable
             flux_SMF  = flux_INF-flux_INT-flux_REC;
-            flux_GWF  = flux_SMF.*(1-(1./(1+exp((S2-smsc+.05*insc)/(.01*((smsc==0)+smsc))))));
+            flux_GWF  = flux_SMF.*(1-(1./(1+exp((S2-smsc+.05*smsc)/(.01*((.01*smsc==0)+smsc))))));
             flux_BAS  = k.*S3;
             flux_SRUN = flux_EXC - flux_INF; 
             flux_Qt   = flux_SRUN + flux_INT + flux_BAS;

@@ -114,20 +114,34 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             T  = climate_in(3);
             
             % fluxes functions
-            flux_sf   = snowfall_2(P,T,tt,tti);
-            flux_refr = refreeze_1(cfr,cfmax,ttm,T,S2,delta_t);
-            flux_melt = melt_1(cfmax,ttm,T,S1,delta_t);
-            flux_rf   = rainfall_2(P,T,tt,tti);
-            flux_in   = infiltration_3(flux_rf+flux_melt,S2,whc*S1);
-            flux_se   = excess_1(obj.Sold(2),whc*S1,delta_t);
-            flux_cf   = capillary_1(cflux,S3,fc,S4,delta_t);
-            flux_ea   = evap_3(lp,S3,fc,Ep,delta_t);
-            flux_r    = recharge_2(beta,S3,fc,flux_in+flux_se);
-            flux_q0   = interflow_2(k0,S4,alpha,delta_t);
-            flux_perc = percolation_1(perc,S4,delta_t);
-            flux_q1   = baseflow_1(k1,S5);
+%             flux_sf   = snowfall_2(P,T,tt,tti);
+%             flux_refr = refreeze_1(cfr,cfmax,ttm,T,S2,delta_t);
+%             flux_melt = melt_1(cfmax,ttm,T,S1,delta_t);
+%             flux_rf   = rainfall_2(P,T,tt,tti);
+%             flux_in   = infiltration_3(flux_rf+flux_melt,S2,whc*S1);
+%             flux_se   = excess_1(obj.Sold(2),whc*S1,delta_t);
+%             flux_cf   = capillary_1(cflux,S3,fc,S4,delta_t);
+%             flux_ea   = evap_3(lp,S3,fc,Ep,delta_t);
+%             flux_r    = recharge_2(beta,S3,fc,flux_in+flux_se);
+%             flux_q0   = interflow_2(k0,S4,alpha,delta_t);
+%             flux_perc = percolation_1(perc,S4,delta_t);
+%             flux_q1   = baseflow_1(k1,S5);
+%             flux_qt   = uh(1) * (flux_q0 + flux_q1) + stf(1);
+
+            flux_sf   = min(P,max(0,P.*(tt+0.5*tti-T)/tti));
+            flux_refr = min(max(0,cfr*cfmax*(ttm-T)),S2/delta_t);
+            flux_melt = min(max(cfmax*(T-ttm),0),S1/delta_t);
+            flux_rf   = min(P,max(0,P.*(T-(tt-0.5*tti))/tti));
+            flux_in   = (flux_rf+flux_melt).*(1-...
+                (1./(1+exp((S2-whc*S1+.05*whc*S1)/(.01*((.01*whc*S1==0)+(whc*S1)))))));
+            flux_se   = max((obj.Sold(2)-whc*S1)/delta_t,0);
+            flux_cf   = min(cflux.*(1-S3/fc),S4/delta_t);
+            flux_ea   = min([S3/(lp*fc)*Ep,Ep,S3/delta_t]);
+            flux_r    = (flux_in+flux_se)*((max(S3,0)/fc)^beta);
+            flux_q0   = min(k0*max(S4,0)^(1+alpha),max(S4/delta_t,0));
+            flux_perc = min(perc,S4/delta_t);
+            flux_q1   = k1.*S5;
             flux_qt   = uh(1) * (flux_q0 + flux_q1) + stf(1);
-            
 
             % stores ODEs
             dS1 = flux_sf   + flux_refr - flux_melt;

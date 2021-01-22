@@ -152,16 +152,18 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
             
             flux_qdir    = pctim.*P;
             flux_peff    = (1-pctim).*P;
-            flux_ru      = ((S2.*uztwm-S1.*uzfwm)/(uztwm+uzfwm))./ (1+exp(((S1./uztwm)-(S2./uzfwm)+.05*(S2./uzfwm))/(.01*((S2 == 0) + (S2./uzfwm)))));
+            flux_ru      = ((S2.*uztwm-S1.*uzfwm)/(uztwm+uzfwm))./...
+                (1+exp(((S1./uztwm)-(S2./uzfwm)+.05*(S2./uzfwm))/(.01*(((.01*S2./uzfwm) == 0) + (S2./uzfwm)))));
             flux_euztw   = min(S1./uztwm.*Ep,S1/delta_t);
-            flux_twexu   = flux_peff.*(1 - 1./(1+exp((S1-uztwm+.05*uztwm)/(.01*((uztwm == 0) + uztwm)))));
-            flux_qsur    = flux_twexu.*(1 - 1./(1+exp((S2-uzfwm+.05*uzfwm)/(.01*((uzfwm == 0) + uzfwm)))));
+            flux_twexu   = flux_peff.*(1 - 1./(1+exp((S1-uztwm+.05*uztwm)/(.01*(((.01*uztwm) == 0) + uztwm)))));
+            flux_qsur    = flux_twexu.*(1 - 1./(1+exp((S2-uzfwm+.05*uzfwm)/(.01*(((.01*uzfwm) == 0) + uzfwm)))));
             flux_qint    = kuz.*S2;
             flux_euzfw   = min(S2/delta_t,max(0,Ep-flux_euztw));
-            flux_pc      = max(0,min(S2/delta_t,max(0,S2./uzfwm).*(pbase.*(1+zperc.*((max(0,lztwm-S3)+max(0,lzfwpm-S4)+max(0,lzfwsm-S5))./(lztwm+lzfwpm+lzfwsm)).^(1+rexp)))));
+            flux_pc      = max(0,min(S2/delta_t,max(0,S2./uzfwm).*...
+                (pbase.*(1+zperc.*((max(0,lztwm-S3)+max(0,lzfwpm-S4)+max(0,lzfwsm-S5))./(lztwm+lzfwpm+lzfwsm)).^(1+rexp)))));
             flux_pctw    = (1-pfree) .* flux_pc;
             flux_elztw   = min(S3./lztwm.*max(0,Ep-flux_euztw-flux_euzfw),S3/delta_t);
-            flux_twexl   = flux_pctw.*(1-1./(1+exp((S3-lztwm+.05*lztwm)/(.01*((lztwm == 0) + lztwm)))));
+            flux_twexl   = flux_pctw.*(1-1./(1+exp((S3-lztwm+.05*lztwm)/(.01*(((.01*lztwm) == 0) + lztwm)))));
             
             if S4 ~= lzfwpm || S5 ~= lzfwsm
                 tmp_rd4 = (S4-lzfwpm)/lzfwpm;
@@ -177,7 +179,8 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
             flux_pcfwp   = (pfree*tmp_distr4).*flux_pc;
             flux_pcfws   = (pfree*tmp_distr5).*flux_pc;
             
-            tmp_thresh = 1 ./ (1+exp(((S3./lztwm)-((S4+S5)./(lzfwpm+lzfwsm))+.05*((S4+S5)./(lzfwpm+lzfwsm)))/(.01*(((S4+S5)==0) + (S4+S5)./(lzfwpm+lzfwsm)))));
+            tmp_max = (S4+S5)./(lzfwpm+lzfwsm);
+            tmp_thresh = 1 ./ (1+exp(((S3./lztwm)-(tmp_max)+.05*(tmp_max))/(.01*(((.01*tmp_max)==0) + tmp_max))));
             tmp_sm = (S3.*(lzfwpm+lzfwsm)+lztwm.*(S4+S5))./((lzfwpm+lzfwsm).*(lztwm+lzfwpm+lzfwsm));
             flux_rlp     = (S4.*tmp_sm).* tmp_thresh;
             flux_rls     = (S5.*tmp_sm).* tmp_thresh;  

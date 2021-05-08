@@ -21,6 +21,9 @@ MARRMoT v1.2 has been accepted through peer review. Since then, users have found
 - Water balance calculations did not properly account for time step sizes different than 1 day. This has been corrected on the master branch but not been released yet.
 - Models m05, m15, m37 and m44 did not properly account for time step size in certain flux calculations. This has been corrected on the master branch but not been released yet.
 - Workflow_example_4 now works under Octave, after Octave update 5.2.0 and code contribution by Mustafa Kemal Türkeri. This has been integrated on the master branch but not been released yet.
+- A new model m47 (m_47_IHM19_16p_4s) has been added after a contribution by Clara Brandes and her supervisors. 
+- Several additional efficiency metrics have been added, thanks to Thomas Whöling.
+- Efficiency metrics now accept a warmup period (number of initial time steps to ignore when calculating efficiency metrics) as an optional argument. Should be backwards compatible with existing scripts. Thanks to Thomas Whöling.
 
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases. 
@@ -98,6 +101,7 @@ MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for deta
 MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged. Special thanks are extended to:
 - Philip Kraft for finding a bug in the flux smoothing code during peer review; 
 - Sebastian Gnann for suggesting various quality of life fixes; 
-- Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations;
+- Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations and implementing m47;
 - Koen Jansen for suggesting various improvements and correcting parameter descriptions;
-- Mustafa Kemal Türkeri for making workflow_example_4 operational in Octave; and for performing extensive testing of MARRMoT in Matlab and Octave.
+- Mustafa Kemal Türkeri for making workflow_example_4 operational in Octave; and for performing extensive testing of MARRMoT in Matlab and Octave;
+- Thomas Whöling for suggesting various additional efficiency metrics and a possible implementation for warmup periods.

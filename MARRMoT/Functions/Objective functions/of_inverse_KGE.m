@@ -53,6 +53,13 @@ elseif checkTimeseriesSize(obs,sim) == 2
     sim = sim';                                                             % 2 indicates that obs and sim are the same size but have different orientations
 end
 
+% check that inputs are column vectors ('corr()' breaks with rows)
+% obs and sim should have the same orientation when we reach here
+if size(sim,1) < size(sim,2)
+    sim = sim';
+    obs = obs';
+end
+
 %% check for missing values
 % -999 is used to denote missing values in observed data, but this is later
 % scaled by area. Therefore we check for all negative values, and ignore those.

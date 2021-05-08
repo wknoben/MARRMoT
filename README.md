@@ -30,6 +30,8 @@ MARRMoT was developed on Matlab version 9.2.0.538062 (R2017a) and the Optimizati
 If using Octave, MARRMoT was tested on Octave 4.4.1 and requires the 'optim' package.  
 The following instructions assume that MARRMoT will be used with Matlab. 
 
+Note that the function `circshift()` that is used by routing routines has markedly different behaviour in Matlab 2016b and higher compared to previous versions. Routing results will be unreliable in Matlab 2016a and below but will **_not_** generate any warnings or error messages. User discretion is advised.
+
 ### Install
 Download a copy of the files from this repository (note: do not use the folder 'Octave' when using Matlab) and extract the files in an appropriate directory.
 
@@ -98,4 +100,4 @@ MARRMoT could not have been made without the effort that many hydrologists have 
 - Sebastian Gnann for suggesting various quality of life fixes; 
 - Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations;
 - Koen Jansen for suggesting various improvements and correcting parameter descriptions;
-- Mustafa Kemal Türkeri for making workflow_example_4 operational in Octave.
+- Mustafa Kemal Türkeri for making workflow_example_4 operational in Octave; and for performing extensive testing of MARRMoT in Matlab and Octave.

@@ -12,6 +12,10 @@
 % NOTE: this file does not work very well in Octave. Octave users might 
 % need to consider alternative parameter optimisation methods.
 %
+% Update:   Added comments about root-finding solution accuracy on calibration, line 73
+% Author:   Wouter J.M. Knoben
+% Date:     08-05-2021
+%
 % Update:   Compatability with Ocatve, line 82
 % Author:   Mustafa Kemal Türkeri
 % Date:     18-10-2020
@@ -68,7 +72,7 @@ input_s0 = zeros(numStore,1);                                               % In
 % NOTE: the names of all structure fields are hard-coded in each model
 % file. These should not be changed.
 input_solver.name              = 'createOdeApprox_IE';                      % Use Implicit Euler to approximate ODE's
-input_solver.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
+input_solver.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance; users have reported differences in simulation accuracy (KGE scores) during calibration between Matlab and Octave for a given tolerance. In certain cases, Octave seems to require tigther tolerances to obtain the same KGE scores as Matlab does.
 input_solver.resnorm_maxiter   = 6;                                         % Maximum number of re-runs
 
 %% 5. Define calibration settings

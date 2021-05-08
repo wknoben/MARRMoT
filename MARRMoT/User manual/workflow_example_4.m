@@ -87,6 +87,7 @@ optim_settings = optimset(...                                               % Us
 
 % Choose the objective function
 of_name      = 'of_KGE';                                                    % This function is provided as part of MARRMoT. See ./MARRMoT/Functions/Objective functions
+weights      = [1,1,1];                                                     % Weights for the three KGE components
 
 % Time periods for calibration and evaluation. 
 % Note: generally a 'warm-up period' is used to lessen the impact of the 
@@ -101,6 +102,7 @@ time_cal_start  = 1;
 time_cal_end    = 730;
 time_eval_start = 731;
 time_eval_end   = 1461;
+warmup          = 0;                                                        % Number of initial time steps to ignore when computing calibration & evaluation metrics
 
 %% 6. Calibrate the model
 % Each MARRMoT model provides its outputs in a standardized way. We need
@@ -136,7 +138,9 @@ q_sim_fun = @(par) workflow_calibrationAssist(...                           % Au
 cal_fun = @(par) -1*(...                                                    
                  feval(of_name, ...                                         % The objective function, here this is 'of_KGE'
                        q_obs_cal,...                                        % Observed flow during calibration period
-                       q_sim_fun(par)));                                    % Simulated flow for a given parameter set
+                       q_sim_fun(par),...                                   % Simulated flow for a given parameter set
+                       weights,...                                          % KGE components weights
+                       warmup));                                            % Number of initial time steps to ignore when calculating KGE
                    
 % Create initial guesses for the optimizer
 par_ini = mean(parRange,2);
@@ -168,7 +172,9 @@ model_out_eval = feval(model,...
 % Compute evaluation performance
 of_eval = feval(of_name,...                                                 % Objective function name (here 'of_KGE')
                 q_obs_eval,...                                              % Observed flow during evaluation period
-                model_out_eval.Q);                                          % Simulated flow during evaluation period, using calibrated parameters            
+                model_out_eval.Q,...                                        % Simulated flow during evaluation period, using calibrated parameters            
+                weights,...                                                 % KGE component weights
+                warmup);                                                    % Number of initial time steps to ignore
             
 %% 8. Visualise the results
 % Get simulated flow during calibration

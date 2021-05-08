@@ -21,9 +21,9 @@ MARRMoT v1.2 has been accepted through peer review. Since then, users have found
 - Water balance calculations did not properly account for time step sizes different than 1 day. This has been corrected on the master branch but not been released yet.
 - Models m05, m15, m37 and m44 did not properly account for time step size in certain flux calculations. This has been corrected on the master branch but not been released yet.
 - Workflow_example_4 now works under Octave, after Octave update 5.2.0 and code contribution by Mustafa Kemal Türkeri. This has been integrated on the master branch but not been released yet.
-- A new model m47 (m_47_IHM19_16p_4s) has been added after a contribution by Clara Brandes and her supervisors. 
-- Several additional efficiency metrics have been added, thanks to Thomas Whöling.
-- Efficiency metrics now accept a warmup period (number of initial time steps to ignore when calculating efficiency metrics) as an optional argument. Should be backwards compatible with existing scripts. Thanks to Thomas Whöling.
+- A new model m47 (m_47_IHM19_16p_4s) has been added after a contribution by Clara Brandes and her supervisors.  This has been integrated on the master branch but not been released yet.
+- Several additional efficiency metrics have been added, thanks to Thomas Whöling.  This has been integrated on the master branch but not been released yet.
+- Efficiency metrics now accept a warmup period (number of initial time steps to ignore when calculating efficiency metrics) as an optional argument. Should be backwards compatible with existing scripts. Thanks to Thomas Whöling.  This has been integrated on the master branch but not been released yet.
 
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases. 

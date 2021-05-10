@@ -8,8 +8,8 @@ function [ fluxOutput, fluxInternal, storeInternal, waterBalance ] = ...
 %
 % Model reference
 % Brandes, C. (2020). Erstellung eines Konzeptionellen
-% Hochwasserabfluss-modells für das Einzugsgebiet des Forellenbachs, NP
-% Bayerischer Wald. MSc Thesis. Technische Univeristät Dresden, Germany.
+% Hochwasserabfluss-modells fÃ¼r das Einzugsgebiet des Forellenbachs, NP
+% Bayerischer Wald. MSc Thesis. Technische UniverisitÃ¤t Dresden, Germany.
 %
 % Steps
 % --- Practical ---

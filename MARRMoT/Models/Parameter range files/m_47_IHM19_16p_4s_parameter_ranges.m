@@ -8,8 +8,8 @@ function [ theta ] = m_47_IHM19_16p_4s_parameter_ranges( )
 %
 % Model reference
 % Brandes, C. (2020). Erstellung eines Konzeptionellen
-% Hochwasserabfluss-modells für das Einzugsgebiet des Forellenbachs, NP
-% Bayerischer Wald. MSc Thesis. Technische Univeristät Dresden, Germany.
+% Hochwasserabfluss-modells fÃ¼r das Einzugsgebiet des Forellenbachs, NP
+% Bayerischer Wald. MSc Thesis. Technische UniverisitÃ¤t Dresden, Germany.
 
 theta = [   2,     5;      % 01 SIMAX, maximum interception storage [mm]
             0.9,   1;      % 02 A, splitting coeffcient for excess precipitation [-]

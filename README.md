@@ -104,4 +104,4 @@ MARRMoT could not have been made without the effort that many hydrologists have 
 - Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations and implementing m47;
 - Koen Jansen for suggesting various improvements and correcting parameter descriptions;
 - Mustafa Kemal Türkeri for making workflow_example_4 operational in Octave; and for performing extensive testing of MARRMoT in Matlab and Octave;
-- Thomas Whöling for suggesting various additional efficiency metrics and a possible implementation for warmup periods.
+- Thomas Wöhling for suggesting various additional efficiency metrics and a possible implementation for warmup periods.

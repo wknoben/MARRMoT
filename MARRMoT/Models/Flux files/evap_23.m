@@ -1,4 +1,4 @@
-function [func] = evap_23(~)
+function [out] = evap_23(p1,p2,S,Smax,Ep,dt)
 % evap_23
 % combines evap_5 (evaporation) and evap_6 (transpiration)
 %
@@ -22,6 +22,6 @@ function [func] = evap_23(~)
 %               Ep   - potential evapotranspiration rate [mm/d]
 %               dt   - time step size [d]
 
-func = @(p1,p2,S,Smax,Ep,dt) min([p1.*Ep+(1-p1).*S./Smax.*Ep, p1*Ep*S./(p2*Smax)+(1-p1).*S./Smax.*Ep,S/dt]);
+out = min([p1.*Ep+(1-p1).*S./Smax.*Ep, p1*Ep*S./(p2*Smax)+(1-p1).*S./Smax.*Ep,S/dt]);
 
 end

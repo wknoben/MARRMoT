@@ -1,4 +1,4 @@
-function [func] = infiltration_8(~)
+function [out] = infiltration_8(S,Smax,fin)
 %infiltration_8
 %
 % Copyright (C) 2021 Clara Brandes
@@ -16,6 +16,6 @@ function [func] = infiltration_8(~)
 %               Smax - maximum storage [mm]
 %               fin  - size of incoming flux [mm/d]
 
-func = @(S,Smax,fin) ((S < Smax) .* fin);
+out = (S < Smax) .* fin;
 
 end

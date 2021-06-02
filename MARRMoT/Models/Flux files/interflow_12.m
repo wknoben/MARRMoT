@@ -1,4 +1,4 @@
-function [func] = interflow_12(~)
+function [out] = interflow_12(p1,p2,p3,S,Smax,dt)
 % interflow_12 
 % source: interflow_3 with customization -> field capacity (FC) is lower
 %
@@ -20,7 +20,7 @@ function [func] = interflow_12(~)
 %               Smax - maximum storage [mm]
 %               dt   - time step size [d]
 
-func = @(p1,p2,p3,S,Smax,dt) ((S >(p2*Smax)).*(min(p1*max((S-(p2*Smax)),0).^(p3),max(S/dt,0))));
+out = (S >(p2*Smax)).*(min(p1*max((S-(p2*Smax)),0).^(p3),max(S/dt,0)));
 
 end
 

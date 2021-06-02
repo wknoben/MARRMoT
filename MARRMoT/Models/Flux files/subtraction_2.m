@@ -1,4 +1,4 @@
-function [func] = subtraction_2(~)
+function [out] = subtraction_2(fin1, fin2)
 % subtraction_2
 %
 % Copyright (C) 2021 Clara Brandes
@@ -12,6 +12,6 @@ function [func] = subtraction_2(~)
 % @(Inputs):    fin1   - incomming flux 1
 %               fout1  - outgoing flux 1
 
-func = @(fin1,fout1) (fin1 - fout1);
+out = fin1 - fin2;
 
 end

@@ -1,4 +1,4 @@
-function [func] = infiltration_7(~)
+function [out] = infiltration_7(p1,p2,S,Smax,fin)
 %infiltration_7
 % source: infiltration_1 with customization
 %
@@ -16,7 +16,6 @@ function [func] = infiltration_7(~)
 %               Smax - maximum storage [mm]
 %               fin  - size of incoming flux [mm/d]
 
-func = @(p1,p2,S,Smax,fin) ((S < Smax) .* (min(p1.*exp((-1*p2*S)./Smax),fin))).*(smoothThreshold_storage_logistic(S,Smax));
-
+out = ((S < Smax) .* (min(p1.*exp((-1*p2*S)./Smax),fin))).*(smoothThreshold_storage_logistic(S,Smax));
 
 end

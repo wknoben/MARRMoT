@@ -16,6 +16,7 @@ classdef MARRMoT_model < handle
         store_max         % store maximum values
         uhs               % unit hydrographs
         fluxes_stf        % still-to-flow fluxes
+        S0                % initial store values
         t                 % current timestep
         Sold              % Vector of stores at time t-1
         input_climate     % Vector of climate at t
@@ -92,7 +93,9 @@ classdef MARRMoT_model < handle
             T     = fluxInput.temp;
             t_end = length(P);
             
-            S0 = storeInitial;
+            if isempty(obj.S0)
+                obj.S0 = storeInitial;
+            end
             
             stores = zeros(t_end, obj.numStores);
             fluxes = zeros(t_end, obj.numFluxes);
@@ -104,7 +107,7 @@ classdef MARRMoT_model < handle
             
             for t = 1:t_end
                obj.t = t;
-               if t == 1; obj.Sold = S0(:); else; obj.Sold = stores(t-1,:)'; end
+               if t == 1; obj.Sold = obj.S0(:); else; obj.Sold = stores(t-1,:)'; end
                obj.input_climate = [P(t) Ep(t) T(t)];
                Snew = obj.solve_stores(solver_opts);
                

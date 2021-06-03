@@ -81,7 +81,7 @@ results_mc_sampling{1,1} = 'parameter_values';
 results_mc_sampling{1,2} = 'output_ex';
 results_mc_sampling{1,3} = 'output_in';
 results_mc_sampling{1,4} = 'output_ss';
-%results_mc_sampling{1,5} = 'output_wb';
+results_mc_sampling{1,5} = 'output_wb';
 
 % Start the sampling
 for i = 1:numSample
@@ -95,18 +95,19 @@ for i = 1:numSample
     % Run the model
     [output_ex,...                                                             % Fluxes leaving the model: simulated flow (Q) and evaporation (Ea)
      output_in,...                                                             % Internal model fluxes
-     output_ss ] = ...                                                         % Internal storages
+     output_ss ,...                                                            % Internal storages
+     output_waterbalance] = ...                                                % Water balance check              
                    m.get_output(...                                            % Model method to run and return all outputs
                                 input_climatology,...                          % Time series of climatic fluxes in simulation period
                                 input_s0,...                                   % Initial storages
-                                input_solver_opts);                            % Options for numerical solving of ODEs
-
+                                input_solver_opts,...                          % Options for numerical solving of ODEs
+                                false);                                        % Do not display water balance
     % Save the results
     results_mc_sampling{1+i,1} = input_theta;
     results_mc_sampling{1+i,2} = output_ex;
     results_mc_sampling{1+i,3} = output_in;
     results_mc_sampling{1+i,4} = output_ss;
-    %results_mc_sampling{1+i,5} = output_waterbalance;
+    results_mc_sampling{1+i,5} = output_waterbalance;
     
     % Display a separation line
     disp(' ')

@@ -83,7 +83,8 @@ m.delta_t = delta_t;
 % This process takes ~6 seconds on a i7-4790 CPU 3.60GHz, 4 core processor.
 [output_ex,...                                                             % Fluxes leaving the model: simulated flow (Q) and evaporation (Ea)
  output_in,...                                                             % Internal model fluxes
- output_ss ] = ...                                                         % Internal storages
+ output_ss,...                                                             % Internal storages
+ output_waterbalance] = ...                                                % Water balance check              
                m.get_output(...                                            % Model method to run and return all outputs
                             input_climatology,...                          % Time series of climatic fluxes in simulation period
                             input_s0,...                                   % Initial storages

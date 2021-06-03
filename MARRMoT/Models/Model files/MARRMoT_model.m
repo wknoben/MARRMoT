@@ -121,14 +121,17 @@ classdef MARRMoT_model < handle
                obj.step(f);
             end
         end
+        
         % GET_OUTPUT runs the model exactly like RUN, but output is
         % consistent with current MARRMoT
         function [fluxOutput,...
                   fluxInternal,...
-                  storeInternal] = get_output(obj,...
-                                              fluxInput,...
-                                              storeInitial,...
-                                              solver_opts)
+                  storeInternal,...
+                  waterBalance] = get_output(obj,...
+                                             fluxInput,...
+                                             storeInitial,...
+                                             solver_opts,...
+                                             varargin)
             
             [fluxes, stores] = obj.run(fluxInput, storeInitial, solver_opts);
             
@@ -146,6 +149,48 @@ classdef MARRMoT_model < handle
             storeInternal = struct;
             for i = 1:obj.numStores
                 storeInternal.(obj.StoreNames(i)) = stores(:,i)';
+            end
+            
+            % --- Water balance, if requested ---
+            if nargout == 4
+                P = fluxInput.precip;
+                waterBalance = obj.check_waterbalance(P, fluxes, stores,...
+                                                      varargin{:});
+            end
+        end
+        
+        % CHECK_WATERBALANCE returns the waterbalance given fluxes and
+        % stores (i.e. the output of RUN)
+        % like in MARRMoT1, it will print to screen
+        function [out] = check_waterbalance(obj,P, fluxes, stores, display)
+            % Get variables
+            Q  = sum(fluxes(:,obj.Flux_Q_idx),2);                          % cumulative of each flow producing streamflow
+            Ea = sum(fluxes(:,obj.Flux_Ea_idx),2);                         % cumulative of each flow producing evapotranspiration
+            dS = stores(end,:) - obj.S0';                                    % difference of final and initial storage for each store
+            if ~isempty(obj.fluxes_stf)
+                R = cellfun(@sum, obj.fluxes_stf);                           % cumulative of each flows still to be routed
+            else
+                R = 0;
+            end
+            
+            % calculate water balance
+            out = sum(P) - sum(Ea) - sum(Q) - sum(dS) - sum(R);
+            
+            % Display, if output = true
+            if nargin > 3 && display
+                disp(['Total P  = ',num2str(sum(P)),' mm.'])
+                disp(['Total Q  = ',num2str(sum(Q)),' mm.'])
+                disp(['Total Ea = ',num2str(sum(Ea)),' mm.'])
+                for s = 1:obj.numStores
+                    disp(['Delta S',num2str(s),' = ',num2str(dS(s)),' mm.'])
+                end
+                disp(['On route = ',num2str(sum(R)),' mm.'])
+            
+            disp('-------------')
+            disp(['Water balance = ',...
+                  'sum(P) - (sum(Q) + sum(Ea)) ',...
+                  '- delta S - still-being-routed = ',...
+                  num2str(out),' mm.'])
             end
         end
         

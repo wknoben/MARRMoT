@@ -171,9 +171,7 @@ classdef MARRMoT_model < handle
                                             of_name,...                    % name of the objective function
                                             varargin)                      % additional arguments to
             Q_sim = obj.get_streamflow(fluxInput, storeInitial, solver_opts);
-            
-            Q_obs_fit = Q_obs(fit_idx); Q_sim_fit = Q_sim(fit_idx);
-            fitness = feval(of_name, Q_obs_fit, Q_sim_fit, varargin{:});
+            fitness = feval(of_name, Q_obs, Q_sim, fit_idx, varargin{:});
         end
         
         % CALIBRATE uses the chosen algorithm to find the optimal parameter
@@ -205,12 +203,10 @@ classdef MARRMoT_model < handle
                                    
              % helper function to calculate fitness given a set of
              % parameters
-             Q_obs_cal = Q_obs(cal_idx);
              function fitness = fitness_fun(par)
                  obj.theta = par;
                  Q_sim = obj.get_streamflow(fluxInput, storeInitial, solver_opts);
-                 Q_sim_cal = Q_sim(cal_idx);
-                 fitness = (-1)^inverse_flag*feval(of_name, Q_obs_cal, Q_sim_cal, varargin{:});
+                 fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, cal_idx, varargin{:});
              end
              
              % if the initial parameter set isn't set,  start from mean
@@ -228,6 +224,9 @@ classdef MARRMoT_model < handle
                                  @fitness_fun,...                          % function to optimise is the fitness function
                                  par_ini,...                               % initial parameter set
                                  optim_opts);                              % optimiser options
+             
+             % if of_cal was inverted, invert it back before returning
+             of_cal = (-1)^inverse_flag * of_cal;
         end
          
          % function to return default solver options
@@ -244,8 +243,8 @@ classdef MARRMoT_model < handle
                                                  'MaxFunEvals',1000);
          end
          
+         % function to add new solver opts to the default ones
          function solver_opts = add_to_def_opts(obj, opts)
-
              def_opts = obj.default_solver_opts();
              def_fields = fields(def_opts);
  

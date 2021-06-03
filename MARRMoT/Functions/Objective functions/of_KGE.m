@@ -1,4 +1,4 @@
-function [val,c,w] = of_KGE(obs,sim,varargin)
+function [val,c,idx,w] = of_KGE(obs, sim, idx, w)
 % of_KGE Calculates Kling-Gupta Efficiency of simulated streamflow (Gupta
 % et al, 2009). Ignores time steps with -999 values.
 %
@@ -9,12 +9,14 @@ function [val,c,w] = of_KGE(obs,sim,varargin)
 % In:
 % obs       - time series of observations       [nx1]
 % sim       - time series of simulations        [nx1]
-% varargin  - optional weights of components    [3x1]
-%           - number of timesteps for warmup    [1x1]
+% idx       - optional vector of indices to use for calculation, can be
+%               logical vector [nx1] or numeric vector [mx1], with m <= n
+% w         - optional weights of components    [3x1]
 %
 % Out:
 % val       - objective function value          [1x1]
 % c         - components [r,alpha,beta]         [3x1]
+% idx       - indices used for the calculation
 % w         - weights    [wr,wa,wb]             [3x1]
 %
 % Gupta, H. V., Kling, H., Yilmaz, K. K., & Martinez, G. F. (2009). 
@@ -29,51 +31,47 @@ elseif nargin > 4
     error('Too many inputs.')    
 end
 
+% make sure inputs are vertical and have the same size
+obs = obs(:);
+sim = sim(:);
+if ~size(obs) == size(sim)
+    error('Time series not of equal size.')
+end
+
 % defaults
-w = [1,1,1];
-warmup = 0; % time steps to ignore when calculating 
+w_default = [1,1,1];          % weights
+idx_exists = find(obs >= 0);  % time steps to use in calculating of value
+% -999 is opten used to denote missing values in observed data. Therefore
+% we check for all negative values, and ignore those. 
+
+% update default indices if needed
+if nargin < 3 || isempty(idx)
+    idx = idx_exists;
+else 
+    idx = idx(:);
+    if islogical(idx) && all(size(idx) == size(obs))
+        idx = intersect(find(idx), idx_exists);
+    elseif isnumeric(idx)
+        idx = intersect(idx, idx_exists);
+    else
+        error(['Indices should be either ' ...
+                'a logical vector of the same size of Qsim and Qobs, or '...
+                'a numeric vector of indices']);
+    end                                                      % use all non missing Q if idx is not provided otherwise
+end
+
 
 % update defaults weights if needed  
-if nargin == 3 || nargin == 4
-    if min(size(varargin{1})) == 1 && max(size(varargin{1})) == 3           % check weights variable for size
-        w = varargin{1};                                                    % apply weights if size = correct
-    else
-        error('Weights should be a 3x1 or 1x3 vector.')                     % or throw error
-    end
+if nargin < 4 || isempty(w)
+    w = w_default;
+else
+    if ~min(size(w)) == 1 || ~max(size(w)) == 3                            % check weights variable for size
+        error('Weights should be a 3x1 or 1x3 vector.')                    % or throw error        
+    end                                                         % use dafult weight is w is not provided
 end   
-
-% update default warmup period if needed
-if nargin == 4
-    if size(varargin{2}) == [1,1]
-        warmup = varargin{2};
-    else
-        error('Warm up period should be 1x1 scalar.')
-    end
-end
-
-% check time series size and rotate one if needed
-if checkTimeseriesSize(obs,sim) == 0
-    error('Time series not of equal size.')
-    
-elseif checkTimeseriesSize(obs,sim) == 2
-    sim = sim';                                                             % 2 indicates that obs and sim are the same size but have different orientations
-end
-
-% check that inputs are column vectors ('corr()' breaks with rows)
-% obs and sim should have the same orientation when we reach here
-if size(sim,1) < size(sim,2)
-    sim = sim';
-    obs = obs';
-end
-
-%% Apply warmup period
-obs = obs(1+warmup:end);
-sim = sim(1+warmup:end);
-
-%% check for missing values
-% -999 is used to denote missing values in observed data, but this is later
-% scaled by area. Therefore we check for all negative values, and ignore those.
-idx = find(obs >= 0);   
+%% filter to only selected indices
+obs = obs(idx);
+sim = sim(idx);                                            
 
 %% calculate components
 c(1) = corr(obs(idx),sim(idx));                                             % r: linear correlation

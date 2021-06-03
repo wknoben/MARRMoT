@@ -1,4 +1,4 @@
-function [func] = split_2(~)
+function [out] = split_2(p1,In)
 %split_2
 %
 % Copyright (C) 2021 Clara Brandes
@@ -12,6 +12,6 @@ function [func] = split_2(~)
 % @(Inputs):    p1   - fraction of flux to be diverted [-]
 %               In   - incoming flux [mm/d]
 
-func = @(p1,In) (1-p1).*In;
+out = (1-p1).*In;
 
 end

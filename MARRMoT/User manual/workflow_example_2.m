@@ -15,9 +15,10 @@
 %
 % 1. Data preparation
 % 2. Model choice and setup
-% 3. Model solver settings and time-stepping scheme
-% 4. Model runs
-% 5. Output vizualization
+% 3. Model solver settings
+% 4. Model generation and set-up
+% 5. Model runs
+% 6. Output vizualization
 
 %% 1. Prepare data
 % Load the data
@@ -29,7 +30,7 @@ load MARRMoT_example_data.mat
 input_climatology.precip   = data_MARRMoT_examples.precipitation;                   % Daily data: P rate  [mm/d]
 input_climatology.temp     = data_MARRMoT_examples.temperature;                     % Daily data: mean T  [degree C]
 input_climatology.pet      = data_MARRMoT_examples.potential_evapotranspiration;    % Daily data: Ep rate [mm/d]
-input_climatology.delta_t  = 1;                                                     % time step size of the inputs: 1 [d]
+delta_t  = 1;                                                     % time step size of the inputs: 1 [d]
 
 %% 2. Define the model settings
 % NOTE: this example assumes that parameter values for this combination of
@@ -38,11 +39,6 @@ input_climatology.delta_t  = 1;                                                 
 % Model name 
 % NOTE: these can be found in the Model Descriptions.
 model       = 'm_29_hymod_5p_5s';                     
-
-% Extract parameter ranges from the parameter file
-% NOTE: files with parameter ranges are found in the folder
-% './MARRMoT/Models/Parameter range files/'
-model_range = feval([model,'_parameter_ranges']);                           % Call the function that stores parameter ranges
 
 % Initial storage values
 % NOTE: see the model function for the order in which stores are given. For
@@ -58,15 +54,24 @@ input_s0       = [ 1;                                                       % In
 % Create a solver settings data input structure. 
 % NOTE: the names of all structure fields are hard-coded in each model
 % file. These should not be changed.
-input_solver.name              = 'createOdeApprox_IE';                      % Use Implicit Euler to approximate ODE's
-input_solver.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
-input_solver.resnorm_maxiter   = 6;                                         % Maximum number of re-runs
+input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
+input_solver_opts.resnorm_maxiter   = 6;                                         % Maximum number of re-runs
+% these are the same settings that run by default if no settings are given
 
+%% 4. Create a model object
+% Create a model object
+m = feval(model);
 
-%% 4. Run the model and extract all outputs
+% Set timestep for the model
+m.delta_t = delta_t;
+
+% Extract parameter ranges
+model_range = m.parRanges;
+
+%% 5. Run the model and extract all outputs
 % Define the requested number of samples
 numSample = 10;
-numPar    = size(model_range,1);
+numPar    = m.numParams;
 
 % Prepare a storage array
 results_mc_sampling = cell(numSample+1,5);
@@ -76,7 +81,7 @@ results_mc_sampling{1,1} = 'parameter_values';
 results_mc_sampling{1,2} = 'output_ex';
 results_mc_sampling{1,3} = 'output_in';
 results_mc_sampling{1,4} = 'output_ss';
-results_mc_sampling{1,5} = 'output_wb';
+%results_mc_sampling{1,5} = 'output_wb';
 
 % Start the sampling
 for i = 1:numSample
@@ -84,23 +89,24 @@ for i = 1:numSample
     % Sample a parameter set from the range
     input_theta = model_range(:,1)+rand(numPar,1).*(model_range(:,2)-model_range(:,1));
     
+    % Initialise the model with the required parameter set
+    m.theta = input_theta;
+    
     % Run the model
-    [output_ex,...                                                          % Fluxes leaving the model: simulated flow (Q) and evaporation (Ea)
-     output_in,...                                                          % Internal model fluxes
-     output_ss,....                                                         % Internal storages
-     output_waterbalance] = ...                                             % Water balance check
-                        feval(model,...                                     % Model function name
-                              input_climatology,...                         % Time series of climatic fluxes in simulation period
-                              input_s0,...                                  % Initial storages
-                              input_theta,...                               % Parameter values
-                              input_solver);                                % Details of numerical time-stepping scheme
-                      
+    [output_ex,...                                                             % Fluxes leaving the model: simulated flow (Q) and evaporation (Ea)
+     output_in,...                                                             % Internal model fluxes
+     output_ss ] = ...                                                         % Internal storages
+                   m.get_output(...                                            % Model method to run and return all outputs
+                                input_climatology,...                          % Time series of climatic fluxes in simulation period
+                                input_s0,...                                   % Initial storages
+                                input_solver_opts);                            % Options for numerical solving of ODEs
+
     % Save the results
     results_mc_sampling{1+i,1} = input_theta;
     results_mc_sampling{1+i,2} = output_ex;
     results_mc_sampling{1+i,3} = output_in;
     results_mc_sampling{1+i,4} = output_ss;
-    results_mc_sampling{1+i,5} = output_waterbalance;
+    %results_mc_sampling{1+i,5} = output_waterbalance;
     
     % Display a separation line
     disp(' ')
@@ -132,15 +138,3 @@ figure('color','w');
     set(gca,'fontsize',16);
 
 clear h i t 
-    
-
-
-
-
-
-
-
-
-
-
-

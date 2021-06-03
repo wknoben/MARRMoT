@@ -129,63 +129,27 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
             % fluxes functions
             % Original formulation using MARRMoT fluxes is very slow on sacramento,
             % individual functions have been explicitly coded underneath.
-%             flux_qdir    = split_1(pctim,P);
-%             flux_peff    = split_1(1-pctim,P);
-%             flux_ru      = soilmoisture_1(S1,uztwm,S2,uzfwm);
-%             flux_euztw   = evap_7(S1,uztwm,Ep,delta_t);
-%             flux_twexu   = saturation_1(flux_peff,S1,uztwm);
-%             flux_qsur    = saturation_1(flux_twexu,S2,uzfwm);
-%             flux_qint    = interflow_5(kuz,S2);
-%             flux_euzfw   = evap_1(S2,max(0,Ep-flux_euztw),delta_t);
-%             flux_pc      = percolation_4(pbase,zperc,rexp,max(0,lztwm-S3)+max(0,lzfwpm-S4)+max(0,lzfwsm-S5),lztwm+lzfwpm+lzfwsm,S2,uzfwm,delta_t);
-%             flux_pctw    = split_1(1-pfree,flux_pc);
-%             flux_elztw   = evap_7(S3,lztwm,max(0,Ep-flux_euztw-flux_euzfw),delta_t);
-%             flux_twexl   = saturation_1(flux_pctw,S3,lztwm);  
-%             flux_twexlp  = split_1(deficitBasedDistribution(S4,lzfwpm,S5,lzfwsm),flux_twexl);
-%             flux_twexls  = split_1(deficitBasedDistribution(S5,lzfwsm,S4,lzfwpm),flux_twexl);
-%             flux_pcfwp   = split_1(pfree*deficitBasedDistribution(S4,lzfwpm,S5,lzfwsm),flux_pc);
-%             flux_pcfws   = split_1(pfree*deficitBasedDistribution(S5,lzfwsm,S4,lzfwpm),flux_pc); 
-%             flux_rlp     = soilmoisture_2(S3,lztwm,S4,lzfwpm,S5,lzfwsm);
-%             flux_rls     = soilmoisture_2(S3,lztwm,S5,lzfwsm,S4,lzfwpm);   
-%             flux_qbfp    = baseflow_1(klzp,S4);
-%             flux_qbfs    = baseflow_1(klzs,S5);
+            flux_qdir    = split_1(pctim,P);
+            flux_peff    = split_1(1-pctim,P);
+            flux_ru      = soilmoisture_1(S1,uztwm,S2,uzfwm);
+            flux_euztw   = evap_7(S1,uztwm,Ep,delta_t);
+            flux_twexu   = saturation_1(flux_peff,S1,uztwm);
+            flux_qsur    = saturation_1(flux_twexu,S2,uzfwm);
+            flux_qint    = interflow_5(kuz,S2);
+            flux_euzfw   = evap_1(S2,max(0,Ep-flux_euztw),delta_t);
+            flux_pc      = percolation_4(pbase,zperc,rexp,max(0,lztwm-S3)+max(0,lzfwpm-S4)+max(0,lzfwsm-S5),lztwm+lzfwpm+lzfwsm,S2,uzfwm,delta_t);
+            flux_pctw    = split_1(1-pfree,flux_pc);
+            flux_elztw   = evap_7(S3,lztwm,max(0,Ep-flux_euztw-flux_euzfw),delta_t);
+            flux_twexl   = saturation_1(flux_pctw,S3,lztwm);  
+            flux_twexlp  = split_1(deficitBasedDistribution(S4,lzfwpm,S5,lzfwsm),flux_twexl);
+            flux_twexls  = split_1(deficitBasedDistribution(S5,lzfwsm,S4,lzfwpm),flux_twexl);
+            flux_pcfwp   = split_1(pfree*deficitBasedDistribution(S4,lzfwpm,S5,lzfwsm),flux_pc);
+            flux_pcfws   = split_1(pfree*deficitBasedDistribution(S5,lzfwsm,S4,lzfwpm),flux_pc); 
+            flux_rlp     = soilmoisture_2(S3,lztwm,S4,lzfwpm,S5,lzfwsm);
+            flux_rls     = soilmoisture_2(S3,lztwm,S5,lzfwsm,S4,lzfwpm);   
+            flux_qbfp    = baseflow_1(klzp,S4);
+            flux_qbfs    = baseflow_1(klzs,S5);
             
-            flux_qdir    = pctim.*P;
-            flux_peff    = (1-pctim).*P;
-            flux_ru      = ((S2.*uztwm-S1.*uzfwm)/(uztwm+uzfwm))./...
-                (1+exp(((S1./uztwm)-(S2./uzfwm)+.05*(S2./uzfwm))/(.01*(((.01*S2./uzfwm) == 0) + (S2./uzfwm)))));
-            flux_euztw   = min(S1./uztwm.*Ep,S1/delta_t);
-            flux_twexu   = flux_peff.*(1 - 1./(1+exp((S1-uztwm+.05*uztwm)/(.01*(((.01*uztwm) == 0) + uztwm)))));
-            flux_qsur    = flux_twexu.*(1 - 1./(1+exp((S2-uzfwm+.05*uzfwm)/(.01*(((.01*uzfwm) == 0) + uzfwm)))));
-            flux_qint    = kuz.*S2;
-            flux_euzfw   = min(S2/delta_t,max(0,Ep-flux_euztw));
-            flux_pc      = max(0,min(S2/delta_t,max(0,S2./uzfwm).*...
-                (pbase.*(1+zperc.*((max(0,lztwm-S3)+max(0,lzfwpm-S4)+max(0,lzfwsm-S5))./(lztwm+lzfwpm+lzfwsm)).^(1+rexp)))));
-            flux_pctw    = (1-pfree) .* flux_pc;
-            flux_elztw   = min(S3./lztwm.*max(0,Ep-flux_euztw-flux_euzfw),S3/delta_t);
-            flux_twexl   = flux_pctw.*(1-1./(1+exp((S3-lztwm+.05*lztwm)/(.01*(((.01*lztwm) == 0) + lztwm)))));
-            
-            if S4 ~= lzfwpm || S5 ~= lzfwsm
-                tmp_rd4 = (S4-lzfwpm)/lzfwpm;
-                tmp_rd5 = (S5-lzfwsm)/lzfwsm;
-                tmp_distr4 = tmp_rd4/(tmp_rd4+tmp_rd5);
-                tmp_distr5 = tmp_rd5/(tmp_rd4+tmp_rd5);                
-            else
-                tmp_distr4 = lzfwpm/(lzfwpm+lzfwsm);
-                tmp_distr5 = lzfwsm/(lzfwpm+lzfwsm);
-            end            
-            flux_twexlp  = tmp_distr4.*flux_twexl;
-            flux_twexls  = tmp_distr5.*flux_twexl;
-            flux_pcfwp   = (pfree*tmp_distr4).*flux_pc;
-            flux_pcfws   = (pfree*tmp_distr5).*flux_pc;
-            
-            tmp_max = (S4+S5)./(lzfwpm+lzfwsm);
-            tmp_thresh = 1 ./ (1+exp(((S3./lztwm)-(tmp_max)+.05*(tmp_max))/(.01*(((.01*tmp_max)==0) + tmp_max))));
-            tmp_sm = (S3.*(lzfwpm+lzfwsm)+lztwm.*(S4+S5))./((lzfwpm+lzfwsm).*(lztwm+lzfwpm+lzfwsm));
-            flux_rlp     = (S4.*tmp_sm).* tmp_thresh;
-            flux_rls     = (S5.*tmp_sm).* tmp_thresh;  
-            flux_qbfp    = klzp.*S4;
-            flux_qbfs    = klzs.*S5;
             
             % stores ODEs
             dS1 = flux_peff   + flux_ru    - flux_euztw - flux_twexu;

@@ -80,29 +80,14 @@ classdef m_18_simhyd_7p_3s < MARRMoT_model
             % fluxes functions
             % Original formulation using MARRMoT fluxes is slow on simhyd,
             % individual functions have been explicitly coded underneath.
-%             flux_Ei   = evap_1(S1,Ep,delta_t);
-%             flux_EXC  = interception_1(P,S1,insc);
-%             flux_INF  = infiltration_1(coeff,sq,S2,smsc,flux_EXC);
-%             flux_INT  = interflow_1(sub,S2,smsc,flux_INF);
-%             flux_REC  = recharge_1(crak,S2,smsc,(flux_INF-flux_INT));
-%             flux_Et   = evap_2(10,S2,smsc,Ep,delta_t);
-%             flux_GWF  = saturation_1((flux_INF-flux_INT-flux_REC),S2,smsc);
-%             flux_BAS  = baseflow_1(k,S3);
-%             flux_SRUN = flux_EXC - flux_INF; 
-%             flux_Qt   = flux_SRUN + flux_INT + flux_BAS;
-            
-            flux_Ei   = min(S1/delta_t, Ep);
-            flux_EXC  = P.*(1-(1./(1+exp((S1-insc+.05*insc)/(.01*((.01*insc==0)+insc))))));
-            flux_INF  = min(coeff.*exp((-1*sq*S2)./smsc),flux_EXC);
-            flux_INT  = sub*S2/smsc*flux_INF;
-            flux_REC  = crak*S2/smsc*(flux_INF-flux_INT);
-            flux_Et   = min([10*S2/smsc,Ep,S2/delta_t]);
-            %flux_SMF is not explicitly calculated and reported in original
-            %MARRMoT, so it's not reported here either to maintain results
-            %comparable
-            flux_SMF  = flux_INF-flux_INT-flux_REC;
-            flux_GWF  = flux_SMF.*(1-(1./(1+exp((S2-smsc+.05*smsc)/(.01*((.01*smsc==0)+smsc))))));
-            flux_BAS  = k.*S3;
+            flux_Ei   = evap_1(S1,Ep,delta_t);
+            flux_EXC  = interception_1(P,S1,insc);
+            flux_INF  = infiltration_1(coeff,sq,S2,smsc,flux_EXC);
+            flux_INT  = interflow_1(sub,S2,smsc,flux_INF);
+            flux_REC  = recharge_1(crak,S2,smsc,(flux_INF-flux_INT));
+            flux_Et   = evap_2(10,S2,smsc,Ep,delta_t);
+            flux_GWF  = saturation_1((flux_INF-flux_INT-flux_REC),S2,smsc);
+            flux_BAS  = baseflow_1(k,S3);
             flux_SRUN = flux_EXC - flux_INF; 
             flux_Qt   = flux_SRUN + flux_INT + flux_BAS;
             

@@ -167,62 +167,68 @@ classdef MARRMoT_model < handle
                                             storeInitial,...               % initial values of stores
                                             solver_opts,...                % solver options
                                             Q_obs,...                      % observed streamflow
+                                            fit_idx,...                    % indices to use to calculate the fitness function
                                             of_name,...                    % name of the objective function
                                             varargin)                      % additional arguments to
             Q_sim = obj.get_streamflow(fluxInput, storeInitial, solver_opts);
-            fitness = feval(of_name, Q_obs, Q_sim, varargin{:});
+            
+            Q_obs_fit = Q_obs(fit_idx); Q_sim_fit = Q_sim(fit_idx);
+            fitness = feval(of_name, Q_obs_fit, Q_sim_fit, varargin{:});
         end
         
-        % CALIBRATE uses CMA-ES to find the optimal parameter set given
-        % model inputs, objective function and observed streamflow                                           
-         function [par_opt,...                                             % optimal parameter set
-                   of_cal,...                                              % value of objective function at calibration
-                   n_feval,...                                             % number of function evaluations
-                   stopflag]= calibrate(obj,...
-                                        fluxInput,...                      % struct of input fluxes
-                                        storeInitial,...                   % initial values of stores
-                                        solver_opts,...                    % solver options
-                                        Q_obs,...                          % observed streamflow
-                                        cmaes_sigma0,...                   % initial sigma for CMA-ES
-                                        cmaes_opts,...                     % CMA-ES options
-                                        of_name,...                        % name of objective function to use
-                                        inverse_flag,...                   % should the OF be inversed?
-                                        varargin)                          % additional arguments to
+        % CALIBRATE uses the chosen algorithm to find the optimal parameter
+        % set, given model inputs, objective function and observed streamflow.
+        % the function chosen in algorithm should have the same inputs and
+        % outputs as MATLAB's fminsearch.
+        function  [par_opt,...                                             % optimal parameter set
+                   of_cal,...                                              % value of objective function at par_opt
+                   stopflag,...                                            % flag indicating reason the algorithm stopped
+                   output] = ...                                           % output, see fminsearch for detail
+                             calibrate(obj,...
+                                       fluxInput,...                       % struct of input fluxes
+                                       storeInitial,...                    % initial values of stores
+                                       solver_opts,...                     % solver options
+                                       Q_obs,...                           % observed streamflow
+                                       cal_idx,...                         % timesteps to use for model calibration
+                                       optim_fun,...                       % function to use for optimisation (must have same structure as fminsearch)
+                                       par_ini,...                         % initial parameter estimates
+                                       optim_opts,...                      % options to optim_fun
+                                       of_name,...                         % name of objective function to use
+                                       inverse_flag,...                    % should the OF be inversed?
+                                       varargin)                           % additional arguments to of_name
              
+             % if the list of timesteps to use for calibration is empty,
+             % use all steps 
+             if isempty(cal_idx)
+                 cal_idx = 1:length(Q_obs);
+             end
+                                   
              % helper function to calculate fitness given a set of
              % parameters
+             Q_obs_cal = Q_obs(cal_idx);
              function fitness = fitness_fun(par)
                  obj.theta = par;
                  Q_sim = obj.get_streamflow(fluxInput, storeInitial, solver_opts);
-                 fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, varargin{:});
+                 Q_sim_cal = Q_sim(cal_idx);
+                 fitness = (-1)^inverse_flag*feval(of_name, Q_obs_cal, Q_sim_cal, varargin{:});
              end
              
-             % start from mean parameter set
-             %par_ini = obj.parRanges(:,1) + rand(obj.numParams,1).*(obj.parRanges(:,2)-obj.parRanges(:,1));
-             par_ini = mean(obj.parRanges,2);
-             
-             % set default options for cmaes if options are empty
-             [def_cmaes_opts, def_cmaes_sigma0] = obj.default_cmaes_opts();
-             if isempty(cmaes_opts);   cmaes_opts   = def_cmaes_opts;   end
-             if isempty(cmaes_sigma0); cmaes_sigma0 = def_cmaes_sigma0; end
-             
-             % set parameter bounds if they are not set
-             if ~isfield(cmaes_opts, 'LBounds') || isempty(cmaes_opts.LBounds)
-                 cmaes_opts.LBounds = obj.parRanges(:,1);
-             end
-             if ~isfield(cmaes_opts, 'UBounds') || isempty(cmaes_opts.UBounds)
-                 cmaes_opts.UBounds = obj.parRanges(:,2);
+             % if the initial parameter set isn't set,  start from mean
+             % values of parameter range
+             if isempty(par_ini)
+                 %par_ini = obj.parRanges(:,1) + rand(obj.numParams,1).*(obj.parRanges(:,2)-obj.parRanges(:,1));
+                 par_ini = mean(obj.parRanges,2);
              end
              
-             % run CMA-ES
-             [par_opt,...
-                 of_cal,...
-                 n_feval,...
-                 stopflag] = cmaes(@fitness_fun,...
-                                   par_ini,...
-                                   cmaes_sigma0,...
-                                   cmaes_opts);
-         end
+             [par_opt,...                                                  % optimal parameter set at the end of the optimisation
+                 of_cal,...                                                % value of the objective function at par_opt
+                 stopflag,...                                              % flag indicating reason the algorithm stopped
+                 output] = ...                                             % output, see fminsearch for detail
+                           feval(optim_fun,...                             % run the optimisation algorithm chosen
+                                 @fitness_fun,...                          % function to optimise is the fitness function
+                                 par_ini,...                               % initial parameter set
+                                 optim_opts);                              % optimiser options
+        end
          
          % function to return default solver options
          function solver_opts = default_solver_opts(obj)
@@ -259,21 +265,6 @@ classdef MARRMoT_model < handle
                      solver_opts.(field) = opts.(field);
                  end
              end             
-         end
-         
-         % function to return default CMA-ES options
-         function [cmaes_opts, cmaes_sigma0] = default_cmaes_opts(obj)
-            cmaes_opts.LBounds  = obj.parRanges(:,1);                      % lower bounds of parameters
-            cmaes_opts.UBounds  = obj.parRanges(:,2);                      % upper bounds of parameters
-            cmaes_opts.PopSize  = 2 * (4 + floor(3*log(obj.numParams)));   % population size is 2x the defaul
-            
-            % starting sigma
-            cmaes_sigma0 = .3*(obj.parRanges(:,2) - obj.parRanges(:,1));   % starting sigma (this is default)
-            
-            % stopping criteria
-            cmaes_opts.TolX       = 1e-6 * min(cmaes_sigma0);              % stopping criterion on changes to parameters 
-            cmaes_opts.TolFun     = 1e-4;                                  % stopping criterion on changes to fitness function
-            cmaes_opts.TolHistFun = 1e-5;                                  % stopping criterion on changes to fitness function
          end
     end
 end

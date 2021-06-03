@@ -71,7 +71,7 @@ classdef MARRMoT_model < handle
                     [Snew,~,~] = rerunSolver('lsqnonlin', ...              
                         solver_opts.lsqnonlin, ...                         % solver options
                         @obj.solve_fun_IE,...                              % system of ODEs
-                        solver_opts.resnorm_maxiter, ...                   % maximum number of re-runs
+                        solver_opts.rerun_maxiter, ...                     % maximum number of re-runs
                         solver_opts.resnorm_tolerance, ...                 % convergence tolerance
                         Snew, ...                                          % recent estimates
                         obj.Sold, ...                                      % storages at previous time step
@@ -103,6 +103,8 @@ classdef MARRMoT_model < handle
             % use default options for the solvers if they are not set
             if nargin < 4 || isempty(solver_opts)
                 solver_opts = obj.default_solver_opts;
+            else
+                solver_opts = obj.add_to_def_opts(solver_opts);
             end
             
             for t = 1:t_end
@@ -225,7 +227,7 @@ classdef MARRMoT_model < handle
          % function to return default solver options
          function solver_opts = default_solver_opts(obj)
             solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
-            solver_opts.resnorm_maxiter   = 6;                                         % Maximum number of re-runs
+            solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
             solver_opts.NewtonRaphson = optimset('MaxIter', obj.numStores * 10);
             solver_opts.fsolve = optimoptions('fsolve',...
                                               'Display','none',...                     % Disable display settings
@@ -234,6 +236,29 @@ classdef MARRMoT_model < handle
                                                  'Display','none',...
                                                  'JacobPattern',obj.JacobPattern,...
                                                  'MaxFunEvals',1000);
+         end
+         
+         function solver_opts = add_to_def_opts(obj, opts)
+
+             def_opts = obj.default_solver_opts();
+             def_fields = fields(def_opts);
+ 
+             % for each field in the default options (5 at the moment)
+             for k = 1:length(def_fields)
+                 field = def_fields{k};
+                 % if the field is not provided, use the default one
+                 if ~isfield(opts, field) || isempty(opts.(field))
+                     solver_opts.(field) = def_opts.(field);
+                 % if the field is provided, and the dafault is a struct,
+                 % add the new values to the default struct
+                 elseif isstruct(def_opts.(field))
+                     solver_opts.(field) = optimset(def_opts.(field),opts.(field));
+                 % if the field is provided, and the dafault is not a struct,
+                 % discard the default and use the new value
+                 else
+                     solver_opts.(field) = opts.(field);
+                 end
+             end             
          end
          
          % function to return default CMA-ES options

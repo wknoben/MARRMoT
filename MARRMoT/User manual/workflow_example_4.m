@@ -60,7 +60,7 @@ input_s0  = zeros(numStores,1);                                            % Ini
 % NOTE: the names of all structure fields are hard-coded in each model
 % file. These should not be changed.
 input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance; users have reported differences in simulation accuracy (KGE scores) during calibration between Matlab and Octave for a given tolerance. In certain cases, Octave seems to require tigther tolerances to obtain the same KGE scores as Matlab does.
-input_solver_opts.resnorm_maxiter   = 6;                                         % Maximum number of re-runs
+input_solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
 
 %% 4. Define calibration settings
 % Settings for 'my_cmaes'
@@ -131,8 +131,7 @@ model_out = ...
                  input_s0,...                                              % Initial storages
                  input_solver_opts);                                       % Solver settings  
 
-% extract simulated streamflow during evaluation (everything that wasn't
-% calibration)
+% extract simulated streamflow
 Q_sim = model_out.Q;
              
 % Compute evaluation performance

@@ -48,7 +48,7 @@ model_list  = {'m_29_hymod_5p_5s',...
 % NOTE: the names of all structure fields are hard-coded in each model
 % file. These should not be changed.
 input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
-input_solver_opts.resnorm_maxiter   = 6;                                         % Maximum number of re-runs
+input_solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
 % these are the same settings that run by default if no settings are given
 
 

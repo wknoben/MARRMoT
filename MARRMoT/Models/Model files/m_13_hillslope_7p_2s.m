@@ -28,8 +28,8 @@ classdef m_13_hillslope_7p_2s < MARRMoT_model
             obj.FluxNames  = ["pe",   "ei", "ea",    "qse",  "qses",...
                               "qseg", "c",  "qhsrf", "qhgw", "qt"];        % Names for the fluxes
             
-            obj.Flux_Ea_idx = [2 3];                                       % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = 10;                                          % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = [2 3];                                     % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = 10;                                        % Index or indices of fluxes to add to Streamflow
             
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)

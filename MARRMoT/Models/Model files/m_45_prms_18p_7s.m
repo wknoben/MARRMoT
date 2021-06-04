@@ -47,8 +47,9 @@ classdef m_45_prms_18p_7s < MARRMoT_model
                               "qres", "sep", "gad", "ras", "bas"...
                               "snk",  "ein", "eim", "ea",  "et"];          % Names for the fluxes
             
-            obj.Flux_Ea_idx = [22 23 24 25];                               % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = [11 12 19 20];                               % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = [22 23 24 25];                             % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = [11 12 19 20];                             % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Sink  = 21;                                     % index of sink fluxes
             
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)

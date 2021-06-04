@@ -29,9 +29,11 @@ classdef m_25_tcm_6p_4s < MARRMoT_model
             obj.FluxNames  = ["en",  "ea",   "et",   "pn",  "pby",...
                               "pin", "qex1", "qex2", "qux", "a", "q"];     % Names for the fluxes
             
-            obj.Flux_Ea_idx = [1 2 3];                                     % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = 11;                                          % Index or indices of fluxes to add to Streamflow
-            
+            obj.FluxGroups.Ea_idx = [1 2 3];                               % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q_idx  = 11;                                    % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Abstraction = 10;                               % Index or abstraction flux (just needed for water balance)
+            obj.StoreSigns  = [1 -1 1 1];                                  % Signs to give to stores (-1 is a deficit store), only needed for water balance
+
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)
                 obj.delta_t = delta_t;

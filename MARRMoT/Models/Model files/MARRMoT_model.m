@@ -8,8 +8,8 @@ classdef MARRMoT_model < handle
         JacobPattern      % pattern of the Jacobian matrix of model store ODEs
         StoreNames        % Names for the stores
         FluxNames         % Names for the fluxes
-        Flux_Ea_idx       % indices of fluxes related to Actual ET
-        Flux_Q_idx        % indices of fluxes related to Streamflow
+        FluxGroups        % Grouping of fluxes (useful for water balance and output)
+        StoreSigns        % Signs to give to stores (-1 is a deficit store), only needed for water balance
         theta             % Set of parameters
         delta_t           % time step
         store_min         % store minimum values
@@ -136,8 +136,8 @@ classdef MARRMoT_model < handle
             [fluxes, stores] = obj.run(fluxInput, storeInitial, solver_opts);
             
             % --- Fluxes leaving the model ---
-            fluxOutput.Ea     = sum(fluxes(:,obj.Flux_Ea_idx),2)';
-            fluxOutput.Q      = sum(fluxes(:,obj.Flux_Q_idx),2)';
+            fluxOutput.Ea     = sum(fluxes(:,obj.FluxGroups.Ea),2)';
+            fluxOutput.Q      = sum(fluxes(:,obj.FluxGroups.Q),2)';
             
             % --- Fluxes internal to the model ---
             fluxInternal = struct;
@@ -164,33 +164,47 @@ classdef MARRMoT_model < handle
         % like in MARRMoT1, it will print to screen
         function [out] = check_waterbalance(obj,P, fluxes, stores, display)
             % Get variables
-            Q  = sum(fluxes(:,obj.Flux_Q_idx),2);                          % cumulative of each flow producing streamflow
-            Ea = sum(fluxes(:,obj.Flux_Ea_idx),2);                         % cumulative of each flow producing evapotranspiration
-            dS = stores(end,:) - obj.S0';                                    % difference of final and initial storage for each store
-            if ~isempty(obj.fluxes_stf)
-                R = cellfun(@sum, obj.fluxes_stf);                           % cumulative of each flows still to be routed
-            else
-                R = 0;
+            fg = fieldnames(obj.FluxGroups);
+            OutFluxes = zeros(1,numel(fg));
+            for k=1:numel(fg)                                              % cumulative of each flow leaving the model
+                idx = abs(obj.FluxGroups.(fg{k}));
+                signs = sign(obj.FluxGroups.(fg{k}));
+                OutFluxes(k) = sum(sum(signs.*fluxes(:,idx), 1),2);
             end
+            if isempty(obj.StoreSigns); obj.StoreSigns = repelem(1, obj.numStores); end
+            dS = obj.StoreSigns .* (stores(end,:) - obj.S0');              % difference of final and initial storage for each store
+            if isempty(obj.fluxes_stf); obj.fluxes_stf = {}; end
+            R = cellfun(@sum, obj.fluxes_stf);                             % cumulative of each flows still to be routed
             
             % calculate water balance
-            out = sum(P) - sum(Ea) - sum(Q) - sum(dS) - sum(R);
+            out = sum(P) - ...                                             % input from precipitation
+                sum(OutFluxes) - ...                                       % all fluxes leaving the model (some may be entering, but they should have a negative sign)
+                sum(dS) - ...                                              % all differences in storage
+                sum(R);                                                    % all flows still being routed
             
             % Display, if output = true
-            if nargin > 3 && display
+            
+            if nargin > 4 && display
                 disp(['Total P  = ',num2str(sum(P)),' mm.'])
-                disp(['Total Q  = ',num2str(sum(Q)),' mm.'])
-                disp(['Total Ea = ',num2str(sum(Ea)),' mm.'])
-                for s = 1:obj.numStores
-                    disp(['Delta S',num2str(s),' = ',num2str(dS(s)),' mm.'])
+                for k = 1:numel(fg)
+                    disp(['Total ',char(fg(k)),' = ',...
+                          num2str(-OutFluxes(k)),' mm.'])
                 end
-                disp(['On route = ',num2str(sum(R)),' mm.'])
+                for s = 1:obj.numStores
+                    if obj.StoreSigns(s) == -1
+                        ending=' (deficit store).';
+                    else
+                        ending='.';
+                    end
+                    disp(['Delta S',num2str(s),' = ',...
+                          num2str(-dS(s)),' mm',ending])
+                end
+                if ~isempty(R)
+                    disp(['On route = ',num2str(-sum(R)),' mm.'])
+                end
             
             disp('-------------')
-            disp(['Water balance = ',...
-                  'sum(P) - (sum(Q) + sum(Ea)) ',...
-                  '- delta S - still-being-routed = ',...
-                  num2str(out),' mm.'])
+            disp(['Water balance = ', num2str(out), ' mm.'])
             end
         end
         

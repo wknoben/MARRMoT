@@ -26,8 +26,9 @@ classdef m_05_ihacres_7p_1s < MARRMoT_model
             obj.StoreNames = ["S1"];                                       % Names for the stores
             obj.FluxNames  = ["Ea", "u", "uq", "us", "xq","xs", "Qt"];     % Names for the fluxes
             
-            obj.Flux_Ea_idx = 1;                                           % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = 7;                                           % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = 1;                                         % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = 7;                                         % Index or indices of fluxes to add to Streamflow
+            obj.StoreSigns  = -1;                                          % Signs to give to stores (-1 is a deficit store), only needed for water balance
             
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)

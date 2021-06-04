@@ -51,8 +51,9 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
                               "qs1",   "q0",  "q0r",    "qmps1", "pc",...
                               "qh",    "qs2", "qgw"];                      % Names for the fluxes
             
-            obj.Flux_Ea_idx = [1 10];                                      % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = [13 16 17];                                  % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = [1 10];                                    % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = [13 16 17];                                % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.GW = -18;                                       % Index of GW runoff flow.
             
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)

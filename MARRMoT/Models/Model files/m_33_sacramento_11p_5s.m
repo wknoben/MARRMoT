@@ -38,8 +38,8 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
                               "elztw", "twexl", "twexlp", "twexls", "pcfwp",...
                               "pcfws", "rlp", "rls", "qbfp", "qbfs"];      % Names for the fluxes
             
-            obj.Flux_Ea_idx = [4 8 11];                                    % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = [1 6 7 19 20];                               % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = [4 8 11];                                    % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = [1 6 7 19 20];                               % Index or indices of fluxes to add to Streamflow
             
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)

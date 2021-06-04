@@ -39,8 +39,9 @@ classdef m_43_gsmsocont_12p_6s < MARRMoT_model
                               "pnis", "pnir",  "mnis",  "peq", "peff",...
                               "pinf", "et",    "qsl",   "qqu"];            % Names for the fluxes
             
-            obj.Flux_Ea_idx = [17];                                        % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = [8 9 18 19];                                 % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = [17];                                      % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = [8 9 18 19];                               % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.GlacierMelt = -7;                               % Index of flows from glacier melt (neg sign because it is input, differently from Q and Ea)
             
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)

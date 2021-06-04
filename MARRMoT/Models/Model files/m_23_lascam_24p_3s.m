@@ -48,8 +48,8 @@ classdef m_23_lascam_24p_3s < MARRMoT_model
                               "qsse", "qsie", "fa",  "ef",  "rf",...
                               "ea1",  "ea2",  "qa",  "ra",  "qb", "eb"];   % Names for the fluxes
             
-            obj.Flux_Ea_idx = [1 9 11 12 16];                              % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = [3 4 13];                                    % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = [1 9 11 12 16];                            % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = [3 4 13];                                  % Index or indices of fluxes to add to Streamflow
             
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)

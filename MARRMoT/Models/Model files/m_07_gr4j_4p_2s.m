@@ -10,7 +10,7 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
         % and sets all the static properties of the model
         function obj = m_07_gr4j_4p_2s(delta_t, theta)            
             obj.numStores = 2;                                             % number of model stores
-            obj.numFluxes = 12;                                            % number of model fluxes
+            obj.numFluxes = 13;                                            % number of model fluxes
             obj.numParams = 4;
             
             obj.JacobPattern  = [1,1;
@@ -23,10 +23,11 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             
             obj.StoreNames = ["S1" "S2" "S3" "S4" "S5"];                   % Names for the stores
             obj.FluxNames  = ["pn", "en", "ef", "ps", "es", "perc",...
-                              "q9", "q1", "fr", "fq", "qr", "qt"];         % Names for the fluxes
+                              "q9", "q1", "fr", "fq", "qr", "qt", "ex"];   % Names for the fluxes
             
-            obj.Flux_Ea_idx = [3 5];                                       % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = 12;                                          % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = [3 5];                                     % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = [12];                                      % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Exchange  = -13;                                % Index or indices of exchange fluxes
             
             % setting delta_t and theta triggers the function obj.init()
             if nargin > 0 && ~isempty(delta_t)
@@ -111,6 +112,9 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             flux_fq   = flux_fr;
             flux_qr   = baseflow_3(S2,x3);
             flux_qt   = flux_qr + max(flux_q1 + flux_fq,0);
+            % this flux is not included in original MARRMoT,
+            % but it is useful to calculate the water balance
+            flux_ex = flux_fr + max(flux_q1 + flux_fq,0) - flux_q1;      
 
             % stores ODEs
             dS1 = flux_ps - flux_es - flux_perc;
@@ -118,8 +122,9 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             
             % outputs
             dS = [dS1 dS2];
-            fluxes = [flux_pn, flux_en, flux_ef, flux_ps, flux_es, flux_perc,...
-                      flux_q9, flux_q1, flux_fr, flux_fq, flux_qr, flux_qt];
+            fluxes = [flux_pn,   flux_en, flux_ef, flux_ps, flux_es,...
+                      flux_perc, flux_q9, flux_q1, flux_fr, flux_fq,...
+                      flux_qr,   flux_qt, flux_ex];
         end
         
         % STEP runs at the end of every timestep, use it to update

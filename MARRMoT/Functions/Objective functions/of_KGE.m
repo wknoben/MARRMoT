@@ -74,9 +74,9 @@ obs = obs(idx);
 sim = sim(idx);                                            
 
 %% calculate components
-c(1) = corr(obs(idx),sim(idx));                                             % r: linear correlation
-c(2) = std(sim(idx))/std(obs(idx));                                         % alpha: ratio of standard deviations
-c(3) = mean(sim(idx))/mean(obs(idx));                                       % beta: bias 
+c(1) = corr(obs,sim);                                             % r: linear correlation
+c(2) = std(sim)/std(obs);                                         % alpha: ratio of standard deviations
+c(3) = mean(sim)/mean(obs);                                       % beta: bias 
 
 %% calculate value
 val = 1-sqrt((w(1)*(c(1)-1))^2 + (w(2)*(c(2)-1))^2 + (w(3)*(c(3)-1))^2);    % weighted KGE

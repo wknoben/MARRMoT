@@ -92,8 +92,15 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             S4 = S(4);
             S5 = S(5);
             
-            % climate input
+            % stores at previous timestep
             t = obj.t;                             % this time step
+            if t == 1
+                S2old=obj.S0(2);
+            else
+                S2old = obj.stores(t-1,2);
+            end
+            
+            % climate input
             climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
@@ -105,7 +112,7 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             flux_melt = melt_1(cfmax,ttm,T,S1,delta_t);
             flux_rf   = rainfall_2(P,T,tt,tti);
             flux_in   = infiltration_3(flux_rf+flux_melt,S2,whc*S1);
-            flux_se   = excess_1(obj.Sold(2),whc*S1,delta_t);
+            flux_se   = excess_1(S2old,whc*S1,delta_t);
             flux_cf   = capillary_1(cflux,S3,fc,S4,delta_t);
             flux_ea   = evap_3(lp,S3,fc,Ep,delta_t);
             flux_r    = recharge_2(beta,S3,fc,flux_in+flux_se);

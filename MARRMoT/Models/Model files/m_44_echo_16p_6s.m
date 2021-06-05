@@ -102,8 +102,15 @@ classdef m_44_echo_16p_6s < MARRMoT_model
             S5 = S(5);
             S6 = S(6);
             
-            % climate input
+            % stores at previous timestep
             t = obj.t;                             % this time step
+            if t == 1
+                S3old=obj.S0(3);
+            else
+                S3old = obj.stores(t-1,3);
+            end
+            
+            % climate input
             climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
@@ -118,7 +125,7 @@ classdef m_44_echo_16p_6s < MARRMoT_model
             flux_fs = refreeze_1(af,as,tm,T,S3,delta_t);
             flux_gs = melt_2(gmax,S2,delta_t);
             flux_mw = saturation_1(flux_pr+flux_ms,S3,the*S2);
-            flux_ew = excess_1(obj.Sold(3),the*S2,delta_t);
+            flux_ew = excess_1(S3old,the*S2,delta_t);
             flux_eq = flux_mw + flux_gs + flux_ew;
             flux_fi = infiltration_4(flux_eq,phi);
             flux_rh = effective_1(flux_eq,flux_fi);

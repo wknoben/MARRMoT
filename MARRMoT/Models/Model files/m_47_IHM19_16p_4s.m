@@ -52,7 +52,7 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
                               "qh",    "qs2", "qgw"];                      % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 10];                                    % Index or indices of fluxes to add to Actual ET
-            obj.FluxGroups.Q  = [13 16 17];                                % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Q  = [13 16 17 18];                             % Index or indices of fluxes to add to Streamflow
             obj.FluxGroups.GW = -18;                                       % Index of GW runoff flow.
             
         end
@@ -128,17 +128,17 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
             flux_pexmp   = split_1(A,flux_pex);
             flux_pexs1   = split_2(A,flux_pex);
             flux_fmp     = infiltration_8(S2,SMPMAX,flux_pexmp);
-            flux_qexmp   = subtraction_2(flux_pexmp,flux_fmp);
+            flux_qexmp   = flux_pexmp - flux_fmp;
             flux_qmp     = interflow_3(CQMP,XQMP,S2,delta_t);
-            flux_pqexs1  = addition_2(flux_pexs1,flux_qexmp);
+            flux_pqexs1  = flux_pexs1 + flux_qexmp;
             flux_fs1     = infiltration_7(CFS1,XFS1,S3,SS1MAX,flux_pqexs1);
             flux_etas1   = evap_23(FF,FCCS1,S3,SS1MAX,Ep,delta_t);  
             flux_qs1     = interflow_12(CQS1,FCCS1,XQS1,S3,SS1MAX,delta_t);
-            flux_q0      = subtraction_2(flux_pqexs1,flux_fs1);
+            flux_q0      = flux_pqexs1 - flux_fs1;
             flux_q0r     = uh_q0r(1) .* flux_q0 + stf_q0r(1);
-            flux_qmps1   = addition_2(flux_qmp, flux_qs1);
+            flux_qmps1   = flux_qmp + flux_qs1;
             flux_pc      = infiltration_8(S4,SS2MAX,flux_qmps1);
-            flux_qh      = subtraction_2(flux_qmps1, flux_pc);
+            flux_qh      = flux_qmps1 - flux_pc;
             flux_qs2     = interflow_3(CQS2,XQS2,S4,delta_t);
             flux_qgw     = 0.0195;
 

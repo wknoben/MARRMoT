@@ -162,7 +162,7 @@ classdef m_39_mcrm_16p_5s < MARRMoT_model
             % input fluxes to the unit hydrographs 
             flux_qr = fluxes(3);
             flux_qd = fluxes(6);
-            flux_qb = fluxes(6);
+            flux_qb = fluxes(8);
             
             % update still-to-flow vectors using fluxes at current step and
             % unit hydrographs

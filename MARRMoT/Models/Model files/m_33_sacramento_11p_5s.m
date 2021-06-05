@@ -9,7 +9,7 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_33_sacramento_11p_5s(delta_t, theta)          
+        function obj = m_33_sacramento_11p_5s()          
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 20;                                            % number of model fluxes
             obj.numParams = 11;                                            % number of model parameters
@@ -41,20 +41,9 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
             obj.FluxGroups.Ea = [4 8 11];                                    % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [1 6 7 19 20];                               % Index or indices of fluxes to add to Streamflow
             
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
         end
         
-        % INIT is run automatically as soon as both theta and delta_t are
-        % set (it is therefore ran only once at the beginning of the run. 
-        % Use it to initialise all the model parameters (in case there are
-        % derived parameters) and unit hydrographs and set minima and
-        % maxima for stores based on parameters.
+        % INITialisation function
         function obj = init(obj)
             theta = obj.theta;
             smax    = theta(2);     % Maximum total storage depth [mm]
@@ -85,8 +74,7 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
             obj.theta_derived = [uztwm, uzfwm, lztwm, lzfwpm, lzfwsm,...
                                  pbase, zperc];
             
-            % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
+            % max of stores
             obj.store_max = [uztwm,uzfwm,lztwm,lzfwpm,lzfwsm];
         end
         
@@ -122,7 +110,8 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
             S5 = S(5);
             
             % climate_input
-            climate_in = obj.input_climate;
+            t = obj.t;                             % this time step
+            climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
             

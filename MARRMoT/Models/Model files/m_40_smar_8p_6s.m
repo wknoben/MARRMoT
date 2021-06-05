@@ -8,7 +8,7 @@ classdef m_40_smar_8p_6s < MARRMoT_model
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_40_smar_8p_6s(delta_t, theta)
+        function obj = m_40_smar_8p_6s()
             obj.numStores = 6;                                             % number of model stores
             obj.numFluxes = 20;                                            % number of model fluxes
             obj.numParams = 8;
@@ -38,20 +38,9 @@ classdef m_40_smar_8p_6s < MARRMoT_model
             obj.FluxGroups.Ea = [3 7 8 9 10 11];                           % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [19 20];                                   % Index or indices of fluxes to add to Streamflow
             
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
         end
         
-        % INIT is run automatically as soon as both theta and delta_t are
-        % set (it is therefore ran only once at the beginning of the run. 
-        % Use it to initialise all the model parameters (in case there are
-        % derived parameters) and unit hydrographs and set minima and
-        % maxima for stores based on parameters.
+        % INITialisation function
         function obj = init(obj)
             % parameters
             theta   = obj.theta;
@@ -60,10 +49,6 @@ classdef m_40_smar_8p_6s < MARRMoT_model
             nk   = theta(8);     % Routing delay [d]. n and k are optimized together 
                                  % due to interactions between them
             k    = nk/n;         % time parameter in the gamma function 
-            
-            % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
-            obj.store_max = inf(1,obj.numStores);
             
             % initialise the unit hydrographs and still-to-flow vectors            
             uh = uh_6_gamma(n,k,delta_t);
@@ -99,7 +84,8 @@ classdef m_40_smar_8p_6s < MARRMoT_model
             S6 = S(6);
             
             % climate input
-            climate_in = obj.input_climate;
+            t = obj.t;                             % this time step
+            climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
             T  = climate_in(3);

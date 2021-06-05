@@ -8,7 +8,7 @@ classdef m_16_newzealand2_8p_2s < MARRMoT_model
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_16_newzealand2_8p_2s(delta_t, theta)
+        function obj = m_16_newzealand2_8p_2s()
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 8;                                             % number of model fluxes
             obj.numParams = 8;
@@ -31,30 +31,15 @@ classdef m_16_newzealand2_8p_2s < MARRMoT_model
             
             obj.FluxGroups.Ea = [1 3 4];                                   % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 8;                                         % Index or indices of fluxes to add to Streamflow
-            
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
+
         end
         
-        % INIT is run automatically as soon as both theta and delta_t are
-        % set (it is therefore ran only once at the beginning of the run. 
-        % Use it to initialise all the model parameters (in case there are
-        % derived parameters) and unit hydrographs and set minima and
-        % maxima for stores based on parameters.
+        % INITialisation function
         function obj = init(obj)
             theta   = obj.theta;
             delta_t = obj.delta_t;
             
             d = theta(8);     % Routing delay [d]
-            
-            % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
-            obj.store_max = inf(1,obj.numStores);
             
             % initialise the unit hydrographs and still-to-flow vectors            
             uh = uh_4_full(d,delta_t);
@@ -87,7 +72,8 @@ classdef m_16_newzealand2_8p_2s < MARRMoT_model
             S2 = S(2);
             
             % climate input
-            climate_in = obj.input_climate;
+            t = obj.t;                             % this time step
+            climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
             T  = climate_in(3);

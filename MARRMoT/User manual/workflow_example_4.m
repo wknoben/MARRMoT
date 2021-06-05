@@ -42,14 +42,14 @@ load MARRMoT_example_data.mat
 input_climatology.precip   = data_MARRMoT_examples.precipitation;                   % Daily data: P rate  [mm/d]
 input_climatology.temp     = data_MARRMoT_examples.temperature;                     % Daily data: mean T  [degree C]
 input_climatology.pet      = data_MARRMoT_examples.potential_evapotranspiration;    % Daily data: Ep rate [mm/d]
-delta_t  = 1;                                                     % time step size of the inputs: 1 [d]
+input_climatology.delta_t  = 1;                                                     % time step size of the inputs: 1 [d]
 
 % Extract observed streamflow
 Q_obs = data_MARRMoT_examples.streamflow;
 
 %% 2. Define the model settings and create the model object
 model     = 'm_07_gr4j_4p_2s';                                             % Name of the model function (these can be found in Supporting Material 2)
-m         = feval(model, delta_t);
+m         = feval(model);
 parRanges = m.parRanges;                                                   % Parameter ranges
 numParams = m.numParams;                                                   % Number of parameters
 numStores = m.numStores;                                                   % Number of stores
@@ -76,10 +76,11 @@ optim_opts.sigma0 = .3*(parRanges(:,2) - parRanges(:,1));                  % sta
 % other options
 optim_opts.cmaes_opts.LBounds  = parRanges(:,1);                           % lower bounds of parameters
 optim_opts.cmaes_opts.UBounds  = parRanges(:,2);                           % upper bounds of parameters
-optim_opts.cmaes_opts.PopSize  = 2 * (4 + floor(3*log(numParams)));        % population size (2x the default)
+optim_opts.cmaes_opts.PopSize  = 4 + floor(3*log(numParams));              % population size (default)
 optim_opts.cmaes_opts.TolX       = 1e-6 * min(optim_opts.sigma0);          % stopping criterion on changes to parameters 
 optim_opts.cmaes_opts.TolFun     = 1e-4;                                   % stopping criterion on changes to fitness function
 optim_opts.cmaes_opts.TolHistFun = 1e-5;                                   % stopping criterion on changes to fitness function
+optim_opts.cmaes_opts.MaxIter    = 5;                                      % just do 5 iterations, to check if it works
 optim_opts.cmaes_opts.SaveFilename      = 'wf_ex_4_cmaesvars.mat';         % output file of cmaes variables
 optim_opts.cmaes_opts.LogFilenamePrefix = 'wf_ex_4_';                      % prefix for cmaes log-files
 
@@ -105,14 +106,17 @@ eval_idx = max(cal_idx):n;
 % optimisation algorithm and objective function to optimise the parameter
 % set. See MARRMoT_model class for details.
 
+% first set up the model
+m.input_climate = input_climatology;
+%m.delta_t       = input_climatology.delta_t;         % unnecessary if input_climate already contains .delta_t
+m.solver_opts   = input_solver_opts;
+m.S0            = input_s0;
+
 [par_opt,...                                                               % optimal parameter set
     of_cal,...                                                             % value of objective function at par_opt
     stopflag,...                                                           % flag indicating reason the algorithm stopped
     output] = ...                                                          % other info about parametrisation
               m.calibrate(...                                              % call the calibrate method of the model object
-                          input_climatology,...                            % struct of input fluxes
-                          input_s0,...                                     % initial values of stores
-                          input_solver_opts,...                            % solver options
                           Q_obs,...                                        % observed streamflow
                           cal_idx,...                                      % timesteps to use for model calibration
                           'my_cmaes',...                                   % function to use for optimisation (must have same structure as fminsearch)
@@ -123,16 +127,8 @@ eval_idx = max(cal_idx):n;
                           weights);                                        % additional arguments to of_name
                    
 %% 6. Evaluate the calibrated parameters on unseen data
-% Run the model with calibrated parameters
-m.theta = par_opt;
-model_out = ...
-    m.get_output(...
-                 input_climatology,...                                     % Climate data
-                 input_s0,...                                              % Initial storages
-                 input_solver_opts);                                       % Solver settings  
-
-% extract simulated streamflow
-Q_sim = model_out.Q;
+% Run the model with calibrated parameters, get only the streamflow
+Q_sim = m.get_streamflow(par_opt);  
              
 % Compute evaluation performance
 of_eval = feval(of_name,...                                                % Objective function name (here 'of_KGE')

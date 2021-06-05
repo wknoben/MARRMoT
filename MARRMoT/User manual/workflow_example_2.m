@@ -1,4 +1,4 @@
-﻿% This file is part of the Modular Assessment of Rainfall-Runoff Models 
+% This file is part of the Modular Assessment of Rainfall-Runoff Models 
 % Toolbox (MARRMoT) – User manual. It contains an example application of a
 % single model to a single catchment. See section 3 in the User Manual 
 % for details.
@@ -30,7 +30,7 @@ load MARRMoT_example_data.mat
 input_climatology.precip   = data_MARRMoT_examples.precipitation;                   % Daily data: P rate  [mm/d]
 input_climatology.temp     = data_MARRMoT_examples.temperature;                     % Daily data: mean T  [degree C]
 input_climatology.pet      = data_MARRMoT_examples.potential_evapotranspiration;    % Daily data: Ep rate [mm/d]
-delta_t  = 1;                                                     % time step size of the inputs: 1 [d]
+input_climatology.delta_t  = 1;                                                     % time step size of the inputs: 1 [d]
 
 %% 2. Define the model settings
 % NOTE: this example assumes that parameter values for this combination of
@@ -62,8 +62,12 @@ input_solver_opts.rerun_maxiter   = 6;                                          
 % Create a model object
 m = feval(model);
 
-% Set timestep for the model
-m.delta_t = delta_t;
+% Set up the model
+m.input_climate = input_climatology;
+%m.delta_t       = input_climatology.delta_t;         % unnecessary if input_climate already contains .delta_t
+m.solver_opts   = input_solver_opts;
+m.S0            = input_s0;
+
 
 % Extract parameter ranges
 model_range = m.parRanges;
@@ -89,19 +93,13 @@ for i = 1:numSample
     % Sample a parameter set from the range
     input_theta = model_range(:,1)+rand(numPar,1).*(model_range(:,2)-model_range(:,1));
     
-    % Initialise the model with the required parameter set
-    m.theta = input_theta;
-    
-    % Run the model
+    % Run the model with the given parameter set
     [output_ex,...                                                             % Fluxes leaving the model: simulated flow (Q) and evaporation (Ea)
      output_in,...                                                             % Internal model fluxes
      output_ss ,...                                                            % Internal storages
      output_waterbalance] = ...                                                % Water balance check              
                    m.get_output(...                                            % Model method to run and return all outputs
-                                input_climatology,...                          % Time series of climatic fluxes in simulation period
-                                input_s0,...                                   % Initial storages
-                                input_solver_opts,...                          % Options for numerical solving of ODEs
-                                false);                                        % Do not display water balance
+                                input_theta);
     % Save the results
     results_mc_sampling{1+i,1} = input_theta;
     results_mc_sampling{1+i,2} = output_ex;

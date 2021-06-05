@@ -30,7 +30,7 @@ load MARRMoT_example_data.mat
 input_climatology.precip   = data_MARRMoT_examples.precipitation;                   % Daily data: P rate  [mm/d]
 input_climatology.temp     = data_MARRMoT_examples.temperature;                     % Daily data: mean T  [degree C]
 input_climatology.pet      = data_MARRMoT_examples.potential_evapotranspiration;    % Daily data: Ep rate [mm/d]
-delta_t  = 1;                                                                       % time step size of the inputs: 1 [d]
+input_climatology.delta_t  = 1;                                                                       % time step size of the inputs: 1 [d]
 
 %% 2. Define the model settings
 % NOTE: this example assumes that parameter values for this combination of
@@ -67,17 +67,19 @@ input_s0       = [15;                                                       % In
 % NOTE: the names of all structure fields are hard-coded in the model class.
 %  These should not be changed.
 input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
-input_solver_opts.rerun_maxiter   = 10;                                           % Maximum number of re-runs
+input_solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
 % these are the same settings that run by default if no settings are given
               
 %% 4. Create a model object
 % Create a model object
 m = feval(model);
 
-% Set parameters and timestep for the model
-%  this runs the m.init() method of the model class
-m.theta   = input_theta;
-m.delta_t = delta_t;
+% Set up the model
+m.theta         = input_theta;
+m.input_climate = input_climatology;
+%m.delta_t       = input_climatology.delta_t;         % unnecessary if input_climate already contains .delta_t
+m.solver_opts   = input_solver_opts;
+m.S0            = input_s0;
 
 %% 5. Run the model and extract all outputs
 % This process takes ~6 seconds on a i7-4790 CPU 3.60GHz, 4 core processor.
@@ -85,10 +87,7 @@ m.delta_t = delta_t;
  output_in,...                                                             % Internal model fluxes
  output_ss,...                                                             % Internal storages
  output_waterbalance] = ...                                                % Water balance check              
-               m.get_output(...                                            % Model method to run and return all outputs
-                            input_climatology,...                          % Time series of climatic fluxes in simulation period
-                            input_s0,...                                   % Initial storages
-                            input_solver_opts);                            % Options for numerical solving of ODEs
+                        m.get_output();                            
     
 %% 6. Analyze the outputs                   
 % Prepare a time vector

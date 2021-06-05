@@ -4,13 +4,13 @@ classdef m_39_mcrm_16p_5s < MARRMoT_model
         % in case the model has any specific properties (eg derived theta,
         % add it here)
         
-        c0       %auxiliary parameter
+        aux_theta       %auxiliary parameter
     end
     methods
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_39_mcrm_16p_5s(delta_t, theta)
+        function obj = m_39_mcrm_16p_5s()
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 12;                                            % number of model fluxes
             obj.numParams = 16;
@@ -45,20 +45,9 @@ classdef m_39_mcrm_16p_5s < MARRMoT_model
             obj.FluxGroups.Ea = [1 4];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [11 12];                                   % Index or indices of fluxes to add to Streamflow
             
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
         end
         
-        % INIT is run automatically as soon as both theta and delta_t are
-        % set (it is therefore ran only once at the beginning of the run. 
-        % Use it to initialise all the model parameters (in case there are
-        % derived parameters) and unit hydrographs and set minima and
-        % maxima for stores based on parameters.
+        % INITialisation function
         function obj = init(obj)
             % parameters
             theta   = obj.theta;
@@ -69,7 +58,7 @@ classdef m_39_mcrm_16p_5s < MARRMoT_model
             
             % auxiliary parameters
             c0     = ct*cmax;       % Minimum fraction of area contributing to rapid runoff [-]
-            obj.c0 = c0;
+            obj.aux_theta(1) = c0;
             
             % min and max of stores
             obj.store_min = [0,-1E6,0,0,0];
@@ -112,7 +101,7 @@ classdef m_39_mcrm_16p_5s < MARRMoT_model
             gamor  = theta(16);     % Out-of-bank flow non-linearity [-]
             
             % auxiliary parameters
-            c0 = obj.c0;
+            c0 = obj.aux_theta(1);
             
             % delta_t
             delta_t = obj.delta_t;
@@ -129,7 +118,8 @@ classdef m_39_mcrm_16p_5s < MARRMoT_model
             S5 = S(5);
             
             % climate input
-            climate_in = obj.input_climate;
+            t = obj.t;                             % this time step
+            climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
             T  = climate_in(3);

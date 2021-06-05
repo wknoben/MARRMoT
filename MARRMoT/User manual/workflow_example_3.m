@@ -31,7 +31,7 @@ load MARRMoT_example_data.mat
 input_climatology.precip   = data_MARRMoT_examples.precipitation;                   % Daily data: P rate  [mm/d]
 input_climatology.temp     = data_MARRMoT_examples.temperature;                     % Daily data: mean T  [degree C]
 input_climatology.pet      = data_MARRMoT_examples.potential_evapotranspiration;    % Daily data: Ep rate [mm/d]
-delta_t  = 1;                                                                       % time step size of the inputs: 1 [d]
+input_climatology.delta_t  = 1;                                                     % time step size of the inputs: 1 [d]
 
 %% 2. Define the model settings
 % NOTE: this example assumes that the model parameters for each model will 
@@ -79,9 +79,6 @@ for i = 1:length(model_list)
     % Create a model object
     m = feval(model);
 
-    % Set timestep for the model
-    m.delta_t = delta_t;
-
     % Extract parameter ranges
     model_range = m.parRanges;
 
@@ -97,8 +94,6 @@ for i = 1:length(model_list)
     % Set the inital storages
     input_s0    = zeros(numStore,1);
     
-    % Initialise the model with the required parameter set
-    m.theta = input_theta;
     
     % Run the model
     [output_ex,...                                                             % Fluxes leaving the model: simulated flow (Q) and evaporation (Ea)
@@ -106,6 +101,7 @@ for i = 1:length(model_list)
      output_ss ,...                                                            % Internal storages
      output_waterbalance] = ...                                                % Water balance check              
                    m.get_output(...                                            % Model method to run and return all outputs
+                                input_theta,...                                % Parameter set.
                                 input_climatology,...                          % Time series of climatic fluxes in simulation period
                                 input_s0,...                                   % Initial storages
                                 input_solver_opts);                            % Options for numerical solving of ODEs

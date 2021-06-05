@@ -8,7 +8,7 @@ classdef m_11_collie3_6p_2s < MARRMoT_model
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_11_collie3_6p_2s(delta_t, theta)
+        function obj = m_11_collie3_6p_2s()
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 7;                                             % number of model fluxes
             obj.numParams = 6;
@@ -39,15 +39,8 @@ classdef m_11_collie3_6p_2s < MARRMoT_model
             end
         end
         
-        % INIT is run automatically as soon as both theta and delta_t are
-        % set (it is therefore ran only once at the beginning of the run. 
-        % Use it to initialise all the model parameters (in case there are
-        % derived parameters) and unit hydrographs and set minima and
-        % maxima for stores based on parameters.
+        % INITialisation function
         function obj = init(obj)
-            % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
-            obj.store_max = inf(1,obj.numStores);
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation
@@ -69,7 +62,8 @@ classdef m_11_collie3_6p_2s < MARRMoT_model
             S2 = S(2);
             
             % climate input
-            climate_in = obj.input_climate;
+            t = obj.t;                             % this time step
+            climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
             T  = climate_in(3);

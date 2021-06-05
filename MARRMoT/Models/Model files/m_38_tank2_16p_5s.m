@@ -9,7 +9,7 @@ classdef m_38_tank2_16p_5s < MARRMoT_model
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_38_tank2_16p_5s(delta_t, theta)
+        function obj = m_38_tank2_16p_5s()
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 14;                                            % number of model fluxes
             obj.numParams = 16; 
@@ -46,20 +46,9 @@ classdef m_38_tank2_16p_5s < MARRMoT_model
             obj.FluxGroups.Ea = [8 9 10 11];                               % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [3 4 5 6 7];                               % Index or indices of fluxes to add to Streamflow
             
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
         end
         
-        % INIT is run automatically as soon as both theta and delta_t are
-        % set (it is therefore ran only once at the beginning of the run. 
-        % Use it to initialise all the model parameters (in case there are
-        % derived parameters) and unit hydrographs and set minima and
-        % maxima for stores based on parameters.
+        % INITialisation function
         function obj = init(obj)
             % parameters
             theta = obj.theta;
@@ -88,9 +77,6 @@ classdef m_38_tank2_16p_5s < MARRMoT_model
             d1  = fd*c1;            % Time parameter for base runoff 1 [d-1]
             obj.aux_theta = [sm1, t2, t1, sm2, t3, t4, a2, b1, c1, d1];
             
-            % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
-            obj.store_max = inf(1,obj.numStores);
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation        
@@ -128,7 +114,8 @@ classdef m_38_tank2_16p_5s < MARRMoT_model
             S5 = S(5);
             
             % climate input
-            climate_in = obj.input_climate;
+            t = obj.t;                             % this time step
+            climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
             T  = climate_in(3);

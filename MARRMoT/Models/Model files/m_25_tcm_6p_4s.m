@@ -3,12 +3,13 @@ classdef m_25_tcm_6p_4s < MARRMoT_model
     properties
         % in case the model has any specific properties (eg derived theta,
         % add it here)
+        aux_theta             % auxiliary calculated parameters
     end
     methods
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_25_tcm_6p_4s(delta_t, theta)
+        function obj = m_25_tcm_6p_4s()
             obj.numStores = 4;                                             % number of model stores
             obj.numFluxes = 11;                                            % number of model fluxes
             obj.numParams = 6;
@@ -26,49 +27,35 @@ classdef m_25_tcm_6p_4s < MARRMoT_model
                                 0, 1];    % k2, Runoff coefficient [mm-1 d-1]
             
             obj.StoreNames = ["S1" "S2" "S3" "S4"];                        % Names for the stores
-            obj.FluxNames  = ["en",  "ea",   "et",   "pn",  "pby",...
-                              "pin", "qex1", "qex2", "qux", "a", "q"];     % Names for the fluxes
-            
-            obj.FluxGroups.Ea_idx = [1 2 3];                               % Index or indices of fluxes to add to Actual ET
-            obj.FluxGroups.Q_idx  = 11;                                    % Index or indices of fluxes to add to Streamflow
+            obj.FluxNames  = ["pn", "en",   "pby",   "pin",  "ea",...
+                              "et", "qex1", "qex2", "quz", "a", "q"];      % Names for the fluxes
+                          
+            obj.FluxGroups.Ea = [2 5 6];                                   % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = 11;                                        % Index or indices of fluxes to add to Streamflow
             obj.FluxGroups.Abstraction = 10;                               % Index or abstraction flux (just needed for water balance)
             obj.StoreSigns  = [1 -1 1 1];                                  % Signs to give to stores (-1 is a deficit store), only needed for water balance
-
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
         end
         
-        % INIT is run automatically as soon as both theta and delta_t are
-        % set (it is therefore ran only once at the beginning of the run. 
-        % Use it to initialise all the model parameters (in case there are
-        % derived parameters) and unit hydrographs and set minima and
-        % maxima for stores based on parameters.
+        % INITialisation function
         function obj = init(obj)
-            % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
-            obj.store_max = inf(1,obj.numStores);
+            fa = obj.theta(5);    % Fraction of average P abstracted [-]
+            P  = obj.input_climate(:,1);
+            
+            ca = fa * mean(P);    % Abstraction rate [mm/day]
+            obj.aux_theta(1) = ca;
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation        
         function [dS, fluxes] = model_fun(obj, S)
             % parameters
-            % Original MARRMoT has fa = theta(5) and ca = fa * mean(P) as
-            % an auxiliary parameter. Here ca = theta(5) is a parameter by
-            % itself as described in Moore & Bell (2001) in order to keep
-            % it consisted with the other models and remove the dependence
-            % on the entire record of input rainfall.
             theta   = obj.theta;
             phi   = theta(1);     % Fraction preferential recharge [-]
             rc    = theta(2);     % Maximum soil moisture depth [mm]
             gam   = theta(3);     % Fraction of Ep reduction with depth [-]
             k1    = theta(4);     % Runoff coefficient [d-1]
-            ca    = theta(5);     % Abstraction rate [mm/d]
             k2    = theta(6);     % Runoff coefficient [mm-1 d-1]
+            
+            ca    = obj.aux_theta(1);    % Abstraction rate [mm/day]
             
             % delta_t
             delta_t = obj.delta_t;
@@ -80,7 +67,8 @@ classdef m_25_tcm_6p_4s < MARRMoT_model
             S4 = S(4);
             
             % climate input
-            climate_in = obj.input_climate;
+            t = obj.t;                             % this time step
+            climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
             T  = climate_in(3);

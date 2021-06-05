@@ -9,7 +9,7 @@ classdef m_22_vic_10p_3s < MARRMoT_model
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_22_vic_10p_3s(delta_t, theta)
+        function obj = m_22_vic_10p_3s()
             obj.numStores = 3;                                             % number of model stores
             obj.numFluxes = 11;                                            % number of model fluxes
             obj.numParams = 10;
@@ -35,21 +35,10 @@ classdef m_22_vic_10p_3s < MARRMoT_model
             
             obj.FluxGroups.Ea = [1 6 9];                                   % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [4 10 11];                                 % Index or indices of fluxes to add to Streamflow
-            
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
+
         end
         
-        % INIT is run automatically as soon as both theta and delta_t are
-        % set (it is therefore ran only once at the beginning of the run. 
-        % Use it to initialise all the model parameters (in case there are
-        % derived parameters) and unit hydrographs and set minima and
-        % maxima for stores based on parameters.
+        % INITialisation function
         function obj = init(obj)
             %Parameters
             theta = obj.theta;
@@ -62,9 +51,6 @@ classdef m_22_vic_10p_3s < MARRMoT_model
             tmax    = 365.25;       % Length of one growing cycle [d]
             obj.aux_theta = [smmax; gwmax; tmax];
             
-            % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
-            obj.store_max = inf(1,obj.numStores);
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation        
@@ -94,7 +80,8 @@ classdef m_22_vic_10p_3s < MARRMoT_model
             S3 = S(3);
             
             % climate input
-            climate_in = obj.input_climate;
+            t = obj.t;                             % this time step
+            climate_in = obj.input_climate(t,:);   % climate at this step
             P  = climate_in(1);
             Ep = climate_in(2);
             T  = climate_in(3);

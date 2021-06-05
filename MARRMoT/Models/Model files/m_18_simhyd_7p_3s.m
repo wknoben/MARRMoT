@@ -90,6 +90,9 @@ classdef m_18_simhyd_7p_3s < MARRMoT_model
             flux_BAS  = baseflow_1(k,S3);
             flux_SRUN = flux_EXC - flux_INF; 
             flux_Qt   = flux_SRUN + flux_INT + flux_BAS;
+            % flux_SMF is not reported in old MARRMoT, it is not reported
+            % here either to keep results consistent
+            flux_SMF  = flux_INF-flux_INT-flux_REC;
             
             % stores ODEs
             dS1  = P        - flux_Ei  - flux_EXC;

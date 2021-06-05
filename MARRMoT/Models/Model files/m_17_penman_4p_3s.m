@@ -26,7 +26,7 @@ classdef m_17_penman_4p_3s < MARRMoT_model
             obj.FluxNames  = ["ea", "qex", "u1", "q12", "et", "u2", "q"];  % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 5];                                     % Index or indices of fluxes to add to Actual ET
-            obj.FluxGroups.Q_ = [7];                                       % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Q  = [7];                                       % Index or indices of fluxes to add to Streamflow
             obj.StoreSigns  = [1 -1 1];                                    % Signs to give to stores (-1 is a deficit store), only needed for water balance
 
             % setting delta_t and theta triggers the function obj.init()

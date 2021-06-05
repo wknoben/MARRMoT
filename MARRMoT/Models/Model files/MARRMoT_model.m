@@ -184,7 +184,7 @@ classdef MARRMoT_model < handle
                obj.fluxes(t,:) = f * obj.delta_t;
                obj.stores(t,:) = Sold + dS' * obj.delta_t;
                
-               obj.step(f);
+               obj.step();
             end
             fluxes = obj.fluxes;
             stores = obj.stores;

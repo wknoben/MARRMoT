@@ -121,9 +121,8 @@ classdef m_43_gsmsocont_12p_6s < MARRMoT_model
                       flux_pinf, flux_et,    flux_qsl,   flux_qqu];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep
+        function obj = step(obj)
         end
     end
 end

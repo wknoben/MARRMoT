@@ -154,9 +154,8 @@ classdef m_23_lascam_24p_3s < MARRMoT_model
                       flux_qa, flux_ra,   flux_qb,   flux_eb];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep
+        function obj = step(obj)
         end
     end
 end

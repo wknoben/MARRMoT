@@ -99,14 +99,14 @@ classdef m_16_newzealand2_8p_2s < MARRMoT_model
                       flux_qse,  flux_qss, flux_qbf, flux_qt];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep.
+        function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
             uhs = obj.uhs; stf = obj.fluxes_stf;
             uh = uhs{1}; stf = stf{1};
             
-            % input fluxes to the unit hydrographs
+            % input fluxes to the unit hydrographs 
+            fluxes = obj.fluxes(obj.t,:);
             flux_qse = fluxes(5);
             flux_qss = fluxes(6);
             flux_qbf = fluxes(7);

@@ -154,9 +154,8 @@ classdef m_44_echo_16p_6s < MARRMoT_model
                       flux_l  flux_lf  flux_ls flux_rf flux_rs];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep.
+        function obj = step(obj)
         end
     end
 end

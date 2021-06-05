@@ -70,9 +70,8 @@ classdef m_02_wetland_4p_1s < MARRMoT_model
             fluxes = [flux_pe,  flux_ei,  flux_ew,  flux_qwsof, flux_qwgw];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep
+        function obj = step(obj)
         end
     end
 end

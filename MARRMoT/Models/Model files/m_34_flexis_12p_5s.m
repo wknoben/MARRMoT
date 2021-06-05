@@ -137,15 +137,15 @@ classdef m_34_flexis_12p_5s < MARRMoT_model
                       flux_rfl, flux_rsl, flux_qf, flux_qs];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep.
+        function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
             uhs = obj.uhs; stf = obj.fluxes_stf;
             uh_f = uhs{1}; stf_f = stf{1};
             uh_s = uhs{2}; stf_s = stf{2};
             
-            % input fluxes to the unit hydrographs  
+            % input fluxes to the unit hydrographs
+            fluxes = obj.fluxes(obj.t,:);
             flux_rp   = fluxes(8);
             flux_rf   = fluxes(9);
             flux_rs   = fluxes(10);

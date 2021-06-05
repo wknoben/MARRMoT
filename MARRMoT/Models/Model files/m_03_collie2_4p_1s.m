@@ -68,9 +68,8 @@ classdef m_03_collie2_4p_1s < MARRMoT_model
             fluxes = [flux_eb, flux_ev, flux_qse, flux_qss];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep
+        function obj = step(obj)
         end
     end
 end

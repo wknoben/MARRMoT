@@ -155,12 +155,8 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
                       flux_pcfws, flux_rlp, flux_rls, flux_qbfp, flux_qbfs];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
-            % sacramento has no unit hydrographs to update, so this is
-            % empty, it still needs to exists though as it is called in the
-            % MARRMoT_model.run function.
+        % STEP runs at the end of every timestep.
+        function obj = step(obj)
         end
     end
 end

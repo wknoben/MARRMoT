@@ -92,10 +92,8 @@ classdef m_18_simhyd_7p_3s < MARRMoT_model
                      flux_Et, flux_GWF, flux_BAS, flux_SRUN, flux_Qt];
         end
         
-        function step(obj, fluxes)
-            % simhyd has no unit hydrographs to update, so this is
-            % empty, it still needs to exists though as it is called in the
-            % MARRMoT_model.run function.
+        % STEP runs at the end of every timestep
+        function obj = step(obj)
         end
     end
 end

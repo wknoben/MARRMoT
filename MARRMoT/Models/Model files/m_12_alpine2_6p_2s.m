@@ -79,9 +79,8 @@ classdef m_12_alpine2_6p_2s < MARRMoT_model
                       flux_qse, flux_qin, flux_qbf];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep
+        function obj = step(obj)
         end
     end
 end

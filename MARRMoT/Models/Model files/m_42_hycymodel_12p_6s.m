@@ -138,9 +138,8 @@ classdef m_42_hycymodel_12p_6s < MARRMoT_model
                       flux_esb, flux_qb, flux_qh,  flux_qc,  flux_ec,  flux_qt];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep.
+        function obj = step(obj)
         end
     end
 end

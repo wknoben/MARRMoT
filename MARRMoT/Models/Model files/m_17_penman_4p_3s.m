@@ -79,9 +79,8 @@ classdef m_17_penman_4p_3s < MARRMoT_model
                       flux_q12, flux_et,  flux_u2, flux_q];
         end
         
-        % STEP runs at the end of every timestep, use it to update
-        % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        % STEP runs at the end of every timestep
+        function obj = step(obj)
         end
     end
 end

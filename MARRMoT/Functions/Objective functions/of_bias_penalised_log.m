@@ -1,4 +1,4 @@
-function [val] = of_bias_penalised_log(obs,sim,of_name,varargin)
+function [val] = of_bias_penalised_log(obs,sim, idx, of_name,varargin)
 
 % of_bias_penalised_log applies a bias penalisation to an objective
 % function as suggested by Viney et al. (2009). Ignore timesteps with
@@ -33,10 +33,26 @@ end
 %% check for missing values
 % -999 is used to denote missing values in observed data, but this is later
 % scaled by area. Therefore we check for all negative values, and ignore those.
-idx = find(obs >= 0); 
+idx_exists = find(obs >= 0);  % time steps to use in calculating of value
+
+% update default indices if needed
+if nargin < 3 || isempty(idx)
+    idx = idx_exists;
+else 
+    idx = idx(:);
+    if islogical(idx) && all(size(idx) == size(obs))
+        idx = intersect(find(idx), idx_exists);
+    elseif isnumeric(idx)
+        idx = intersect(idx, idx_exists);
+    else
+        error(['Indices should be either ' ...
+                'a logical vector of the same size of Qsim and Qobs, or '...
+                'a numeric vector of indices']);
+    end                                                      % use all non missing Q if idx is not provided otherwise
+end
 
 %% calculate components
-E_of = feval(of_name, obs, sim, varargin{:});
+E_of = feval(of_name, obs, sim, idx, varargin{:});
 B = mean(sim(idx) - obs(idx))/mean(obs(idx));                                       % beta: bias 
 
 %% calculate value

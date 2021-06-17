@@ -182,8 +182,8 @@ end
 % output.iterations = Niter; % final number of iterations
 % output.stepsize = dx; % final stepsize
 % output.lambda = lambda; % final lambda
-% if Niter>=MAXITER
-%     exitflag = 0;
+if Niter>=MAXITER
+    exitflag = 0;
 %     output.message = 'Number of iterations exceeded OPTIONS.MAXITER.';
 % elseif exitflag==2
 %     output.message = 'May have converged, but X is too close to XOLD.';
@@ -191,7 +191,7 @@ end
 %     output.message = 'Matrix may be singular. Step was NaN or Inf.';
 % else
 %     output.message = 'Normal exit.';
-% end
+end
 % jacob = J;
 end
 function J = jacobian(fun, x, nf, funx)

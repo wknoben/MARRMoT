@@ -9,7 +9,7 @@ classdef MARRMoT_model < handle
         StoreNames        % Names for the stores
         FluxNames         % Names for the fluxes
         FluxGroups        % Grouping of fluxes (useful for water balance and output)
-        StoreSigns        % Signs to give to stores (-1 is a deficit store), only needed for water balance
+        StoreSigns        % Signs to give to stores (-1 is a deficit store), assumes all 1 if not given
         theta             % Set of parameters
         delta_t           % time step
         store_min         % store minimum values
@@ -22,6 +22,7 @@ classdef MARRMoT_model < handle
         stores            % vector of all stores
         input_climate     % vector of input climate
         solver_opts       % options for numerical solving of ODEs
+        solver_data       % step-by-step info of solver used and residuals
         status            % 0 = model created, 1 = simulation ended
     end
     methods
@@ -92,13 +93,18 @@ classdef MARRMoT_model < handle
         % auxiliary parameters etc. it calles INIT which is model specific
         function obj = init_(obj)
             % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
-            obj.store_max = inf(1,obj.numStores);
+            obj.store_min = zeros(obj.numStores,1);
+            obj.store_max = inf(obj.numStores,1);
             
             % empty vectors of fluxes and stores
             t_end = size(obj.input_climate, 1);
             obj.stores = zeros(t_end, obj.numStores);
             obj.fluxes = zeros(t_end, obj.numFluxes);
+            
+            % empty struct with the solver data
+            obj.solver_data.resnorm   = zeros(t_end,1);
+            obj.solver_data.solver = strings(t_end,1);
+            obj.solver_data.iter   = zeros(t_end,1);
             
             % model specific initialisation
             obj.init();
@@ -113,33 +119,50 @@ classdef MARRMoT_model < handle
         end 
         
         % SOLVE_STORES solves the stores ODEs 
-        function Snew = solve_stores(obj, Sold)
+        function [Snew, resnorm, solver, iter] = solve_stores(obj, Sold)
             
             solver_opts = obj.solver_opts;
-
-            [Snew, fval, exitflag] = NewtonRaphson(@obj.solve_fun_IE,...
-                                                   Sold,...
-                                                   solver_opts.NewtonRaphson);
+            resnorm_tolerance = solver_opts.resnorm_tolerance;
+            
+            [Snew, fval] = NewtonRaphson(@obj.solve_fun_IE,...
+                                         Sold,...
+                                         solver_opts.NewtonRaphson);
             resnorm = sum(fval.^2);
+            solver = "NewtonRaphson";
+            iter   = 1;
             
             % if NewtonRaphson doesn't find a good enough solution, run FSOLVE
-            if exitflag <= 0 || resnorm > solver_opts.resnorm_tolerance
-                [Snew,fval,exitflag] = fsolve(@obj.solve_fun_IE,...        % system of storage equations
-                                              Snew,...                     % storage values at the end of NewtonRaphson solver
-                                              solver_opts.fsolve);         % solver options
-                resnorm = sum(fval.^2);
-                
-                % if FSOLVE doesn't find a good enough solution, run LSQNONLIN
-                if exitflag <= 0 || resnorm > solver_opts.resnorm_tolerance
-                    [Snew,~,~] = rerunSolver('lsqnonlin', ...              
-                        solver_opts.lsqnonlin, ...                         % solver options
+            if resnorm > resnorm_tolerance || any(Snew < obj.store_min(:) | Snew > obj.store_max(:))
+                [Snew,fval,~,iter] = rerunSolver('fsolve', ...              
+                        solver_opts.fsolve, ...                            % solver options
                         @obj.solve_fun_IE,...                              % system of ODEs
                         solver_opts.rerun_maxiter, ...                     % maximum number of re-runs
-                        solver_opts.resnorm_tolerance, ...                 % convergence tolerance
+                        resnorm_tolerance, ...                             % convergence tolerance
                         Snew, ...                                          % recent estimates
                         Sold, ...                                          % storages at previous time step
                         obj.store_min, ...                                 % lower bounds
                         obj.store_max);                                    % upper bounds 
+                
+%                 [Snew,fval,exitflag] = fsolve(@obj.solve_fun_IE,...        % system of storage equations
+%                                               Snew,...                     % storage values at the end of NewtonRaphson solver
+%                                               solver_opts.fsolve);         % solver options
+                resnorm = sum(fval.^2);
+                solver = "fsolve";
+                
+                % if FSOLVE doesn't find a good enough solution, run LSQNONLIN
+                if resnorm > resnorm_tolerance || any(Snew < obj.store_min(:) | Snew > obj.store_max(:))
+                    [Snew,fval,~,iter] = rerunSolver('lsqnonlin', ...              
+                        solver_opts.lsqnonlin, ...                         % solver options
+                        @obj.solve_fun_IE,...                              % system of ODEs
+                        solver_opts.rerun_maxiter, ...                     % maximum number of re-runs
+                        resnorm_tolerance, ...                             % convergence tolerance
+                        Snew, ...                                          % recent estimates
+                        Sold, ...                                          % storages at previous time step
+                        obj.store_min, ...                                 % lower bounds
+                        obj.store_max);                                    % upper bounds
+                    
+                    resnorm = sum(fval.^2);
+                    solver = "lsqnonlin";
                 end
             end
         end
@@ -154,6 +177,7 @@ classdef MARRMoT_model < handle
                                         input_climate,...         
                                         S0,...
                                         solver_opts)
+
             if nargin > 4 && ~isempty(solver_opts)
                 obj.solver_opts = solver_opts;
             end
@@ -172,12 +196,19 @@ classdef MARRMoT_model < handle
             % and set up routing vectors and store limits
             obj.init_();
             
+            % if the max span of the stores is small (less than 2 orders of
+            % magnetude as the tolerance), reduce the tolerance
+%             if min(obj.store_max - obj.store_min) < obj.solver_opts.resnorm_tolerance*100
+%                 obj.solver_opts.resnorm_tolerance = obj.solver_opts.resnorm_tolerance/100;
+%             end
+
             t_end = size(obj.input_climate, 1);
+            
             for t = 1:t_end
                obj.t = t;
                if t == 1; Sold = obj.S0(:); else; Sold = obj.stores(t-1,:)'; end
                %obj.input_climate = [P(t) Ep(t) T(t)];
-               Snew = obj.solve_stores(Sold);
+               [Snew,resnorm,solver,iter] = obj.solve_stores(Sold);
                
                [dS, f] = obj.model_fun(Snew);
     
@@ -185,10 +216,22 @@ classdef MARRMoT_model < handle
                obj.stores(t,:) = Sold + dS' * obj.delta_t;
                
                obj.step();
+               
+               obj.solver_data.resnorm(t) = resnorm;
+               obj.solver_data.solver(t) = solver;
+               obj.solver_data.iter(t) = iter;
+               
             end
             fluxes = obj.fluxes;
             stores = obj.stores;
             obj.status = 1;
+            
+            if any(obj.solver_data.resnorm > obj.solver_opts.resnorm_tolerance)
+                msg = ['I was not able to solve the stores at all ',...
+                       'timesteps within the tolerance, check ',...
+                       'obj.solver_data for details'];
+                warning(msg);
+            end
         end
         
         % GET_OUTPUT runs the model exactly like RUN, but output is
@@ -196,8 +239,9 @@ classdef MARRMoT_model < handle
         function [fluxOutput,...
                   fluxInternal,...
                   storeInternal,...
-                  waterBalance] = get_output(obj,...
-                                             varargin)
+                  waterBalance,...
+                  solverSteps] = get_output(obj,...
+                                            varargin)
             
             if isempty(obj.status) || obj.status == 0 
                 [~] = obj.run(varargin{:});
@@ -220,8 +264,13 @@ classdef MARRMoT_model < handle
             end
             
             % --- Water balance, if requested ---
-            if nargout == 4
+            if nargout >= 4
                 waterBalance = obj.check_waterbalance();
+            end
+            
+            % --- step-by-step data of the solver, if requested ---
+            if nargout == 5
+                solverSteps = obj.solver_data;
             end
         end
         

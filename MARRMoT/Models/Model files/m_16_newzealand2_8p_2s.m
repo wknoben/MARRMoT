@@ -39,7 +39,12 @@ classdef m_16_newzealand2_8p_2s < MARRMoT_model
             theta   = obj.theta;
             delta_t = obj.delta_t;
             
-            d = theta(8);     % Routing delay [d]
+            s1max   = theta(1);     % Maximum interception storage [mm] 
+            s2max   = theta(2);     % Maximum soil moisture storage [mm] 
+            d       = theta(8);     % Routing delay [d]
+            
+            % maximum store values
+            obj.store_max = [s1max, s2max];
             
             % initialise the unit hydrographs and still-to-flow vectors            
             uh = uh_4_full(d,delta_t);

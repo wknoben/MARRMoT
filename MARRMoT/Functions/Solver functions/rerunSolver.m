@@ -1,4 +1,4 @@
- function [ sNew, fval, stopflag, stopiter ] = ...
+ function [ Snew, fval, stopflag, stopiter ] = ...
                                  rerunSolver( solverName,...
                                               solverOptions,...
                                               solveFun,...
@@ -21,16 +21,20 @@ stopflag  = 1;                                                               % n
 
 % Initialise vector of sNew and fval for each iteration, this way you can
 % keep the best one, not the last one.
-sNew_v    = zeros(numStores, maxIter);
+Snew_v    = zeros(numStores, maxIter);
 fval_v    = inf(numStores,maxIter);
 resnorm_v = inf(1, maxIter);
+Snew = -1 * ones(numStores, 1);
 
 % Create the constant parts of the PROBLEM structure
 problem.solver      = solverName;                                           % I.e. 'fsolve' or 'lsqnonlin'
 problem.options     = solverOptions;                                        % option structure from 'optimoptions'
 problem.objective   = solveFun;                                             % function to be solved
-if size(varargin,2) > 0; problem.lb = cell2mat(varargin(1)); end            % only relevant for 'lsqnonlin' solver
-if size(varargin,2) > 1; problem.ub = cell2mat(varargin(2)); end            % as above
+
+if size(varargin,2) > 0; lb = cell2mat(varargin(1)); else; lb = zeros(numStores,1); end
+if size(varargin,2) > 1; ub = cell2mat(varargin(2)); else; ub = inf(numStores,1); end
+problem.lb = lb(:);
+problem.ub = ub(:);
 
 % Start the re-sampling
 % Re-sampling uses different starting points for the solver to see if
@@ -41,38 +45,31 @@ if size(varargin,2) > 1; problem.ub = cell2mat(varargin(2)); end            % as
 % 4. maximum values
 % 5. randomized values close to solution of previous time steps
 
-while resnorm > resnorm_tolerance
+while resnorm > resnorm_tolerance || any(Snew < lb(:) | Snew > ub(:))
 
     % Select the starting points
     switch iter
-        case 3                                                             % 1. Low values (store minima or zero)
-            if isempty(problem.lb)
-                problem.x0 = zeros(numStores,1);
-            else
-                problem.x0 = problem.lb;
-            end
-        case 4                                                             % 2. High values (store maxima or 2E4)
-            if isempty(problem.ub)
-                problem.x0 = 2*10^4.*ones(numStores,1);
-            else
-                problem.x0 = min(2*10^4.*ones(numStores,1), problem.ub);
-            end
         case 1
-            problem.x0 = initGuess(:);                                     % 3. Location where solver got stuck
+            problem.x0 = initGuess(:);                                     % 1. Location where solver got stuck
         case 2
-            problem.x0 = oldVal(:);                                        % 4. Stores at t-1
+            problem.x0 = oldVal(:);                                        % 2. Stores at t-1
+        case 3                                                             
+            problem.x0 = lb(:);                                            % 3. Low values (store minima or zero)
+        case 4                                                             
+            problem.x0 = min(2*10^4.*ones(numStores,1),ub(:));             % 4. High values (store maxima or 2E4)
+
         otherwise
             problem.x0 = max(zeros(numStores,1),...
                              oldVal(:)+(rand(numStores,1)-0.5));           % 5. Randomized values close to starting location
     end
    
     % Re-run the solver
-    [sNew_v(:,iter), fval_v(:,iter), stopflag] = feval(solverName, problem);
+    [Snew_v(:,iter), fval_v(:,iter), stopflag] = feval(solverName, problem);
     
     resnorm_v(iter) = sum(fval_v(:,iter).^2);
     [resnorm,stopiter] = min(resnorm_v);
     fval = fval_v(:,stopiter);
-    sNew = sNew_v(:,stopiter);
+    Snew = Snew_v(:,stopiter);
     
     % Increase the iteration counter
     iter = iter + 1;

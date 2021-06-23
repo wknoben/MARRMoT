@@ -124,47 +124,71 @@ classdef MARRMoT_model < handle
             solver_opts = obj.solver_opts;
             resnorm_tolerance = solver_opts.resnorm_tolerance;
             
-            [Snew, fval] = NewtonRaphson(@obj.solve_fun_IE,...
-                                         Sold,...
-                                         solver_opts.NewtonRaphson);
-            resnorm = sum(fval.^2);
-            solver = "NewtonRaphson";
-            iter   = 1;
+            % create vectors for each of the three solutions (NewtonRaphon,
+            % fsolve and lsqnonlin), this way if all three run it takes the
+            % best at the end and not the last one.
+            Snew_v    = zeros(3, obj.numStores);
+            resnorm_v = Inf(3, 1);
+            iter_v    = ones(3,1);
+            
+            % first try to solve the ODEs using NewtonRaphson
+            [tmp_Snew, tmp_fval] = ...
+                            NewtonRaphson(@obj.solve_fun_IE,...
+                                          Sold,...
+                                          solver_opts.NewtonRaphson);
+            tmp_resnorm = sum(tmp_fval.^2);
+            
+            Snew_v(1,:)  = tmp_Snew;
+            resnorm_v(1) = tmp_resnorm;
             
             % if NewtonRaphson doesn't find a good enough solution, run FSOLVE
-            if resnorm > resnorm_tolerance || any(Snew < obj.store_min(:) | Snew > obj.store_max(:))
-                [Snew,fval,~,iter] = rerunSolver('fsolve', ...              
-                        solver_opts.fsolve, ...                            % solver options
-                        @obj.solve_fun_IE,...                              % system of ODEs
-                        solver_opts.rerun_maxiter, ...                     % maximum number of re-runs
-                        resnorm_tolerance, ...                             % convergence tolerance
-                        Snew, ...                                          % recent estimates
-                        Sold, ...                                          % storages at previous time step
-                        obj.store_min, ...                                 % lower bounds
-                        obj.store_max);                                    % upper bounds 
+            if tmp_resnorm > resnorm_tolerance
+                [tmp_Snew,tmp_fval,~,tmp_iter] = ...
+                            rerunSolver('fsolve', ...              
+                                        solver_opts.fsolve, ...            % solver options
+                                        @obj.solve_fun_IE,...              % system of ODEs
+                                        solver_opts.rerun_maxiter, ...     % maximum number of re-runs
+                                        resnorm_tolerance, ...             % convergence tolerance
+                                        tmp_Snew, ...                      % recent estimates
+                                        Sold, ...                          % storages at previous time step
+                                        obj.store_min, ...                 % lower bounds
+                                        obj.store_max);                    % upper bounds 
                 
-%                 [Snew,fval,exitflag] = fsolve(@obj.solve_fun_IE,...        % system of storage equations
-%                                               Snew,...                     % storage values at the end of NewtonRaphson solver
-%                                               solver_opts.fsolve);         % solver options
-                resnorm = sum(fval.^2);
-                solver = "fsolve";
+                tmp_resnorm = sum(tmp_fval.^2);
                 
+                Snew_v(2,:)  = tmp_Snew;
+                resnorm_v(2) = tmp_resnorm;
+                iter_v(2)    = tmp_iter;
+
                 % if FSOLVE doesn't find a good enough solution, run LSQNONLIN
-                if resnorm > resnorm_tolerance || any(Snew < obj.store_min(:) | Snew > obj.store_max(:))
-                    [Snew,fval,~,iter] = rerunSolver('lsqnonlin', ...              
-                        solver_opts.lsqnonlin, ...                         % solver options
-                        @obj.solve_fun_IE,...                              % system of ODEs
-                        solver_opts.rerun_maxiter, ...                     % maximum number of re-runs
-                        resnorm_tolerance, ...                             % convergence tolerance
-                        Snew, ...                                          % recent estimates
-                        Sold, ...                                          % storages at previous time step
-                        obj.store_min, ...                                 % lower bounds
-                        obj.store_max);                                    % upper bounds
+                if tmp_resnorm > resnorm_tolerance
+                    [tmp_Snew,tmp_fval,~,tmp_iter] = ...
+                            rerunSolver('lsqnonlin', ...              
+                                        solver_opts.lsqnonlin, ...         % solver options
+                                        @obj.solve_fun_IE,...              % system of ODEs
+                                        solver_opts.rerun_maxiter, ...     % maximum number of re-runs
+                                        resnorm_tolerance, ...             % convergence tolerance
+                                        tmp_Snew, ...                      % recent estimates
+                                        Sold, ...                          % storages at previous time step
+                                        obj.store_min, ...                 % lower bounds
+                                        obj.store_max);                    % upper bounds
                     
-                    resnorm = sum(fval.^2);
-                    solver = "lsqnonlin";
+                    tmp_resnorm = sum(tmp_fval.^2);
+
+                    Snew_v(3,:)  = tmp_Snew;
+                    resnorm_v(3) = tmp_resnorm;
+                    iter_v(3)    = tmp_iter;
+                    
                 end
             end
+            
+            % get the best solution
+            [resnorm, solver_id] = min(resnorm_v);
+            Snew = Snew_v(solver_id,:);
+            iter = iter_v(solver_id);
+            solvers = ["NewtonRaphson", "fsolve", "lsqnonlin"];
+            solver = solvers(solver_id);
+            
         end
         
         % RUN runs the model with a given climate input, initial stores,
@@ -237,7 +261,7 @@ classdef MARRMoT_model < handle
                   solverSteps] = get_output(obj,...
                                             varargin)
             
-            if isempty(obj.status) || obj.status == 0 
+            if nargin > 1 || isempty(obj.status) || obj.status == 0 
                 [~] = obj.run(varargin{:});
             end
             

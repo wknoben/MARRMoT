@@ -45,8 +45,8 @@ problem.ub = ub(:);
 % 4. maximum values
 % 5. randomized values close to solution of previous time steps
 
-while resnorm > resnorm_tolerance || any(Snew < lb(:) | Snew > ub(:))
-
+while resnorm > resnorm_tolerance
+    
     % Select the starting points
     switch iter
         case 1

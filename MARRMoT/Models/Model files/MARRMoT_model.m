@@ -173,22 +173,22 @@ classdef MARRMoT_model < handle
         % obj.theta = theta; obj.input_climate = input_climate; etc.
         % then simply obj.run() without arguments.
         function [fluxes, stores] = run(obj,...
-                                        theta,...,
                                         input_climate,...         
                                         S0,...
+                                        theta,...
                                         solver_opts)
 
             if nargin > 4 && ~isempty(solver_opts)
                 obj.solver_opts = solver_opts;
             end
-            if nargin > 3 && ~isempty(S0)
+            if nargin > 3 && ~isempty(theta)
+                obj.theta = theta;
+            end
+            if nargin > 2 && ~isempty(S0)
                 obj.S0 = S0;
             end
-            if nargin > 2 && ~isempty(input_climate)
+            if nargin > 1 && ~isempty(input_climate)
                 obj.input_climate = input_climate;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
             end
             
             
@@ -226,12 +226,6 @@ classdef MARRMoT_model < handle
             stores = obj.stores;
             obj.status = 1;
             
-            if any(obj.solver_data.resnorm > obj.solver_opts.resnorm_tolerance)
-                msg = ['I was not able to solve the stores at all ',...
-                       'timesteps within the tolerance, check ',...
-                       'obj.solver_data for details'];
-                warning(msg);
-            end
         end
         
         % GET_OUTPUT runs the model exactly like RUN, but output is

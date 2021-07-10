@@ -51,5 +51,7 @@ end
 % the curve to the last delay step, to ensure that 100% of flow is routed).
 UH(end) = UH(end)+(1-sum(UH));
 
+UH(2,:) = zeros(size(UH));
+
 end
 

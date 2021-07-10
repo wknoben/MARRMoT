@@ -77,8 +77,7 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
             % initialise the unit hydrographs and still-to-flow vectors            
             uh_q0r = uh_4_full(D,delta_t);
             
-            obj.uhs        = {uh_q0r};
-            obj.fluxes_stf = arrayfun(@(n) zeros(1, n), cellfun(@length, obj.uhs), 'UniformOutput', false);
+            obj.uhs = {uh_q0r};
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation
@@ -106,8 +105,8 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
             delta_t = obj.delta_t;
             
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh_q0r = uhs{1}; stf_q0r = stf{1};
+            uhs = obj.uhs;
+            uh_q0r = uhs{1};
             
             % stores
             S1 = S(1);
@@ -135,7 +134,7 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
             flux_etas1   = evap_23(FF,FCCS1,S3,SS1MAX,Ep,delta_t);  
             flux_qs1     = interflow_12(CQS1,FCCS1,XQS1,S3,SS1MAX,delta_t);
             flux_q0      = flux_pqexs1 - flux_fs1;
-            flux_q0r     = uh_q0r(1) .* flux_q0 + stf_q0r(1);
+            flux_q0r     = route(flux_q0, uh_q0r);
             flux_qmps1   = flux_qmp + flux_qs1;
             flux_pc      = infiltration_8(S4,SS2MAX,flux_qmps1);
             flux_qh      = flux_qmps1 - flux_pc;
@@ -160,8 +159,8 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
         % STEP runs at the end of every timestep.
         function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh_q0r = uhs{1}; stf_q0r = stf{1};
+            uhs = obj.uhs;
+            uh_q0r = uhs{1};
             
             % input fluxes to the unit hydrographs
             fluxes = obj.fluxes(obj.t,:);
@@ -169,11 +168,8 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
             
             % update still-to-flow vectors using fluxes at current step and
             % unit hydrographs
-            stf_q0r      = (uh_q0r .* flux_q0) + stf_q0r;
-            stf_q0r      = circshift(stf_q0r,-1);
-            stf_q0r(end) = 0;
-            
-            obj.fluxes_stf = {stf_q0r};
+            uh_q0r = update_uh(uh_q0r, flux_q0);
+            obj.uhs = {uh_q0r};
         end
     end
 end

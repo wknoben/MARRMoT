@@ -46,8 +46,7 @@ classdef m_05_ihacres_7p_1s < MARRMoT_model
             uh_s = uh_5_half(tau_s,delta_t);
             uh_t = uh_8_delay(tau_d,delta_t);
             
-            obj.uhs        = {uh_q, uh_s, uh_t};
-            obj.fluxes_stf = arrayfun(@(n) zeros(1, n), cellfun(@length, obj.uhs), 'UniformOutput', false);
+            obj.uhs = {uh_q, uh_s, uh_t};
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation        
@@ -63,10 +62,10 @@ classdef m_05_ihacres_7p_1s < MARRMoT_model
             delta_t = obj.delta_t;
             
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh_q = uhs{1}; stf_q = stf{1};
-            uh_s = uhs{2}; stf_s = stf{2};
-            uh_t = uhs{3}; stf_t = stf{3};
+            uhs = obj.uhs;
+            uh_q = uhs{1};
+            uh_s = uhs{2};
+            uh_t = uhs{3};
             
             % stores
             S1 = S(1);
@@ -82,9 +81,9 @@ classdef m_05_ihacres_7p_1s < MARRMoT_model
             flux_u    = saturation_5(S1,d,p,P);
         	flux_uq   = split_1(alpha,flux_u);
             flux_us   = split_1(1-alpha,flux_u);            
-            flux_xq   = uh_q(1) * flux_uq + stf_q(1);
-            flux_xs   = uh_s(1) * flux_us + stf_s(1);
-            flux_xt   = uh_t(1) * (flux_xq + flux_xs) + stf_t(1);
+            flux_xq   = route(flux_uq, uh_q);
+            flux_xs   = route(flux_us, uh_s);
+            flux_xt   = route(flux_xq + flux_xs, uh_t);
 
             % stores ODEs
             dS1 = -P + flux_ea + flux_u;
@@ -99,10 +98,10 @@ classdef m_05_ihacres_7p_1s < MARRMoT_model
         % still-to-flow vectors from unit hydrographs
         function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh_q = uhs{1}; stf_q = stf{1};
-            uh_s = uhs{2}; stf_s = stf{2};
-            uh_t = uhs{3}; stf_t = stf{3};
+            uhs = obj.uhs;
+            uh_q = uhs{1};
+            uh_s = uhs{2};
+            uh_t = uhs{3};
             
             % input fluxes to the unit hydrographs 
             fluxes = obj.fluxes(obj.t,:);
@@ -113,19 +112,12 @@ classdef m_05_ihacres_7p_1s < MARRMoT_model
             
             % update still-to-flow vectors using fluxes at current step and
             % unit hydrographs
-            stf_q      = (uh_q .* flux_uq) + stf_q;
-            stf_q      = circshift(stf_q,-1);
-            stf_q(end) = 0;
-
-            stf_s      = (uh_s .* flux_us) + stf_s;
-            stf_s      = circshift(stf_s,-1);
-            stf_s(end) = 0;
-
-            stf_t      = (uh_t .* (flux_xs + flux_xq)) + stf_t;
-            stf_t      = circshift(stf_t,-1);
-            stf_t(end) = 0;
             
-            obj.fluxes_stf = {stf_q, stf_s, stf_t};
+            uh_q = update_uh(uh_q, flux_uq);
+            uh_s = update_uh(uh_s, flux_us);
+            uh_t = update_uh(uh_t, flux_xq + flux_xs);
+            
+            obj.uhs = {uh_q, uh_s, uh_t};
         end
     end
 end

@@ -35,5 +35,7 @@ for t=1:ceil(delay)
     end
 end
 
+UH(2,:) = zeros(size(UH));
+
 end
 

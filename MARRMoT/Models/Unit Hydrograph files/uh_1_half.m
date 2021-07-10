@@ -38,5 +38,7 @@ for t = tt
     UH(t) = SH(t+1)-SH(t);
 end
 
+   UH(2,:) = zeros(size(UH));
+
 end
 

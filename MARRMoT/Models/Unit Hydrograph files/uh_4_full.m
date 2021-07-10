@@ -49,5 +49,7 @@ tmp_diff   = 1-sum(UH);
 tmp_weight = UH./sum(UH);
 UH         = UH + tmp_weight.*tmp_diff;
 
+UH(2,:) = zeros(size(UH));
+
 end
 

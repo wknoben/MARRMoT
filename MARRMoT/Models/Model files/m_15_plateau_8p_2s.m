@@ -48,8 +48,7 @@ classdef m_15_plateau_8p_2s < MARRMoT_model
             % initialise the unit hydrographs and still-to-flow vectors            
             uh = uh_3_half(tp,delta_t);
             
-            obj.uhs        = {uh};
-            obj.fluxes_stf = arrayfun(@(n) zeros(1, n), cellfun(@length, obj.uhs), 'UniformOutput', false);
+            obj.uhs = {uh};
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation
@@ -69,8 +68,8 @@ classdef m_15_plateau_8p_2s < MARRMoT_model
             delta_t = obj.delta_t;
             
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh = uhs{1}; stf = stf{1};
+            uhs = obj.uhs;
+            uh = uhs{1};
             
             % stores
             S1 = S(1);
@@ -92,7 +91,7 @@ classdef m_15_plateau_8p_2s < MARRMoT_model
             flux_c     = capillary_2(c,S2,delta_t);
             flux_r     = saturation_1((flux_pi+flux_c),S1,sumax);
             flux_qpgw  = baseflow_1(kp,S2);
-            flux_qpieo = uh(1) * (flux_pie) + stf(1);
+            flux_qpieo = route(flux_pie, uh);
 
             % stores ODEs
             dS1 = flux_pi + flux_c - flux_et - flux_r;
@@ -107,8 +106,8 @@ classdef m_15_plateau_8p_2s < MARRMoT_model
         % STEP runs at the end of every timestep.
         function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh = uhs{1}; stf = stf{1};
+            uhs = obj.uhs;
+            uh = uhs{1};
             
             % input fluxes to the unit hydrographs 
             fluxes = obj.fluxes(obj.t,:); 
@@ -116,11 +115,9 @@ classdef m_15_plateau_8p_2s < MARRMoT_model
             
             % update still-to-flow vectors using fluxes at current step and
             % unit hydrographs
-            stf      = (uh .* (flux_pie)) + stf;
-            stf      = circshift(stf,-1);
-            stf(end) = 0;
+            uh = update_uh(uh, flux_pie);
+            obj.uhs = {uh};
             
-            obj.fluxes_stf = {stf};
         end
     end
 end

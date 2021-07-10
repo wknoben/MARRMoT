@@ -45,13 +45,6 @@ classdef m_36_modhydrolog_15p_5s < MARRMoT_model
             obj.FluxGroups.Q  = [14];                                      % Index or indices of fluxes to add to Streamflow
             obj.FluxGroups.GWseepage = 12;                                 % Index or GW seepage flux
 
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
         end
         
         % INITialisation function

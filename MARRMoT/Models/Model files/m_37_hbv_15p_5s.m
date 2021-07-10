@@ -53,9 +53,7 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             
             % initialise the unit hydrographs and still-to-flow vectors            
             uh = uh_4_full(maxbas,delta_t);
-            
-            obj.uhs        = {uh};
-            obj.fluxes_stf = arrayfun(@(n) zeros(1, n), cellfun(@length, obj.uhs), 'UniformOutput', false);
+            obj.uhs = {uh};
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation        
@@ -82,8 +80,8 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             delta_t = obj.delta_t;
             
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh = uhs{1}; stf = stf{1};
+            uhs = obj.uhs;
+            uh = uhs{1};
             
             % stores
             S1 = S(1);
@@ -119,7 +117,7 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             flux_q0   = interflow_2(k0,S4,alpha,delta_t);
             flux_perc = percolation_1(perc,S4,delta_t);
             flux_q1   = baseflow_1(k1,S5);
-            flux_qt   = uh(1) * (flux_q0 + flux_q1) + stf(1);
+            flux_qt   = route(flux_q0 + flux_q1, uh);
 
             % stores ODEs
             dS1 = flux_sf   + flux_refr - flux_melt;
@@ -139,8 +137,8 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
         % still-to-flow vectors from unit hydrographs
         function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh = uhs{1}; stf = stf{1};
+            uhs = obj.uhs;
+            uh = uhs{1};
             
             % input fluxes to the unit hydrographs
             fluxes = obj.fluxes(obj.t,:);
@@ -149,11 +147,8 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             
             % update still-to-flow vectors using fluxes at current step and
             % unit hydrographs
-            stf      = (uh .* (flux_q0 + flux_q1)) + stf;
-            stf      = circshift(stf,-1);
-            stf(end) = 0;
-            
-            obj.fluxes_stf = {stf};
+            uh = update_uh(uh, flux_q0 + flux_q1);
+            obj.uhs = {uh};
         end
     end
 end

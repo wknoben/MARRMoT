@@ -26,8 +26,7 @@ classdef MARRMoT_model < handle
         t                 % current timestep
         fluxes            % vector of all fluxes
         stores            % vector of all stores
-        uhs               % unit hydrographs
-        fluxes_stf        % still-to-flow fluxes
+        uhs               % unit hydrographs and still-to-flow fluxes
         solver_data       % step-by-step info of solver used and residuals
         status            % 0 = model created, 1 = simulation ended
     end
@@ -124,8 +123,7 @@ classdef MARRMoT_model < handle
         	obj.t = [];                 % current timestep
             obj.fluxes = [];            % vector of all fluxes
             obj.stores = [];            % vector of all stores
-            obj.uhs = [];               % unit hydrographs
-            obj.fluxes_stf = [];        % still-to-flow fluxes
+            obj.uhs = [];               % unit hydrographs and still-to-flow fluxes
             obj.solver_data = [];       % step-by-step info of solver used and residuals
             obj.status = 0;             % 0 = model created, 1 = simulation ended
         end
@@ -336,8 +334,8 @@ classdef MARRMoT_model < handle
             end
             if isempty(obj.StoreSigns); obj.StoreSigns = repelem(1, obj.numStores); end
             dS = obj.StoreSigns .* (obj.stores(end,:) - obj.S0');          % difference of final and initial storage for each store
-            if isempty(obj.fluxes_stf); obj.fluxes_stf = {}; end
-            R = cellfun(@sum, obj.fluxes_stf);                             % cumulative of each flows still to be routed
+            if isempty(obj.uhs); obj.uhs = {}; end
+            R = cellfun(@(uh) sum(uh(2,:)), obj.uhs);                      % cumulative of each flows still to be routed
             
             % calculate water balance
             out = sum(P) - ...                                             % input from precipitation

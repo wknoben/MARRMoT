@@ -47,8 +47,7 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             uh_q9 = uh_1_half(x4,delta_t);
             uh_q1 = uh_2_full(2*x4,delta_t);
             
-            obj.uhs        = {uh_q9, uh_q1};
-            obj.fluxes_stf = arrayfun(@(n) zeros(1, n), cellfun(@length, obj.uhs), 'UniformOutput', false);
+            obj.uhs = {uh_q9, uh_q1};
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation
@@ -73,9 +72,9 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             delta_t = obj.delta_t;
             
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh_q9 = uhs{1}; stf_q9 = stf{1};
-            uh_q1 = uhs{2}; stf_q1 = stf{2};
+            uhs = obj.uhs;
+            uh_q9 = uhs{1};
+            uh_q1 = uhs{2};
             
             % stores
             S1 = S(1);
@@ -95,8 +94,8 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             flux_ps   = saturation_4(S1,x1,flux_pn);
             flux_es   = evap_11(S1,x1,flux_en);
             flux_perc = percolation_3(S1,x1);
-            flux_q9   = uh_q9(1).*.9.*(flux_pn - flux_ps + flux_perc) + stf_q9(1);
-            flux_q1   = uh_q1(1).*.1.*(flux_pn - flux_ps + flux_perc) + stf_q1(1);
+            flux_q9   = route(.9.*(flux_pn - flux_ps + flux_perc), uh_q9);
+            flux_q1   = route(.1.*(flux_pn - flux_ps + flux_perc), uh_q1);
             flux_fr   = recharge_2(3.5,S2,x3,x2);
             flux_fq   = flux_fr;
             flux_qr   = baseflow_3(S2,x3);
@@ -119,9 +118,9 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
         % STEP runs at the end of every timestep.
         function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh_q9 = uhs{1}; stf_q9 = stf{1};
-            uh_q1 = uhs{2}; stf_q1 = stf{2};
+            uhs = obj.uhs;
+            uh_q9 = uhs{1};
+            uh_q1 = uhs{2};
             
             % input fluxes to the unit hydrographs 
             fluxes = obj.fluxes(obj.t,:);  
@@ -131,15 +130,11 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             
             % update still-to-flow vectors using fluxes at current step and
             % unit hydrographs
-            stf_q9      = (uh_q9 .* (.9*(flux_pn - flux_ps + flux_perc))) + stf_q9;
-            stf_q9      = circshift(stf_q9,-1);
-            stf_q9(end) = 0;
+            uh_q9 = update_uh(uh_q9, .9.*(flux_pn - flux_ps + flux_perc));
+            uh_q1 = update_uh(uh_q1, .1.*(flux_pn - flux_ps + flux_perc));
             
-            stf_q1      = (uh_q1 .* (.1*(flux_pn - flux_ps + flux_perc))) + stf_q1;
-            stf_q1      = circshift(stf_q1,-1);
-            stf_q1(end) = 0;
+            obj.uhs = {uh_q9, uh_q1};
             
-            obj.fluxes_stf = {stf_q9, stf_q1};
         end
     end
 end

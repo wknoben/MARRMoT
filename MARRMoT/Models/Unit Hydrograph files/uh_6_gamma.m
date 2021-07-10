@@ -60,5 +60,7 @@ tmp_weight = UH./sum(UH);
 % distribute truncated probability mass proportionally to all elements 
 % of the routing vector
 UH = UH+tmp_weight.*tmp_excess;
+
+UH(2,:) = zeros(size(UH));
 end
 

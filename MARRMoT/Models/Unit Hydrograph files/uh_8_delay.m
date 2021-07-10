@@ -35,5 +35,7 @@ t_start = floor(delay);
 UH(1+t_start) = ord1;
 UH(1+t_start+1) = ord2;
 
+UH(2,:) = zeros(size(UH));
+
 end
 

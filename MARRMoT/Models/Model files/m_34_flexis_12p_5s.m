@@ -54,8 +54,7 @@ classdef m_34_flexis_12p_5s < MARRMoT_model
             uh_f = uh_3_half(nlagf,delta_t);
             uh_s = uh_3_half(nlags,delta_t);
             
-            obj.uhs        = {uh_f, uh_s};
-            obj.fluxes_stf = arrayfun(@(n) zeros(1, n), cellfun(@length, obj.uhs), 'UniformOutput', false);
+            obj.uhs = {uh_f, uh_s};
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation        
@@ -89,9 +88,9 @@ classdef m_34_flexis_12p_5s < MARRMoT_model
             delta_t = obj.delta_t;
             
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh_f = uhs{1}; stf_f = stf{1};
-            uh_s = uhs{2}; stf_s = stf{2};
+            uhs = obj.uhs;
+            uh_f = uhs{1};
+            uh_s = uhs{2};
             
             % stores
             S1 = S(1);
@@ -118,8 +117,8 @@ classdef m_34_flexis_12p_5s < MARRMoT_model
             flux_rp   = percolation_2(percmax,S3,smax,delta_t);
             flux_rf   = split_1(1-d,flux_peff-flux_ru);
             flux_rs   = split_1(d,flux_peff-flux_ru);
-            flux_rfl  = uh_f(1).*(flux_rf) + stf_f(1);
-            flux_rsl  = uh_s(1).*(flux_rs + flux_rp) + stf_s(1);
+            flux_rfl = route(flux_rf, uh_f);
+            flux_rsl = route(flux_rs + flux_rp, uh_s);
             flux_qf   = baseflow_1(kf,S4);
             flux_qs   = baseflow_1(ks,S5);
             
@@ -140,9 +139,9 @@ classdef m_34_flexis_12p_5s < MARRMoT_model
         % STEP runs at the end of every timestep.
         function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh_f = uhs{1}; stf_f = stf{1};
-            uh_s = uhs{2}; stf_s = stf{2};
+            uhs = obj.uhs;
+            uh_f = uhs{1};
+            uh_s = uhs{2};
             
             % input fluxes to the unit hydrographs
             fluxes = obj.fluxes(obj.t,:);
@@ -152,15 +151,10 @@ classdef m_34_flexis_12p_5s < MARRMoT_model
             
             % update still-to-flow vectors using fluxes at current step and
             % unit hydrographs
-            stf_f      = (uh_f .* (flux_rf)) + stf_f;
-            stf_f      = circshift(stf_f,-1);
-            stf_f(end) = 0;
+            uh_f = update_uh(uh_f, flux_rf);
+            uh_s = update_uh(uh_s, flux_rs + flux_rp);
             
-            stf_s      = (uh_s .* (flux_rs + flux_rp)) + stf_s;
-            stf_s      = circshift(stf_s,-1);
-            stf_s(end) = 0;
-            
-            obj.fluxes_stf = {stf_f, stf_s};
+            obj.uhs = {uh_f, uh_s};
         end
     end
 end

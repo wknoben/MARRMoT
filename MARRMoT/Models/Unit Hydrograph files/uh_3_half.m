@@ -43,5 +43,7 @@ for t = 1:length(tt)
     end
 end
 
+    UH(2,:) = zeros(size(UH));
+
 end
 

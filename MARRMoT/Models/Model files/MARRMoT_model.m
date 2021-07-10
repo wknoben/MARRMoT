@@ -1,6 +1,7 @@
 classdef MARRMoT_model < handle
     % Class for MARRMoT models
     properties
+        % static attributes, set for each models in the model definition
         numStores         % number of model stores
         numFluxes         % number of model fluxes
         numParams         % number of model parameters
@@ -10,28 +11,33 @@ classdef MARRMoT_model < handle
         FluxNames         % Names for the fluxes
         FluxGroups        % Grouping of fluxes (useful for water balance and output)
         StoreSigns        % Signs to give to stores (-1 is a deficit store), assumes all 1 if not given
+        % attributes set at the beginning of the simulation
+            % directly by the user
         theta             % Set of parameters
         delta_t           % time step
+        S0                % initial store values
+        input_climate     % vector of input climate
+        solver_opts       % options for numerical solving of ODEs
+            % automatically, based on parameter set
         store_min         % store minimum values
         store_max         % store maximum values
-        uhs               % unit hydrographs
-        fluxes_stf        % still-to-flow fluxes
-        S0                % initial store values
+        % attributes created and updated automatically throughout a
+        % simulation
         t                 % current timestep
         fluxes            % vector of all fluxes
         stores            % vector of all stores
-        input_climate     % vector of input climate
-        solver_opts       % options for numerical solving of ODEs
+        uhs               % unit hydrographs
+        fluxes_stf        % still-to-flow fluxes
         solver_data       % step-by-step info of solver used and residuals
         status            % 0 = model created, 1 = simulation ended
     end
     methods
         
-        % Set methods with checks on inputs:
+        % Set methods with checks on inputs for attributes set by the user:
         function [] = set.delta_t(obj, value)
             if numel(value) == 1
                 obj.delta_t = value;
-                obj.status = 0;
+                obj.reset();
             else
                 error('delta_t must be a scalar')
             end
@@ -39,7 +45,7 @@ classdef MARRMoT_model < handle
         function [] = set.theta(obj, value)
             if numel(value) == obj.numParams
                 obj.theta = value(:);
-                obj.status = 0;
+                obj.reset();
             else
                 error(['theta must have ' int2str(obj.numParams) ' elements'])
             end
@@ -57,7 +63,7 @@ classdef MARRMoT_model < handle
                     Ea = value.pet/obj.delta_t;
                     T = value.temp/obj.delta_t;
                     obj.input_climate = [P(:) Ea(:) T(:)];
-                    obj.status = 0;
+                    obj.reset();
                 else
                     error(['Input climate struct must contain fields: '...
                            'precip, pet, temp']);
@@ -65,7 +71,7 @@ classdef MARRMoT_model < handle
             elseif isnumeric(value)
                 if size(value,2)
                     obj.input_climate = value;
-                    obj.status = 0;
+                    obj.reset();
                 else
                     error(['Input climate must have 3 columns: '...
                            'precip, pet, temp']);
@@ -78,19 +84,19 @@ classdef MARRMoT_model < handle
         function [] = set.S0(obj, value)
             if numel(value) == obj.numStores
                 obj.S0 = value(:);
+                obj.reset();
             else
                 error(['S0 must have ' int2str(obj.numStores) ' elements'])
             end
-            obj.status = 0;
         end
         function [] = set.solver_opts(obj, value)
             % add options to default ones
             obj.solver_opts = obj.add_to_def_opts(value);
-            obj.status = 0;
+            obj.reset();
         end
         
         % INIT_ runs before each model run to initialise store limits,
-        % auxiliary parameters etc. it calles INIT which is model specific
+        % auxiliary parameters etc. it calls INIT which is model specific
         function obj = init_(obj)
             % min and max of stores
             obj.store_min = zeros(obj.numStores,1);
@@ -110,6 +116,20 @@ classdef MARRMoT_model < handle
             obj.init();
         end
         
+        % RESET is called any time that a user-specified input is changed
+        % (t, delta_t, input_climate, S0, solver_options) and resets any
+        % previous simulation ran on the object.
+        % This is to prevent human error in analysing results.
+        function obj = reset(obj)
+        	obj.t = [];                 % current timestep
+            obj.fluxes = [];            % vector of all fluxes
+            obj.stores = [];            % vector of all stores
+            obj.uhs = [];               % unit hydrographs
+            obj.fluxes_stf = [];        % still-to-flow fluxes
+            obj.solver_data = [];       % step-by-step info of solver used and residuals
+            obj.status = 0;             % 0 = model created, 1 = simulation ended
+        end
+        
         % ODE approximation with Implicit Euler time-stepping scheme
         function err = solve_fun_IE(obj, S)
             S = S(:);
@@ -122,7 +142,11 @@ classdef MARRMoT_model < handle
         function [Snew, resnorm, solver, iter] = solve_stores(obj, Sold)
             
             solver_opts = obj.solver_opts;
-            resnorm_tolerance = solver_opts.resnorm_tolerance;
+            
+            % This reduces the tolerance to a fraction of the smallest store,
+            % if stores are very small, with 1E-6 as minimum
+            % (if resnorm_tolerance is 0.1 as default)
+            resnorm_tolerance = solver_opts.resnorm_tolerance * min(min(Sold) + 1E-5, 1);
             
             % create vectors for each of the three solutions (NewtonRaphon,
             % fsolve and lsqnonlin), this way if all three run it takes the
@@ -142,7 +166,7 @@ classdef MARRMoT_model < handle
             resnorm_v(1) = tmp_resnorm;
             
             % if NewtonRaphson doesn't find a good enough solution, run FSOLVE
-            if tmp_resnorm > resnorm_tolerance
+            if tmp_resnorm > resnorm_tolerance  
                 [tmp_Snew,tmp_fval,~,tmp_iter] = ...
                             rerunSolver('fsolve', ...              
                                         solver_opts.fsolve, ...            % solver options
@@ -405,7 +429,7 @@ classdef MARRMoT_model < handle
              % helper function to calculate fitness given a set of
              % parameters
              function fitness = fitness_fun(par)
-                 [~] = obj.run(par);
+                 [~] = obj.run([],[],par);
                  Q_sim = sum(obj.fluxes(:,obj.FluxGroups.Q),2);
                  fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, cal_idx, varargin{:});
              end

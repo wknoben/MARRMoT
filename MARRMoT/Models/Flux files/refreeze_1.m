@@ -18,7 +18,7 @@ function [out] = refreeze_1(p1,p2,p3,T,S,dt)
 %
 % WK, 08/10/2018
 
-out = min(max(0,p1*p2*(p3-T)),S/dt);
+out = max(min(p1*p2*(p3-T), S/dt), 0);
 
 end
 

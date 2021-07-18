@@ -98,7 +98,7 @@ for i = 1:numSample
      output_in,...                                                             % Internal model fluxes
      output_ss ,...                                                            % Internal storages
      output_waterbalance] = ...                                                % Water balance check              
-                   m.get_output(...                                            % Model method to run and return all outputs
+                   m.get_output([],[],...                                      % Model method to run and return all outputs
                                 input_theta);
     % Save the results
     results_mc_sampling{1+i,1} = input_theta;

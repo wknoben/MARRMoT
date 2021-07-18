@@ -101,9 +101,9 @@ for i = 1:length(model_list)
      output_ss ,...                                                            % Internal storages
      output_waterbalance] = ...                                                % Water balance check              
                    m.get_output(...                                            % Model method to run and return all outputs
-                                input_theta,...                                % Parameter set.
                                 input_climatology,...                          % Time series of climatic fluxes in simulation period
                                 input_s0,...                                   % Initial storages
+                                input_theta,...                                % Parameter set.
                                 input_solver_opts);                            % Options for numerical solving of ODEs
     
     % Save the results

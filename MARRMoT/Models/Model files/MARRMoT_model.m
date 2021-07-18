@@ -232,11 +232,11 @@ classdef MARRMoT_model < handle
         % none of the arguments are needed, they can be set beforehand with
         % obj.theta = theta; obj.input_climate = input_climate; etc.
         % then simply obj.run() without arguments.
-        function [fluxes, stores] = run(obj,...
-                                        input_climate,...         
-                                        S0,...
-                                        theta,...
-                                        solver_opts)
+        function [] = run(obj,...
+                          input_climate,...         
+                          S0,...
+                          theta,...
+                          solver_opts)
 
             if nargin > 4 && ~isempty(solver_opts)
                 obj.solver_opts = solver_opts;
@@ -269,8 +269,7 @@ classdef MARRMoT_model < handle
                obj.step();
 
             end
-            fluxes = obj.fluxes;
-            stores = obj.stores;
+            
             obj.status = 1;
             
         end
@@ -285,12 +284,17 @@ classdef MARRMoT_model < handle
                                             varargin)
             
             if nargin > 1 || isempty(obj.status) || obj.status == 0 
-                [~] = obj.run(varargin{:});
+                obj.run(varargin{:});
             end
             
-            % --- Fluxes leaving the model ---
-            fluxOutput.Ea     = sum(obj.fluxes(:,obj.FluxGroups.Ea),2)';
-            fluxOutput.Q      = sum(obj.fluxes(:,obj.FluxGroups.Q),2)';
+            % --- Fluxes leaving the model ---          
+            fg = fieldnames(obj.FluxGroups);
+            fluxOutput = struct();
+            for k=1:numel(fg)
+                idx = abs(obj.FluxGroups.(fg{k}));
+                signs = sign(obj.FluxGroups.(fg{k}));
+                fluxOutput.(fg{k}) = sum(signs.*obj.fluxes(:,idx),2);
+            end
             
             % --- Fluxes internal to the model ---
             fluxInternal = struct;
@@ -315,13 +319,12 @@ classdef MARRMoT_model < handle
             end
         end
         
-        % CHECK_WATERBALANCE returns the waterbalance given fluxes and
-        % stores (i.e. the output of RUN)
+        % CHECK_WATERBALANCE returns the waterbalance
         % like in MARRMoT1, it will print to screen
-        function [out] = check_waterbalance(obj)
+        function [out] = check_waterbalance(obj, varargin)
             
-            if isempty(obj.status) || obj.status == 0 
-                error('run model with obj.run() before requesting the water balance');
+            if nargin > 1 || isempty(obj.status) || obj.status == 0 
+                obj.run(varargin{:});
             end
             
             % Get variables
@@ -368,30 +371,13 @@ classdef MARRMoT_model < handle
         
         % GET_STREAMFLOW only returns the streamflow, runs the model if it
         % hadn't run already.
-        function Q = get_streamflow(obj,...
-                                    varargin)
+        function Q = get_streamflow(obj, varargin)
             
             if nargin > 1 || isempty(obj.status) || obj.status == 0
-                [~] = obj.run(varargin{:});
+                obj.run(varargin{:});
             end
         
             Q = sum(obj.fluxes(:,obj.FluxGroups.Q),2);
-        end
-        
-        % CALC_PAR_FITNESS calculates the fitness of the set of parameters
-        % in obj.theta, needs the model to have run already
-        function fitness = calc_fitness(obj,...
-                                        Q_obs,...                          % observed streamflow
-                                        of_name,...                        % name of the objective function
-                                        fit_idx,...                        % indices to use to calculate the fitness function
-                                        varargin)                          % additional arguments to objective function
-            
-            if isempty(obj.status) || obj.status == 0 
-                error('run model with obj.run() before requesting fitness');
-            end
-                                        
-            Q_sim = sum(obj.fluxes(:,obj.FluxGroups.Q),2);
-            fitness = feval(of_name, Q_obs, Q_sim, fit_idx, varargin{:});
         end
         
         % CALIBRATE uses the chosen algorithm to find the optimal parameter
@@ -416,7 +402,7 @@ classdef MARRMoT_model < handle
                      isempty(obj.S0) || isempty(obj.solver_opts)
                  error(['input_climate, delta_t, S0 and solver_opts '...
                         'attributes must be specified before calling '...
-                        'calibrate. Use obj.input_climate = ... etc.']);
+                        'calibrate.']);
              end
              
              % if the list of timesteps to use for calibration is empty,
@@ -428,15 +414,13 @@ classdef MARRMoT_model < handle
              % helper function to calculate fitness given a set of
              % parameters
              function fitness = fitness_fun(par)
-                 [~] = obj.run([],[],par);
-                 Q_sim = sum(obj.fluxes(:,obj.FluxGroups.Q),2);
+                 Q_sim = obj.get_streamflow([],[],par);
                  fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, cal_idx, varargin{:});
              end
              
              % if the initial parameter set isn't set,  start from mean
              % values of parameter range
              if isempty(par_ini)
-                 %par_ini = obj.parRanges(:,1) + rand(obj.numParams,1).*(obj.parRanges(:,2)-obj.parRanges(:,1));
                  par_ini = mean(obj.parRanges,2);
              end
              

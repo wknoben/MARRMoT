@@ -128,7 +128,7 @@ m.S0            = input_s0;
                    
 %% 6. Evaluate the calibrated parameters on unseen data
 % Run the model with calibrated parameters, get only the streamflow
-Q_sim = m.get_streamflow(par_opt);  
+Q_sim = m.get_streamflow([],[],par_opt);  
              
 % Compute evaluation performance
 of_eval = feval(of_name,...                                                % Objective function name (here 'of_KGE')

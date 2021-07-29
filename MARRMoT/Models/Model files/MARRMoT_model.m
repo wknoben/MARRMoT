@@ -129,10 +129,12 @@ classdef MARRMoT_model < handle
         end
         
         % ODE approximation with Implicit Euler time-stepping scheme
-        function err = solve_fun_IE(obj, S)
+        function err = ODE_approx_IE(obj, S)
             S = S(:);
             delta_S = obj.model_fun(S);
-            if obj.t == 1; Sold = obj.S0(:); else; Sold = obj.stores(obj.t-1,:)'; end
+            if obj.t == 1; Sold = obj.S0(:);
+            else; Sold = obj.stores(obj.t-1,:)';
+            end
             err = (S - Sold)/obj.delta_t - delta_S';
         end 
         
@@ -155,7 +157,7 @@ classdef MARRMoT_model < handle
             
             % first try to solve the ODEs using NewtonRaphson
             [tmp_Snew, tmp_fval] = ...
-                            NewtonRaphson(@obj.solve_fun_IE,...
+                            NewtonRaphson(@obj.ODE_approx_IE,...
                                           Sold,...
                                           solver_opts.NewtonRaphson);
             tmp_resnorm = sum(tmp_fval.^2);
@@ -168,7 +170,7 @@ classdef MARRMoT_model < handle
                 [tmp_Snew,tmp_fval,~,tmp_iter] = ...
                             rerunSolver('fsolve', ...              
                                         solver_opts.fsolve, ...            % solver options
-                                        @obj.solve_fun_IE,...              % system of ODEs
+                                        @obj.ODE_approx_IE,...              % system of ODEs
                                         solver_opts.rerun_maxiter, ...     % maximum number of re-runs
                                         resnorm_tolerance, ...             % convergence tolerance
                                         tmp_Snew, ...                      % recent estimates
@@ -187,7 +189,7 @@ classdef MARRMoT_model < handle
                     [tmp_Snew,tmp_fval,~,tmp_iter] = ...
                             rerunSolver('lsqnonlin', ...              
                                         solver_opts.lsqnonlin, ...         % solver options
-                                        @obj.solve_fun_IE,...              % system of ODEs
+                                        @obj.ODE_approx_IE,...              % system of ODEs
                                         solver_opts.rerun_maxiter, ...     % maximum number of re-runs
                                         resnorm_tolerance, ...             % convergence tolerance
                                         tmp_Snew, ...                      % recent estimates
@@ -241,19 +243,15 @@ classdef MARRMoT_model < handle
             % run INIT_ method, this will calculate all auxiliary parameters
             % and set up routing vectors and store limits
             obj.init_();
-            
-            % if the max span of the stores is small (less than 2 orders of
-            % magnetude as the tolerance), reduce the tolerance
-%             if min(obj.store_max - obj.store_min) < obj.solver_opts.resnorm_tolerance*100
-%                 obj.solver_opts.resnorm_tolerance = obj.solver_opts.resnorm_tolerance/100;
-%             end
 
             t_end = size(obj.input_climate, 1);
             
             for t = 1:t_end
                obj.t = t;
-               if t == 1; Sold = obj.S0(:); else; Sold = obj.stores(t-1,:)'; end
-               %obj.input_climate = [P(t) Ep(t) T(t)];
+               if t == 1; Sold = obj.S0(:);
+               else; Sold = obj.stores(t-1,:)';
+               end
+
                [Snew,resnorm,solver,iter] = obj.solve_stores(Sold);
                
                [dS, f] = obj.model_fun(Snew);
@@ -261,16 +259,14 @@ classdef MARRMoT_model < handle
                obj.fluxes(t,:) = f * obj.delta_t;
                obj.stores(t,:) = Sold + dS' * obj.delta_t;
                
-               obj.step();
-               
                obj.solver_data.resnorm(t) = resnorm;
                obj.solver_data.solver(t) = solver;
                obj.solver_data.iter(t) = iter;
                
+               obj.step();
             end
             
             obj.status = 1;
-            
         end
         
         % GET_OUTPUT runs the model exactly like RUN, but output is
@@ -409,18 +405,18 @@ classdef MARRMoT_model < handle
              if isempty(cal_idx)
                  cal_idx = 1:length(Q_obs);
              end
-                                   
+
+             % if the initial parameter set isn't set,  start from mean
+             % values of parameter range
+             if isempty(par_ini)
+                 par_ini = mean(obj.parRanges,2);
+             end
+             
              % helper function to calculate fitness given a set of
              % parameters
              function fitness = fitness_fun(par)
                  Q_sim = obj.get_streamflow([],[],par);
                  fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, cal_idx, varargin{:});
-             end
-             
-             % if the initial parameter set isn't set,  start from mean
-             % values of parameter range
-             if isempty(par_ini)
-                 par_ini = mean(obj.parRanges,2);
              end
              
              [par_opt,...                                                  % optimal parameter set at the end of the optimisation

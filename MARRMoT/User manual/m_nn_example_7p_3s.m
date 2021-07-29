@@ -1,15 +1,5 @@
 classdef m_nn_example_7p_3s < MARRMoT_model
-    % Class for MARRMoT model
-    
-% Hydrologic conceptual model: [MARRMoT User Manual example model] 
-%   
-% Model reference
-% MARRMoT User Manual, 2018. 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
-% WARRANTY. See <https://www.gnu.org/licenses/> for details.
-    
+    % Class for MARRMoT model    
     properties
         % in case the model has any specific properties (eg derived theta,
         % add it here)
@@ -18,7 +8,7 @@ classdef m_nn_example_7p_3s < MARRMoT_model
         
         % this function runs once as soon as the model object is created
         % and sets all the static properties of the model
-        function obj = m_nn_example_7p_3s(delta_t, theta)
+        function obj = m_nn_example_7p_3s()
             obj.numStores = 3;                                             % number of model stores
             obj.numFluxes = 9;                                             % number of model fluxes
             obj.numParams = 7;
@@ -28,27 +18,20 @@ classdef m_nn_example_7p_3s < MARRMoT_model
                                  0,1,1];                                   % Jacobian matrix of model store ODEs
                              
             obj.parRanges = [ 0,    4;     % crate, Maximum capillary rise rate [mm/d]
-                              1, 2000;     % uzamx, Maximum upper zone storage [mm]
+                              1, 2000;     % uzmax, Maximum upper zone storage [mm]
                               0,   20;     % prate, Maximum percolation rate [mm/d]
                               0,    1;     % klz, Lower zone runoff coefficient [d-1]
                               0,    1;     % alpha, Fraction of lower zone runoff to groundwater [-]
                               0,    1;     % kg, Groundwater runoff coefficient [d-1]
                               1,  120];    % d, Routing delay [d]
             
-            obj.StoreNames = ["S1" "S2", "S3"];                                  % Names for the stores
+            obj.StoreNames = ["S1", "S2", "S3"];                           % Names for the stores
             obj.FluxNames  = ["qse", "e",  "qp", "qc", "qlz",...
                               "qf",  "qg", "qs", "qt"];                    % Names for the fluxes
             
-            obj.Flux_Ea_idx = 2;                                           % Index or indices of fluxes to add to Actual ET
-            obj.Flux_Q_idx  = 9;                                           % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Ea = 2;                                         % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Q  = 9;                                         % Index or indices of fluxes to add to Streamflow
             
-            % setting delta_t and theta triggers the function obj.init()
-            if nargin > 0 && ~isempty(delta_t)
-                obj.delta_t = delta_t;
-            end
-            if nargin > 1 && ~isempty(theta)
-                obj.theta = theta;
-            end
         end
         
         % INIT is run automatically as soon as both theta and delta_t are
@@ -57,26 +40,26 @@ classdef m_nn_example_7p_3s < MARRMoT_model
         % derived parameters) and unit hydrographs and set minima and
         % maxima for stores based on parameters.
         function obj = init(obj)
+            % extract theta and delta_t from attributes
             theta   = obj.theta;
             delta_t = obj.delta_t;
             
-            d = theta(7);     % Routing delay [d]
+            % needed parameters
+            uzmax = theta(2); % Maximum upper zone storage [mm]
+            d     = theta(7); % Routing delay [d]
             
             % min and max of stores
-            obj.store_min = zeros(1,obj.numStores);
-            obj.store_max = inf(1,obj.numStores);
+            obj.store_max(1) = uzmax;
             
-            % initialise the unit hydrographs and still-to-flow vectors            
+            % unit hydrographs         
             uh = uh_4_full(d,delta_t);
-            
-            obj.uhs        = {uh};
-            obj.fluxes_stf = arrayfun(@(n) zeros(1, n), cellfun(@length, obj.uhs), 'UniformOutput', false);
+            obj.uhs = {uh};            
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation        
         function [dS, fluxes] = model_fun(obj, S)
             % parameters
-            theta   = obj.theta;
+            theta = obj.theta;
             crate = theta(1);     % Maximum capillary rise rate [mm/d]
             uzmax = theta(2);     % Maximum upper zone storage [mm]
             prate = theta(3);     % Maximum percolation rate [mm/d]
@@ -88,9 +71,9 @@ classdef m_nn_example_7p_3s < MARRMoT_model
             % delta_t
             delta_t = obj.delta_t;
             
-            % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh = uhs{1}; stf = stf{1};
+            % unit hydrographs
+            uhs = obj.uhs;
+            uh = uhs{1};
             
             % stores
             S1 = S(1);
@@ -98,7 +81,8 @@ classdef m_nn_example_7p_3s < MARRMoT_model
             S3 = S(3);
             
             % climate input
-            c = obj.input_climate;
+            t = obj.t;                    % this time step
+            c = obj.input_climate(t,:);   % climate at this step
             P  = c(1);
             Ep = c(2);
             T  = c(3);
@@ -112,7 +96,7 @@ classdef m_nn_example_7p_3s < MARRMoT_model
             flux_qf  = split_1(1-alpha,flux_qlz);
             flux_qg  = split_1(alpha,flux_qlz);
             flux_qs  = baseflow_1(kg,S3);
-            flux_qt  = uh(1) .* (flux_qse + flux_qf + flux_qs) + stf(1);
+            flux_qt  = route(flux_qse + flux_qf + flux_qs, uh);
 
             % stores ODEs
             dS1 = P         + flux_qc - flux_e  - flux_qse - flux_qp;
@@ -127,23 +111,22 @@ classdef m_nn_example_7p_3s < MARRMoT_model
         
         % STEP runs at the end of every timestep, use it to update
         % still-to-flow vectors from unit hydrographs
-        function step(obj, fluxes)
+        function obj = step(obj)
             % unit hydrographs and still-to-flow vectors
-            uhs = obj.uhs; stf = obj.fluxes_stf;
-            uh = uhs{1}; stf = stf{1};
+            uhs = obj.uhs;
+            uh = uhs{1};
                         
-            % input fluxes to the unit hydrographs 
+            % input fluxes to the unit hydrographs at this timestep
+            fluxes = obj.fluxes;
             flux_qse = fluxes(1);
             flux_qf  = fluxes(6);
             flux_qs  = fluxes(8);
             
             % update still-to-flow vectors using fluxes at current step and
             % unit hydrographs
-            stf      = (uh .* (flux_qse + flux_qf + flux_qs)) + stf;
-            stf      = circshift(stf,-1);
-            stf(end) = 0;
+            uh = update_uh(uh, flux_qse + flux_qf + flux_qs);
             
-            obj.fluxes_stf = {stf};
+            obj.uhs = {uh};
         end
     end
 end

@@ -1,10 +1,10 @@
 function [val,c,idx,w] = of_root5_KGE(obs,sim,idx,w)
 % of_root5_KGE Calculates Kling-Gupta Efficiency of the fith root of
-% simulated streamflow (Gupta et al, 2009), intended to capture low flow
-% aspects better. Ignores time steps with -999 
+% simulated streamflow (Gupta et al., 2009), intended to capture low flow
+% aspects better (Chiew et al., 1993). Ignores time steps with obs < 0
 % values.
 %
-% Copyright (C) 2018 W. Knoben
+% Copyright (C) 2021 L. Trotter
 % This program is free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
@@ -25,44 +25,21 @@ function [val,c,idx,w] = of_root5_KGE(obs,sim,idx,w)
 % Decomposition of the mean squared error and NSE performance criteria: 
 % Implications for improving hydrological modelling. Journal of Hydrology, 
 % 377(1–2), 80–91. https://doi.org/10.1016/j.jhydrol.2009.08.003
+%
+% Chiew, F.H.S., Stewardson, M.J., McMahon, T.A., 1993. Comparison of six
+% rainfall-runoff modelling approaches. J. Hydrol.
+% https://doi.org/10.1016/0022-1694(93)90073-I
 
-
-%% check inputs and set defaults
+%% Check inputs and select timesteps
 if nargin < 2
-    error('Not enugh input arguments')
-elseif nargin > 4
-    error('Too many inputs.')    
+    error('Not enugh input arguments')    
 end
 
-% make sure inputs are vertical and have the same size
-obs = obs(:);
-sim = sim(:);
-if ~size(obs) == size(sim)
-    error('Time series not of equal size.')
-end
+if nargin < 3; idx = []; end
+[sim, obs, idx] = check_and_select(sim, obs, idx);
 
-% defaults
-w_default = [1,1,1];          % weights
-idx_exists = find(obs >= 0);  % time steps to use in calculating of value
-% -999 is opten used to denote missing values in observed data. Therefore
-% we check for all negative values, and ignore those. 
-
-% update default indices if needed
-if nargin < 3 || isempty(idx)
-    idx = idx_exists;
-else 
-    idx = idx(:);
-    if islogical(idx) && all(size(idx) == size(obs))
-        idx = intersect(find(idx), idx_exists);
-    elseif isnumeric(idx)
-        idx = intersect(idx, idx_exists);
-    else
-        error(['Indices should be either ' ...
-                'a logical vector of the same size of Qsim and Qobs, or '...
-                'a numeric vector of indices']);
-    end                                                      % use all non missing Q if idx is not provided otherwise
-end
-
+%% Set weights
+w_default = [1,1,1];          % default weights
 
 % update defaults weights if needed  
 if nargin < 4 || isempty(w)
@@ -70,19 +47,15 @@ if nargin < 4 || isempty(w)
 else
     if ~min(size(w)) == 1 || ~max(size(w)) == 3                            % check weights variable for size
         error('Weights should be a 3x1 or 1x3 vector.')                    % or throw error        
-    end                                                         % use dafult weight is w is not provided
-end   
-%% filter to only selected indices
-obs = obs(idx);
-sim = sim(idx);                                            
-
-% Some models (e.g. Sacramento) sometimes return negative streamflow values
-% when flows are very small (probably something to do with the numerical
-% scheme? These negative values cause issues because they turn complex when
-% the fifth root is taken, hence here we change them to 0.
-sim(sim<0) = 0;
+    end
+end                                              
 
 %% calculate the fifth root of the flows
+% Some models sometimes return negative streamflow values when flows are 
+% very small (in the order of -1E-5). These negative values cause issues
+% because they turn complex when the fifth root is taken, hence here we
+% change them to 0.
+sim(sim<0) = 0;
 
 obs = obs.^.2;
 sim = sim.^.2;

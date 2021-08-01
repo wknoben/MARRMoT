@@ -2,9 +2,9 @@ function [val,idx] = of_log_NSE(obs,sim,idx)
 % of_log_NSE Calculates the Nash-Sutcliffe Efficiency (Nash & Sutcliffe, 1970) 
 % of the log of simulated streamflow. Ignores time steps with negative flow
 % values. Adds a constant e of 1/100 of mean(obs) to avoid issues with zero
-% flows (Pushpalatha et al. 2012).
+% flows (Pushpalatha et al., 2012).
 %
-% Copyright (C) 2021 W. Knoben
+% Copyright (C) 2021 L. Trotter
 % This program is free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
@@ -28,44 +28,13 @@ function [val,idx] = of_log_NSE(obs,sim,idx)
 % simulations". Journal of Hydrology. 420-421, 171-182. 
 % doi:10.1016/j.jhydrol.2011.11.055
 
-%% Check inputs and set defaults
+%% Check inputs and select timesteps
 if nargin < 2
-    error('Not enugh input arguments')
-elseif nargin > 4
-    error('Too many inputs.')    
+    error('Not enugh input arguments')    
 end
 
-% make sure inputs are vertical and have the same size
-obs = obs(:);
-sim = sim(:);
-if ~size(obs) == size(sim)
-    error('Time series not of equal size.')
-end
-
-% defaults
-idx_exists = find(obs >= 0);  % time steps to use in calculating of value
-% -999 is opten used to denote missing values in observed data. Therefore
-% we check for all negative values, and ignore those. 
-
-% update default indices if needed
-if nargin < 3 || isempty(idx)
-    idx = idx_exists;
-else 
-    idx = idx(:);
-    if islogical(idx) && all(size(idx) == size(obs))
-        idx = intersect(find(idx), idx_exists);
-    elseif isnumeric(idx)
-        idx = intersect(idx, idx_exists);
-    else
-        error(['Indices should be either ' ...
-                'a logical vector of the same size of Qsim and Qobs, or '...
-                'a numeric vector of indices']);
-    end                                                      % use all non missing Q if idx is not provided otherwise
-end
-
-%% filter to only selected indices
-obs = obs(idx);
-sim = sim(idx);                                            
+if nargin < 3; idx = []; end
+[sim, obs, idx] = check_and_select(sim, obs, idx);                                            
 
 %% Find the constant e
 e = mean(obs)/100;

@@ -4,7 +4,7 @@ function [val,c,w,idx] = of_inverse_KGE(obs, sim, idx, w)
 % aspects better (Pushpalatha et al, 2012). Ignores time steps with -999 
 % values.
 %
-% Copyright (C) 2018 W. Knoben
+% Copyright (C) 2021 L. Trotter
 % This program is free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
@@ -31,42 +31,16 @@ function [val,c,w,idx] = of_inverse_KGE(obs, sim, idx, w)
 % simulations. Journal of Hydrology, 420–421, 171–182. 
 % https://doi.org/10.1016/j.jhydrol.2011.11.055
 
-%% check inputs and set defaults
+%% Check inputs and select timesteps
 if nargin < 2
-    error('Not enugh input arguments')
-elseif nargin > 4
-    error('Too many inputs.')    
+    error('Not enugh input arguments')    
 end
 
-% make sure inputs are vertical and have the same size
-obs = obs(:);
-sim = sim(:);
-if ~size(obs) == size(sim)
-    error('Time series not of equal size.')
-end
+if nargin < 3; idx = []; end
+[sim, obs, idx] = check_and_select(sim, obs, idx);
 
-% defaults
-w_default = [1,1,1];          % weights
-idx_exists = find(obs >= 0);  % time steps to use in calculating of value
-% -999 is opten used to denote missing values in observed data. Therefore
-% we check for all negative values, and ignore those. 
-
-% update default indices if needed
-if nargin < 3 || isempty(idx)
-    idx = idx_exists;
-else 
-    idx = idx(:);
-    if islogical(idx) && all(size(idx) == size(obs))
-        idx = intersect(find(idx), idx_exists);
-    elseif isnumeric(idx)
-        idx = intersect(idx, idx_exists);
-    else
-        error(['Indices should be either ' ...
-                'a logical vector of the same size of Qsim and Qobs, or '...
-                'a numeric vector of indices']);
-    end                                                      % use all non missing Q if idx is not provided otherwise
-end
-
+%% Set weights
+w_default = [1,1,1];          % default weights
 
 % update defaults weights if needed  
 if nargin < 4 || isempty(w)
@@ -74,11 +48,8 @@ if nargin < 4 || isempty(w)
 else
     if ~min(size(w)) == 1 || ~max(size(w)) == 3                            % check weights variable for size
         error('Weights should be a 3x1 or 1x3 vector.')                    % or throw error        
-    end                                                         % use dafult weight is w is not provided
+    end
 end   
-%% filter to only selected indices
-obs = obs(idx);
-sim = sim(idx);                                            
 
 %% invert the time series and add a small constant to avoid issues with 0 flows
 % Pushpalatha et al (2012) suggests to set e at 1/100th of the mean of the

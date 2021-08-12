@@ -1,28 +1,14 @@
-% This file is part of the Modular Assessment of Rainfall-Runoff Models 
-% Toolbox (MARRMoT) – User manual. It contains an example application of 
-% calibration of a single models to a single catchment. See section 3 in 
-% the User Manual for details.
-%
-% NOTE: this example uses a custom function 'my_cmaes' to perform the
-% optimisation, it is a wrapper around 'cmaes' to ensure inputs and outputs
-% are consistent with other MATLAB's optimisation algorithms (e.g.
-% 'fminsearch' or 'fminsearchbnd').
-% While the wrapper is provided as part of MARRMoT, it requires the source 
-% code to 'cmaes' to function, it is available at: 
-% http://cma.gforge.inria.fr/cmaes.m
-
-% The wrapper is necessary for the optimiser to function within the
-% MARRMoT_model.calibrate method.
-% Alternatively any model can be calibrated using any optimisation
-% algorithm using the MARRMoT_model.calc_par_fitness method which returns
-% the value of an objective function and can be used as input to an
-% optimiser.
-
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 
-% This example workflow includes 8 steps:
+% Contact:  l.trotter@unimelb.edu.au
+
+% This example workflow contains an example application of calibration of a
+% single models to a single catchment.
+% It includes 7 steps:
 %
 % 1. Data preparation
 % 2. Model choice and setup
@@ -31,6 +17,21 @@
 % 5. Model calibration
 % 6. Evaluation of calibration results
 % 7. Output vizualization
+
+% NOTE: this example uses a custom function 'my_cmaes' to perform the
+% optimisation, it is a wrapper around 'cmaes' to ensure inputs and outputs
+% are consistent with other MATLAB's optimisation algorithms (e.g.
+% 'fminsearch' or 'fminsearchbnd').
+% While the wrapper is provided as part of MARRMoT, it requires the source 
+% code to 'cmaes' to function, it is available at: 
+% http://cma.gforge.inria.fr/cmaes.m
+%
+% The wrapper is necessary for the optimiser to function within the
+% MARRMoT_model.calibrate method.
+% Alternatively any model can be calibrated using any optimisation
+% algorithm using the MARRMoT_model.calc_par_fitness method which returns
+% the value of an objective function and can be used as input to an
+% optimiser.
 
 %% 1. Prepare data
 % Load the data
@@ -48,8 +49,9 @@ input_climatology.delta_t  = 1;                                                 
 Q_obs = data_MARRMoT_examples.streamflow;
 
 %% 2. Define the model settings and create the model object
-model     = 'm_07_gr4j_4p_2s';                                             % Name of the model function (these can be found in Supporting Material 2)
-m         = feval(model);
+%model     = 'm_37_hbv_15p_5s';                                             % Name of the model function (these can be found in Supporting Material 2)
+
+= feval(model);
 parRanges = m.parRanges;                                                   % Parameter ranges
 numParams = m.numParams;                                                   % Number of parameters
 numStores = m.numStores;                                                   % Number of stores
@@ -83,6 +85,7 @@ optim_opts.cmaes_opts.TolHistFun = 1e-5;                                   % sto
 optim_opts.cmaes_opts.MaxIter    = 5;                                      % just do 5 iterations, to check if it works
 optim_opts.cmaes_opts.SaveFilename      = 'wf_ex_4_cmaesvars.mat';         % output file of cmaes variables
 optim_opts.cmaes_opts.LogFilenamePrefix = 'wf_ex_4_';                      % prefix for cmaes log-files
+optim_opts.cmaes_opts.EvalParallel = true;
 
 % initial parameter set
 par_ini = mean(parRanges,2);                                               % same as default value

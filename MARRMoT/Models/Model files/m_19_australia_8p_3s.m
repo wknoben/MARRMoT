@@ -1,13 +1,26 @@
 classdef m_19_australia_8p_3s < MARRMoT_model
-    % Class for australia model
+% Class for hydrologic conceptual model: Australia model
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Farmer, D., Sivapalan, M., & Jothityangkoon, C. (2003). Climate, soil, 
+% and vegetation controls upon the variability of water balance in 
+% temperate and semiarid landscapes: Downward approach to water balance 
+% analysis. Water Resources Research, 39(2). 
+% http://doi.org/10.1029/2001WR000328
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
+
         function obj = m_19_australia_8p_3s()
             obj.numStores = 3;                                             % number of model stores
             obj.numFluxes = 8;                                             % number of model fluxes

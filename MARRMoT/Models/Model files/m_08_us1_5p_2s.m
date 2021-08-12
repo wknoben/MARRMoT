@@ -1,13 +1,24 @@
 classdef m_08_us1_5p_2s < MARRMoT_model
-    % Class for us1 model
+% Class for hydrologic conceptual model: United States model v1
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Bai, Y., Wagener, T., & Reed, P. (2009). A top-down framework for 
+% watershed model evaluation and selection under uncertainty. Environmental
+% Modelling & Software, 24(8), 901–916. 
+% http://doi.org/10.1016/j.envsoft.2008.12.012
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_08_us1_5p_2s()
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 9;                                             % number of model fluxes

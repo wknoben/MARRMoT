@@ -1,13 +1,24 @@
 classdef m_43_gsmsocont_12p_6s < MARRMoT_model
-    % Class for gsmsocont model
+% Class for hydrologic conceptual model: GSM-SOCONT
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Schaefli, B., Hingray, B., Niggli, M., & Musy, a. (2005). A conceptual 
+% glacio-hydrological model for high mountainous catchments. Hydrology and 
+% Earth System Sciences Discussions, 2(1), 73–117. 
+% http://doi.org/10.5194/hessd-2-73-2005
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_43_gsmsocont_12p_6s()
             obj.numStores = 6;                                             % number of model stores
             obj.numFluxes = 19;                                            % number of model fluxes

@@ -1,13 +1,25 @@
 classdef m_30_mopex2_7p_5s < MARRMoT_model
-    % Class for mopex2 model
+% Class for hydrologic conceptual model: MOPEX-2
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Ye, S., Yaeger, M., Coopersmith, E., Cheng, L., & Sivapalan, M. (2012). 
+% Exploring the physical controls of regional patterns of flow duration 
+% curves - Part 2: Role of seasonality, the regime curve, and associated 
+% process controls. Hydrology and Earth System Sciences, 16(11), 4447–4465.
+% http://doi.org/10.5194/hess-16-4447-2012
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_30_mopex2_7p_5s()
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 10;                                            % number of model fluxes

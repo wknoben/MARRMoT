@@ -1,13 +1,24 @@
 classdef m_11_collie3_6p_2s < MARRMoT_model
-    % Class for collie3 model
+% Class for hydrologic conceptual model: Collie river v3
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Jothityangkoon, C., M. Sivapalan, and D. Farmer (2001), Process controls
+% of water balance variability in a large semi-arid catchment: downward 
+% approach to hydrological model development. Journal of Hydrology, 254,
+% 174198. doi: 10.1016/S0022-1694(01)00496-6.
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_11_collie3_6p_2s()
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 7;                                             % number of model fluxes

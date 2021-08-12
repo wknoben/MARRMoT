@@ -1,13 +1,28 @@
 classdef m_45_prms_18p_7s < MARRMoT_model
-    % Class for prms model
+% Class for hydrologic conceptual model: PRMS
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Leavesley, G. H., R. Lichty, B. Troutman, and L. Saindon (1983), 
+% Precipitation-Runo Modeling System: User's Manual. U.S. Geological 
+% Survey, Water-Resources Investigations Report 83-4238, 207
+%
+% Markstrom, S. L., S. Regan, L. E. Hay, R. J. Viger, R. M. T. Webb, R. A. 
+% Payn, and J. H. LaFontaine (2015), PRMS-IV, the Precipitation-Runoff 
+% Modeling System, Version 4. In U.S. Geological Survey Techniques and
+% Methods, book 6, chap. B7, 158. doi: http://dx.doi.org/10.3133/tm6B7
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_45_prms_18p_7s()
             obj.numStores = 7;                                             % number of model stores
             obj.numFluxes = 25;                                            % number of model fluxes

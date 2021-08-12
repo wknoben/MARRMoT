@@ -1,11 +1,13 @@
 function [out] = infiltration_6(p1,p2,S,Smax,fin)
 %infiltration_6 Creates scaled, non-linear infiltration
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Infiltration rate non-linearly scaled by relative storage
 % Constraints:  f <= fin
@@ -14,8 +16,6 @@ function [out] = infiltration_6(p1,p2,S,Smax,fin)
 %               S    - current storage [mm]
 %               Smax - maximum contributing storage [mm]
 %               fin  - incoming flux [mm/d]
-%
-% WK, 07/10/2018
 
 out = min([fin,p1.*max(0,S/Smax).^(p2).*fin]);
 

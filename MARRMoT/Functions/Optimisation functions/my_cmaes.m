@@ -9,6 +9,12 @@ function [x,...                                                            % Sol
 % This is a wrapper around CMA-ES optimisation algorithm to make its inputs
 % and outputs comparable with MATLAB's fminsearch
 
+% Copyright (C) 2021 L. Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
 % This requires cmaes.m, which can be retrieved from:
 % http://cma.gforge.inria.fr/
 

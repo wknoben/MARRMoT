@@ -1,17 +1,14 @@
-% This file is part of the Modular Assessment of Rainfall-Runoff Models 
-% Toolbox (MARRMoT) – User manual. It contains an example of crash tests 
-% that can be used to quality control a newly create model function. See 
-% section 4 in the manual for details.
-% 
-% Author:   Wouter J.M. Knoben
-% Date:     29-09-2018
-% Contact:  w.j.m.knoben@bristol.ac.uk
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 
-% This example workflow includes 4 steps:
+% Contact:  l.trotter@unimelb.edu.au
+
+% This example workflow contains an example of crash tests 
+% that can be used to quality control a newly create model function.
+% It includes 4 steps:
 %
 % 1. Specify the model and solver
 % 2. Load test data

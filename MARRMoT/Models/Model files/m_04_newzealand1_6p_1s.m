@@ -1,13 +1,24 @@
 classdef m_04_newzealand1_6p_1s < MARRMoT_model
-    % Class for newzealand1 model
+% Class for hydrologic conceptual model: New Zealand model v1
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Atkinson, S. E., Woods, R. A., & Sivapalan, M. (2002). Climate and
+% landscape controls on water balance model complexity over changing 
+% timescales. Water Resources Research, 38(12), 17–50. 
+% http://doi.org/10.1029/2002WR001487
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_04_newzealand1_6p_1s()
             obj.numStores = 1;                                             % number of model stores
             obj.numFluxes = 5;                                             % number of model fluxes

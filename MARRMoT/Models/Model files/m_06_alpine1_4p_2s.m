@@ -1,13 +1,24 @@
 classdef m_06_alpine1_4p_2s < MARRMoT_model
-    % Class for alpine1 model
+% Class for hydrologic conceptual model: Alpine model v1
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Eder, G., Sivapalan, M., & Nachtnebel, H. P. (2003). Modelling water 
+% balances in an Alpine catchment through exploitation of emergent 
+% properties over changing time scales. Hydrological Processes, 17(11), 
+% 2125–2149. http://doi.org/10.1002/hyp.1325
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_06_alpine1_4p_2s()
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 6;                                             % number of model fluxes

@@ -2,11 +2,13 @@ function [val,c,idx,w] = of_mean_hilo_root5_KGE(obs,sim,idx,w)
 % of_mean_hilo_KGE Calculates the average Kling-Gupta Efficiency (Gupta et
 % al., 2009) of the untransformed and fifth root (Chiew et al., 1993) of
 % streamflow. Ingores timesteps with negative flow values.
-%
+
 % Copyright (C) 2021 L. Trotter
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 % In:
 % obs       - time series of observations       [nx1]
 % sim       - time series of simulations        [nx1]

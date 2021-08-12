@@ -1,13 +1,30 @@
 classdef m_34_flexis_12p_5s < MARRMoT_model
-    % Class for flexis model
+% Class for hydrologic conceptual model: Flex-IS
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Fenicia, F., McDonnell, J. J., & Savenije, H. H. G. (2008). Learning from
+% model improvement: On the contribution of complementary data to process
+% understanding. Water Resources Research, 44(6), 1–13. 
+% http://doi.org/10.1029/2007WR006386
+%
+% Nijzink, R., Hutton, C., Pechlivanidis, I., Capell, R., Arheimer, B., 
+% Freer, J., … Hrachowitz, M. (2016). The evolution of root zone moisture 
+% capacities after land use change: a step towards predictions under 
+% change? Hydrology and Earth System Sciences Discussions, 20(August), 
+% 4775–4799. http://doi.org/10.5194/hess-2016-427
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)       
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_34_flexis_12p_5s()
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 14;                                             % number of model fluxes

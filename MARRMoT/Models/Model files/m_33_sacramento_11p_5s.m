@@ -1,14 +1,30 @@
 classdef m_33_sacramento_11p_5s < MARRMoT_model
-    % Class for sacramento model
+% Class for hydrologic conceptual model: Sacramento-SMA
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model references
+% National Weather Service (2005), II.3-SAC-SMA: Conceptualization of the 
+% Sacramento Soil Moisture Accounting model.In National Weather Service 
+% River Forecast System (NWSRFS) User Manual, 113
+%
+% Koren, V. I., Smith, M., Wang, D., & Zhang, Z. (2000). Use of soil 
+% property data in the derivation of conceptual rainfall-runoff model 
+% parameters. Proceedings of the 15th Conference on Hydrology, AMS, Long 
+% Beach, CA, (1), 103–106.
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
-        theta_derived   % derived parameters
+        % model-specific attributes
+        
+        theta_derived      % Derived parameters
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_33_sacramento_11p_5s()          
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 20;                                            % number of model fluxes

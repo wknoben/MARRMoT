@@ -1,15 +1,30 @@
 classdef m_44_echo_16p_6s < MARRMoT_model
-    % Class for echo model
+% Class for hydrologic conceptual model: ECHO
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model references
+% Schaefli, B., Hingray, B., Niggli, M., & Musy, a. (2005). A conceptual 
+% glacio-hydrological model for high mountainous catchments. Hydrology and 
+% Earth System Sciences Discussions, 2(1), 73–117. 
+% http://doi.org/10.5194/hessd-2-73-2005
+%
+% Schaefli, B., Nicotina, L., Imfeld, C., Da Ronco, P., Bertuzzo, E., & 
+% Rinaldo, A. (2014). SEHR-ECHO v1.0: A spatially explicit hydrologic 
+% response model for ecohydrologic applications. Geoscientific Model 
+% Development, 7(6), 2733–2746. http://doi.org/10.5194/gmd-7-2733-2014
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
         
-        aux_theta         % auxiliary parameters
+        aux_theta      % Auxiliary parameters
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_44_echo_16p_6s()
             obj.numStores = 6;                                             % number of model stores
             obj.numFluxes = 20;                                            % number of model fluxes

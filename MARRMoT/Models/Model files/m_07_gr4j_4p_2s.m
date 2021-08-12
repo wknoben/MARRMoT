@@ -1,13 +1,28 @@
 classdef m_07_gr4j_4p_2s < MARRMoT_model
-    % class for gr4j model
+% Class for hydrologic conceptual model: GR4J
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model references
+% Perrin, C., Michel, C., & Andréassian, V. (2003). Improvement of a 
+% parsimonious model for streamflow simulation. Journal of Hydrology, 
+% 279(1-4), 275–289. http://doi.org/10.1016/S0022-1694(03)00225-7
+%
+% Santos, L., Thirel, G., & Perrin, C. (2017). State-space representation 
+% of a bucket-type rainfall-runoff model: a case study with State-Space GR4
+% (version 1.0). Geoscientific Model Development Discussions, 1–22. 
+% http://doi.org/10.5194/gmd-2017-264
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_07_gr4j_4p_2s()            
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 13;                                            % number of model fluxes

@@ -3,11 +3,13 @@ function [val,c,idx,w] = of_root5_KGE(obs,sim,idx,w)
 % simulated streamflow (Gupta et al., 2009), intended to capture low flow
 % aspects better (Chiew et al., 1993). Ignores time steps with obs < 0
 % values.
-%
+
 % Copyright (C) 2021 L. Trotter
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 % In:
 % obs       - time series of observations       [nx1]
 % sim       - time series of simulations        [nx1]

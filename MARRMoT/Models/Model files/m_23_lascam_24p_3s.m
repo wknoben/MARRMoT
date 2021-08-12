@@ -1,14 +1,25 @@
 classdef m_23_lascam_24p_3s < MARRMoT_model
-    % Class for lascam model
+% Class for hydrologic conceptual model: Large-scale catchment water and 
+% salt balance model element 
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Sivapalan, M., Ruprecht, J. K., & Viney, N. R. (1996). Water and salt 
+% balance modelling to predict the effects of land-use changes in forested 
+% catchments. 1. Small catchment water balance model. Hydrological 
+% Processes, 10(3).
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
-        aux_theta       % Auxiliary parameters
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_23_lascam_24p_3s()
             obj.numStores = 3;                                             % number of model stores
             obj.numFluxes = 16;                                            % number of model fluxes

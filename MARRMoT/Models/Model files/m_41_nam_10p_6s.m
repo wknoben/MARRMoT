@@ -1,15 +1,25 @@
 classdef m_41_nam_10p_6s < MARRMoT_model
-    % Class for nam model
+% Class for hydrologic conceptual model: NAM
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model references
+% Nielsen, S. A., & Hansen, E. (1973). Numerical simulation of he rainfall-
+% runoff process on a daily basis. Nordic Hydrology, (4), 171–190. 
+% http://doi.org/https://doi.org/10.2166/nh.1973.0013
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
-        aux_theta      % Auxiliary parameters
+        % model-specific attributes
         
+        aux_theta      % Auxiliary parameters
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_41_nam_10p_6s()
             obj.numStores = 6;                                             % number of model stores
             obj.numFluxes = 14;                                            % number of model fluxes

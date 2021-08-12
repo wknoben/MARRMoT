@@ -1,14 +1,30 @@
 classdef m_22_vic_10p_3s < MARRMoT_model
-    % Class for vic model
+% Class for hydrologic conceptual model:  VIC
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model references
+% Clark, M. P., Slater, A. G., Rupp, D. E., Woods, R. A., Vrugt, J. A., 
+% Gupta, H. V., … Hay, L. E. (2008). Framework for Understanding Structural
+% Errors (FUSE): A modular framework to diagnose differences between 
+% hydrological models. Water Resources Research, 44(12), W00B02. 
+% http://doi.org/10.1029/2007WR006735
+%
+% Liang, X., Lettenmaier, D. P., Wood, E. F., & Burges, S. J. (1994). A 
+% simple hydrologically based model of land surface water and energy fluxes
+% for general circulation models. Journal of Geophysical Research, 99, 
+% 14415–14428.
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
-        aux_theta        % Auxiliary parameters
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_22_vic_10p_3s()
             obj.numStores = 3;                                             % number of model stores
             obj.numFluxes = 11;                                            % number of model fluxes

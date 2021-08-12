@@ -1,14 +1,23 @@
 classdef m_25_tcm_6p_4s < MARRMoT_model
-    % Class for tcm model
+% Class for hydrologic conceptual model: Thames Catchment Model
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Moore, R. J., & Bell, V. A. (2001). Comparison of rainfall-runoff models 
+% for flood forecasting. Part 1: Literature review of models. Bristol: 
+% Environment Agency.
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
-        aux_theta             % auxiliary calculated parameters
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_25_tcm_6p_4s()
             obj.numStores = 4;                                             % number of model stores
             obj.numFluxes = 11;                                            % number of model fluxes

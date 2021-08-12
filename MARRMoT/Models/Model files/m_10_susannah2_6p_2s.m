@@ -1,13 +1,24 @@
 classdef m_10_susannah2_6p_2s < MARRMoT_model
-    % Class for susannah2 model
+% Class for hydrologic conceptual model: Susannah Brook model v2
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Son, K., & Sivapalan, M. (2007). Improving model structure and reducing 
+% parameter uncertainty in conceptual water balance models through the use 
+% of auxiliary data. Water Resources Research, 43(1). 
+% https://doi.org/10.1029/2006WR005032
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_10_susannah2_6p_2s()
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 8;                                             % number of model fluxes

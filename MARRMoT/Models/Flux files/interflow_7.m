@@ -1,11 +1,13 @@
 function [out] = interflow_7(S,Smax,p1,p2,p3,dt)
 %interflow_7 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Non-linear interflow if storage exceeds a threshold
 % Constraints:  f <= (S-p1*Smax)/dt
@@ -17,8 +19,6 @@ function [out] = interflow_7(S,Smax,p1,p2,p3,dt)
 %               S    - current storage [mm]
 %               Smax - maximum storage [mm]
 %               dt   - time step size [d]
-%
-% WK, 09/10/2018
 
 out = min(max(0,(S-p1.*Smax)/dt),(max(0,S-p1.*Smax)./p2).^(1/p3));
 

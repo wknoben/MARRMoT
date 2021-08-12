@@ -1,5 +1,12 @@
 classdef MARRMoT_model < handle
-    % Class for MARRMoT models
+% Superclass for all MARRMoT models
+    
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
     properties
         % static attributes, set for each models in the model definition
         numStores         % number of model stores
@@ -405,6 +412,13 @@ classdef MARRMoT_model < handle
              if isempty(cal_idx)
                  cal_idx = 1:length(Q_obs);
              end
+             
+             % use the data from the start to the last value of cal_idx to
+             % run the simulation
+             if islogical(cal_idx); cal_idx = find(cal_idx); end
+             input_climate_all = obj.input_climate;
+             obj.input_climate = input_climate_all(1:max(cal_idx),:);
+             Q_obs = Q_obs(1:max(cal_idx));
 
              % if the initial parameter set isn't set,  start from mean
              % values of parameter range
@@ -430,6 +444,10 @@ classdef MARRMoT_model < handle
              
              % if of_cal was inverted, invert it back before returning
              of_cal = (-1)^inverse_flag * of_cal;
+             
+             % reset the whole input climate as it was before the
+             % calibration
+             obj.input_climate = input_climate_all;
         end
          
          % function to return default solver options

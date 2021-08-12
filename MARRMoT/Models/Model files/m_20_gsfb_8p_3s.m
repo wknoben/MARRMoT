@@ -1,13 +1,27 @@
 classdef m_20_gsfb_8p_3s < MARRMoT_model
-    % Class for gsfb model
+% Class for hydrologic conceptual model: GSFB
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Nathan, R. J., & McMahon, T. A. (1990). SFB model part l . Validation of 
+% fixed model parameters. In Civil Eng. Trans. (pp. 157–161).
+% 
+% Ye, W., Bates, B. C., Viney, N. R., & Sivapalan, M. (1997). Performance 
+% of conceptual rainfall-runoff models in low-yielding ephemeral catchments.
+% Water Resources Research, 33(1), 153–166. http://doi.org/doi:10.1029/96WR02840
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
+
         function obj = m_20_gsfb_8p_3s()
             obj.numStores = 3;                                             % number of model stores
             obj.numFluxes = 6;                                             % number of model fluxes

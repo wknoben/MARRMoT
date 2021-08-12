@@ -1,17 +1,14 @@
-% This file is part of the Modular Assessment of Rainfall-Runoff Models 
-% Toolbox (MARRMoT) – User manual. It contains an example application of a
-% single model to a single catchment. See section 3 in the User Manual 
-% for details.
-% 
-% Author:   Wouter J.M. Knoben
-% Date:     26-09-2018
-% Contact:  w.j.m.knoben@bristol.ac.uk
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 
-% This example workflow includes 5 steps:
+% Contact:  l.trotter@unimelb.edu.au
+
+% This example workflow  contains an example application of a single model 
+% to a single catchment.
+% It includes 5 steps:
 %
 % 1. Data preparation
 % 2. Model choice and setup

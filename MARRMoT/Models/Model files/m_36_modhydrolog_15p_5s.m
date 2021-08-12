@@ -1,13 +1,26 @@
 classdef m_36_modhydrolog_15p_5s < MARRMoT_model
-    % Class for modhydrolog model
+% Class for hydrologic conceptual model: MODHYDROLOG
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model references
+% Chiew, F. H. S. (1990). Estimating groundwater recharge using an
+% integrated surface and groundwater model. University of Melbourne.
+%
+% Chiew, F., & McMahon, T. (1994). Application of the daily rainfall-runoff
+% model MODHYDROLOG to 28 Australian catchments. Journal of Hydrology, 
+% 153(1–4), 383–416. https://doi.org/10.1016/0022-1694(94)90200-3
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_36_modhydrolog_15p_5s()
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 16;                                            % number of model fluxes

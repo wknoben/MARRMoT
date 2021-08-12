@@ -1,11 +1,13 @@
 function [out] = routing_1(p1,p2,p3,S,dt)
-%routing_1 Creates function for non-linear routing
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+%routing_1 non-linear routing
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Threshold-based non-linear routing
 % Constraints:  f <= S/dt
@@ -15,8 +17,6 @@ function [out] = routing_1(p1,p2,p3,S,dt)
 %               p3   - fractional release parameter [-]
 %               S    - current storage [mm]
 %               dt   - time step size [d]
-%
-% WK, 08/10/2018
 
 out = min([S/dt,p1.*(max(S,0).^p2),p3.*S/dt]);
 

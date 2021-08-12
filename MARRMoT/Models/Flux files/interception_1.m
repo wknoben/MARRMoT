@@ -1,10 +1,12 @@
 function [out] = interception_1(In,S,Smax,varargin)
-%interception_1 Creates function for store overflow: uses logistic smoother.
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+%interception_1
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 % Flux function
 % ------------------
 % Description:  Interception excess when maximum capacity is reached

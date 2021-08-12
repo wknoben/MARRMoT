@@ -1,10 +1,12 @@
 function [out] = smoothThreshold_storage_logistic(S,Smax,r,e)
 %smoothThreshold_storage_logistic Logisitic smoother for storage threshold functions.
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2018 Wouter J.M. Knoben
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 %   Smooths the transition of threshold functions of the form:
 %
 %   Q = { P, if S = Smax

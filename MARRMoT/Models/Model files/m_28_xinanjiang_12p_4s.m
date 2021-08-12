@@ -1,15 +1,28 @@
 classdef m_28_xinanjiang_12p_4s < MARRMoT_model
-    % Class for xinanjiang model
+% Class for hydrologic conceptual model: Xinanjiang
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model references
+% Jayawardena, A. W., & Zhou, M. C. (2000). A modified spatial soil moisture
+% storage capacity distribution curve for the Xinanjiang model. Journal of 
+% Hydrology, 227(1-4), 93–113. http://doi.org/10.1016/S0022-1694(99)00173-0
+% 
+% Zhao, R.-J. (1992). The Xinanjiang model applied in China. Journal of 
+% Hydrology, 135(1-4), 371–381. http://doi.org/10.1016/0022-1694(92)90096-E
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
         
         aux_theta      % Auxiliary parameters
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_28_xinanjiang_12p_4s()
             obj.numStores = 4;                                             % number of model stores
             obj.numFluxes = 10;                                            % number of model fluxes

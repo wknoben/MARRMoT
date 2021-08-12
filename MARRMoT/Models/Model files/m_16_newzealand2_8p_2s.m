@@ -1,13 +1,24 @@
 classdef m_16_newzealand2_8p_2s < MARRMoT_model
-    % Class for newzealand2 model
+% Class for hydrologic conceptual model: New Zealand model v2
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Atkinson, S. E., Sivapalan, M., Woods, R. A., & Viney, N. R. (2003). 
+% Dominant physical controls on hourly flow predictions and the role of 
+% spatial variability: Mahurangi catchment, New Zealand. Advances in Water 
+% Resources, 26(3), 219–235. http://doi.org/10.1016/S0309-1708(02)00183-5
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_16_newzealand2_8p_2s()
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 8;                                             % number of model fluxes

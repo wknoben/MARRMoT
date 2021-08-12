@@ -1,13 +1,28 @@
 classdef m_17_penman_4p_3s < MARRMoT_model
-    % Class for pennman model
+% Class for hydrologic conceptual model: Penman
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Penman, H. L. (1950). the Dependence of Transpiration on Weather and Soil
+% Conditions. Journal of Soil Science, 1(1), 74–89. 
+% http://doi.org/10.1111/j.1365-2389.1950.tb00720.x
+%
+% Wagener, T., Lees, M. J., & Wheater, H. S. (2002). A toolkit for the 
+% development and application of parsimonious hydrological models. In Singh,
+% Frevert, & Meyer (Eds.), Mathematical Models of Small Watershed Hydrology
+% - Volume 2 (pp. 91–139). Water Resources Publications LLC, USA.
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_17_penman_4p_3s()
             obj.numStores = 3;                                             % number of model stores
             obj.numFluxes = 7;                                             % number of model fluxes

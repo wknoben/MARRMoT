@@ -1,8 +1,10 @@
 classdef m_47_IHM19_16p_4s < MARRMoT_model
-    % class for Forellenbach model
+% Class for hydrologic conceptual model: Forellenbach model
     
-% Copyright (C) 2021 Clara Brandes
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+% Copyright (C) 2021 Clara Brandes, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %
 % Model reference
@@ -11,13 +13,11 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
 % Bayerischer Wald. MSc Thesis. Technische Univerisität Dresden, Germany.
 
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_47_IHM19_16p_4s()            
             obj.numStores = 4;                                             % number of model stores
             obj.numFluxes = 18;                                            % number of model fluxes

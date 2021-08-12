@@ -2,11 +2,13 @@ function [sim, obs, idx] = check_and_select(sim, obs, idx)
 % CHECK_AND_SELECT checks that sim and obs have the same number of
 % elements, then filters them based on the values in idx AND on the steps 
 % where obs >= 0.
-%
-% Copyright (C) 2021 L. Trotter
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2021 Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 % In:
 % obs       - time series of observations       [nx1]
 % sim       - time series of simulations        [nx1]

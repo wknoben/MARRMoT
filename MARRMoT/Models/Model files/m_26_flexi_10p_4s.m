@@ -1,13 +1,24 @@
 classdef m_26_flexi_10p_4s < MARRMoT_model
-    % Class for flexi model
+% Class for hydrologic conceptual model: Flex-I
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Fenicia, F., McDonnell, J. J., & Savenije, H. H. G. (2008). Learning from
+% model improvement: On the contribution of complementary data to process 
+% understanding. Water Resources Research, 44(6), 1–13. 
+% http://doi.org/10.1029/2007WR006386
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_26_flexi_10p_4s()
             obj.numStores = 4;                                             % number of model stores
             obj.numFluxes = 11;                                            % number of model fluxes

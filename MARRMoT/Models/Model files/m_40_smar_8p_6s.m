@@ -1,13 +1,27 @@
 classdef m_40_smar_8p_6s < MARRMoT_model
-    % Class for smar model
+% Class for hydrologic conceptual model: SMAR
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% O’Connell, P. E., Nash, J. E., & Farrell, J. P. (1970). River flow 
+% forecasting through conceptual models part II - the Brosna catchment at 
+% Ferbane. Journal of Hydrology, 10, 317–329.
+%
+% Tan, B. Q., & O’Connor, K. M. (1996). Application of an empirical 
+% infiltration equation in the SMAR conceptual model. Journal of Hydrology,
+% 185(1-4), 275–295. http://doi.org/10.1016/0022-1694(95)02993-1
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_40_smar_8p_6s()
             obj.numStores = 6;                                             % number of model stores
             obj.numFluxes = 20;                                            % number of model fluxes

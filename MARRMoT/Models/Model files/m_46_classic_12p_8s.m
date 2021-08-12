@@ -1,15 +1,25 @@
 classdef m_46_classic_12p_8s < MARRMoT_model
-    % Class for classic model
+% Class for hydrologic conceptual model: CLASSIC
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Crooks, S. M., & Naden, P. S. (2007). CLASSIC: a semi-distributed 
+% rainfall-runoff modelling system. Hydrology and Earth System Sciences, 
+% 11(1), 516–531. http://doi.org/10.5194/hess-11-516-2007
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
         
-        aux_theta    % Auxiliary parameters
+        aux_theta      % Auxiliary parameters
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_46_classic_12p_8s()
             obj.numStores = 8;                                             % number of model stores
             obj.numFluxes = 21;                                            % number of model fluxes

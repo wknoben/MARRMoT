@@ -1,22 +1,23 @@
 function [val, idx] = of_bias_penalised_log(obs,sim, idx, of_name,varargin)
-% of_bias_penalised_log applies a bias penalisation to an objective
+% OF_BIAS_PENALISED_LOG applies a bias penalisation to an objective
 % function as suggested by Viney et al. (2009). Ignore timesteps with
 % negative values.
-%
-% Copyright (C) 2021 L. Trotter
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
-% WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
 % Given the efficiency of te OF specified (E_of):
 %       E = E_of - 5 * abs(ln(1 + B)) ^ 2.5
 % where B = mean(sim - obs) / mean(obs) is the bias between obs and sim
-%
+
+% Copyright (C) 2021 L. Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
 % In:
 % obs       - time series of observations       [nx1]
 % sim       - time series of simulations        [nx1]
 % idx       - optional vector of indices to use for calculation, can be
 %               logical vector [nx1] or numeric vector [mx1], with m <= n
-% of_name   - string name of the objective function
+% of_name   - string name of the objective function to penalise
 % varargin  - additional arguments to of_name
 %
 % Out:

@@ -1,11 +1,13 @@
 function [out] = percolation_4(p1,p2,p3,p4,p5,S,Smax,dt)
 %percolation_4 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Demand-based percolation scaled by available moisture
 % Constraints:  f <= S/dt
@@ -18,8 +20,6 @@ function [out] = percolation_4(p1,p2,p3,p4,p5,S,Smax,dt)
 %               S    - current storage in the supplying store [mm]
 %               Smax - maximum storage in the supplying store [mm]
 %               dt   - time step size [d]
-%
-% WK, 08/10/2018
 
 % Note: for certain extreme parameter values (very small stores, highly
 % non-linear p3) and small computational errors that lead to small negative

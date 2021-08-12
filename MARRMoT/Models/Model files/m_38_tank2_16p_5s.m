@@ -1,14 +1,24 @@
 classdef m_38_tank2_16p_5s < MARRMoT_model
-    % Class for tank2 model
+% Class for hydrologic conceptual model: Tank model - SMA
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model references
+% Sugawara, M. (1995). Tank model. In V. P. Singh (Ed.), Computer models of
+% watershed hydrology (pp. 165–214). Water Resources Publications, USA.
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
-        aux_theta       % Auxiliary parameters
+        % model-specific attributes
+        
+        aux_theta      % Auxiliary parameters
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_38_tank2_16p_5s()
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 14;                                            % number of model fluxes

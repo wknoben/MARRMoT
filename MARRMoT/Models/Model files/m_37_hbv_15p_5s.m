@@ -1,13 +1,24 @@
 classdef m_37_hbv_15p_5s < MARRMoT_model
-    % Class for hbv model
+% Class for hydrologic conceptual model: HBV-96
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Lindström, G., Johansson, B., Persson, M., Gardelin, M., & Bergström, S. 
+% (1997). Development and test of the distributed HBV-96 hydrological model. 
+% Journal of Hydrology, 201, 272–288. 
+% https://doi.org/https://doi.org/10.1016/S0022-1694(97)00041-3
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_37_hbv_15p_5s()
             obj.numStores = 5;                                             % number of model stores
             obj.numFluxes = 13;                                            % number of model fluxes

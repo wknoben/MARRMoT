@@ -1,13 +1,38 @@
 classdef m_14_topmodel_7p_2s < MARRMoT_model
-    % Class for topmodel model
+% Class for hydrologic conceptual model: TOPMODEL
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Beven, K., Lamb, R., Quinn, P., Romanowicz, R., & Freer, J. (1995). 
+% TOPMODEL. In V. P. Singh (Ed.), Computer Models of Watershed Hydrology 
+% (pp. 627–668). Baton Rouge: Water Resources Publications, USA.
+%
+% Beven, K. J., & Kirkby, M. J. (1979). A physically based, variable 
+% contributing area model of basin hydrology / Un modèle à base physique 
+% de zone d’appel variable de l'hydrologie du bassin versant. Hydrological 
+% Sciences Bulletin, 24(1), 43–69. http://doi.org/10.1080/02626667909491834
+%
+% Clark, M. P., Slater, A. G., Rupp, D. E., Woods, R. a., Vrugt, J. a., 
+% Gupta, H. V., … Hay, L. E. (2008). Framework for Understanding Structural
+% Errors (FUSE): A modular framework to diagnose differences between 
+% hydrological models. Water Resources Research, 44(12). 
+% http://doi.org/10.1029/2007WR006735
+%
+% Sivapalan, M., Beven, K., & Wood, E. F. (1987). On hydrologic similarity:
+% 2. A scaled model of storm runoff production. Water Resources Research, 
+% 23(12), 2266–2278. http://doi.org/10.1029/WR023i012p02266
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_14_topmodel_7p_2s()
             obj.numStores = 2;                                             % number of model stores
             obj.numFluxes = 6;                                             % number of model fluxes

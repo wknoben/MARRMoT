@@ -1,13 +1,24 @@
 classdef m_18_simhyd_7p_3s < MARRMoT_model
-    % Class for simhyd model
+% Class for hydrologic conceptual model: SimHyd
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
+% WARRANTY. See <https://www.gnu.org/licenses/> for details.
+
+% Model reference
+% Chiew, F. H. S., Peel, M. C., & Western, A. W. (2002). Application and 
+% testing of the simple rainfall-runoff model SIMHYD. In V. P. Singh & D. 
+% K. Frevert (Eds.), Mathematical Models of Small Watershed Hydrology (pp. 
+% 335–367). Chelsea, Michigan, USA: Water Resources Publications LLC, USA.
+
     properties
-        % in case the model has any specific properties (eg derived theta,
-        % add it here)
+        % model-specific attributes
     end
     methods
         
-        % this function runs once as soon as the model object is created
-        % and sets all the static properties of the model
+        % creator method
         function obj = m_18_simhyd_7p_3s()          
             obj.numStores = 3;                                             % number of model stores
             obj.numFluxes = 10;                                            % number of model fluxes

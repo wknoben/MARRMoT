@@ -1,14 +1,22 @@
 function [ UH ] = uh_6_gamma(n,k,delta_t)
 %uh_6_gamma Unit Hydrograph [days] from gamma function.
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 %   Inputs
 %   n       = shape parameter [-]
 %   k       = time delay for flow reduction by a factor e [d]
 %   delta_t = time step size [d]
+%
+%   Output
+%   UH      - unit hydrograph [nx2]
+%               uh's first row contains coeficients to splut flow at each
+%               of n timesteps forward, the second row contains zeros now,
+%               these are the still-to-flow values.
 %
 %   Unit hydrograph spreads the input volume over a time period delay.
 %   Percentage of input returned only decreases. 

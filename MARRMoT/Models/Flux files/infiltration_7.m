@@ -1,12 +1,13 @@
 function [out] = infiltration_7(p1,p2,S,Smax,fin)
-%infiltration_7
-% source: infiltration_1 with customization
-%
-% Copyright (C) 2021 Clara Brandes
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+%infiltration_7: infiltration_1 with customization
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Infiltration as exponentially declining based on relative storage
 % Constraints:  f <= fin

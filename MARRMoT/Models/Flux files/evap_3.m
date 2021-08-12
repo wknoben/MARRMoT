@@ -1,11 +1,13 @@
 function [out] = evap_3(p1,S,Smax,Ep,dt)
-%evap_3 Creates function for evaporation: 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+%evap_3 
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Evaporation based on scaled current water storage and wilting point
 % Constraints:  f <= Ep
@@ -15,8 +17,6 @@ function [out] = evap_3(p1,S,Smax,Ep,dt)
 %               Smax - maximum storage [mm]
 %               Ep   - potential evapotranspiration rate [mm/d]
 %               dt   - time step size [d]
-%
-% WK, 05/10/2018
 
 out = min([S/(p1*Smax)*Ep,Ep,S/dt]);
 

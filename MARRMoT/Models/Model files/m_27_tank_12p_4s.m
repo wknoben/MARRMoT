@@ -13,6 +13,7 @@ classdef m_27_tank_12p_4s < MARRMoT_model
 
     properties
         % model-specific attributes
+        aux_theta % Auxiliary parameters
     end
     methods
         

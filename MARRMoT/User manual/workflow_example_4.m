@@ -49,9 +49,9 @@ input_climatology.delta_t  = 1;                                                 
 Q_obs = data_MARRMoT_examples.streamflow;
 
 %% 2. Define the model settings and create the model object
-%model     = 'm_37_hbv_15p_5s';                                             % Name of the model function (these can be found in Supporting Material 2)
 
-= feval(model);
+model     = 'm_37_hbv_15p_5s';                                             % Name of the model function (these can be found in Supporting Material 2)
+m = feval(model);
 parRanges = m.parRanges;                                                   % Parameter ranges
 numParams = m.numParams;                                                   % Number of parameters
 numStores = m.numStores;                                                   % Number of stores

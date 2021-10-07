@@ -73,19 +73,27 @@ input_solver_opts.rerun_maxiter   = 6;                                          
 %                 or type cmaes to see list of options and default values
 
 % starting sigma
-optim_opts.sigma0 = .3*(parRanges(:,2) - parRanges(:,1));                  % starting sigma (this is default, could have left it blank)
+optim_opts.insigma = .3*(parRanges(:,2) - parRanges(:,1));                 % starting sigma (this is default, could have left it blank)
 
 % other options
-optim_opts.cmaes_opts.LBounds  = parRanges(:,1);                           % lower bounds of parameters
-optim_opts.cmaes_opts.UBounds  = parRanges(:,2);                           % upper bounds of parameters
-optim_opts.cmaes_opts.PopSize  = 4 + floor(3*log(numParams));              % population size (default)
-optim_opts.cmaes_opts.TolX       = 1e-6 * min(optim_opts.sigma0);          % stopping criterion on changes to parameters 
-optim_opts.cmaes_opts.TolFun     = 1e-4;                                   % stopping criterion on changes to fitness function
-optim_opts.cmaes_opts.TolHistFun = 1e-5;                                   % stopping criterion on changes to fitness function
-optim_opts.cmaes_opts.MaxIter    = 5;                                      % just do 5 iterations, to check if it works
-optim_opts.cmaes_opts.SaveFilename      = 'wf_ex_4_cmaesvars.mat';         % output file of cmaes variables
-optim_opts.cmaes_opts.LogFilenamePrefix = 'wf_ex_4_';                      % prefix for cmaes log-files
-optim_opts.cmaes_opts.EvalParallel = true;
+optim_opts.LBounds  = parRanges(:,1);                                      % lower bounds of parameters
+optim_opts.UBounds  = parRanges(:,2);                                      % upper bounds of parameters
+optim_opts.PopSize  = 4 + floor(3*log(numParams));                         % population size (default)
+optim_opts.TolX       = 1e-6 * min(optim_opts.insigma);                    % stopping criterion on changes to parameters 
+optim_opts.TolFun     = 1e-4;                                              % stopping criterion on changes to fitness function
+optim_opts.TolHistFun = 1e-5;                                              % stopping criterion on changes to fitness function
+%optim_opts.MaxIter    = 5;                                                 % just do 5 iterations, to check if it works
+optim_opts.SaveFilename      = 'wf_ex_4_cmaesvars.mat';                    % output file of cmaes variables
+optim_opts.LogFilenamePrefix = 'wf_ex_4_';                                 % prefix for cmaes log-files
+
+% Other useful options
+    % change to true to run in parallel on a pool of CPUs (e.g. on a cluster)
+optim_opts.EvalParallel = false;                                           
+    % uncomment to restart r-times until the condition
+% r = 2;
+% optim_opts.Restarts  = r;
+% optim_opts.RestartIf = 'fmin > -.8'; % OF is inverted, so this restarts
+%                                        unless the OF (KGE here) > 0.8
 
 % initial parameter set
 par_ini = mean(parRanges,2);                                               % same as default value

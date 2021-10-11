@@ -18,7 +18,7 @@
 % Initialize iteration counter, sampling checker and find number of ODEs
 iter      = 1;
 resnorm   = resnorm_tolerance + 1;                                           % i.e. greater than the required accuracy
-numStores = length(initGuess);    
+numStores = length(initGuess);
 stopflag  = 1;                                                               % normal function run
 
 % Initialise vector of sNew and fval for each iteration, this way you can
@@ -48,39 +48,43 @@ problem.ub = ub(:);
 % 5. randomized values close to solution of previous time steps
 
 while resnorm > resnorm_tolerance
-    
+
     % Select the starting points
     switch iter
         case 1
             problem.x0 = initGuess(:);                                     % 1. Location where solver got stuck
         case 2
             problem.x0 = oldVal(:);                                        % 2. Stores at t-1
-        case 3                                                             
+        case 3
             problem.x0 = lb(:);                                            % 3. Low values (store minima or zero)
-        case 4                                                             
+        case 4
             problem.x0 = min(2*10^4.*ones(numStores,1),ub(:));             % 4. High values (store maxima or 2E4)
 
         otherwise
             problem.x0 = max(zeros(numStores,1),...
                              oldVal(:)+(rand(numStores,1)-0.5));           % 5. Randomized values close to starting location
     end
-   
+
     % Re-run the solver
-    [Snew_v(:,iter), fval_v(:,iter), stopflag] = feval(solverName, problem);
-    
+    if solverName == 'fsolve'
+        [Snew_v(:,iter), fval_v(:,iter), stopflag] = feval(solverName, problem);
+    elseif solverName == 'lsqnonlin'
+        [Snew_v(:,iter), ~,  fval_v(:,iter), stopflag] = feval(solverName, problem);
+    else
+        error('Only fsolve and lsqnonlin are supported');
+    end
+
     resnorm_v(iter) = sum(fval_v(:,iter).^2);
     [resnorm,stopiter] = min(resnorm_v);
     fval = fval_v(:,stopiter);
     Snew = Snew_v(:,stopiter);
-    
+
     % Increase the iteration counter
     iter = iter + 1;
-    
+
     % Break out of the loop of iterations exceed the specified maximum
     if iter >= maxIter
         stopflag = 0;                                                          % function stopped due to iteration count
         break
     end
 end
-
-

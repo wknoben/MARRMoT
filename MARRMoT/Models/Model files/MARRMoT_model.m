@@ -181,9 +181,7 @@ classdef MARRMoT_model < handle
                                         solver_opts.rerun_maxiter, ...     % maximum number of re-runs
                                         resnorm_tolerance, ...             % convergence tolerance
                                         tmp_Snew, ...                      % recent estimates
-                                        Sold, ...                          % storages at previous time step
-                                        obj.store_min, ...                 % lower bounds
-                                        obj.store_max);                    % upper bounds 
+                                        Sold);                             % storages at previous time step
                 
                 tmp_resnorm = sum(tmp_fval.^2);
                 

@@ -5,8 +5,7 @@
                                               maxIter,...
                                               resnorm_tolerance,...
                                               initGuess,...
-                                              oldVal,...
-                                              varargin )
+                                              oldVal)
 %rerunSolver Restarts a root-finding solver with different starting points.
 
 % Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
@@ -32,11 +31,6 @@ Snew = -1 * ones(numStores, 1);
 problem.solver      = solverName;                                           % I.e. 'fsolve' or 'lsqnonlin'
 problem.options     = solverOptions;                                        % option structure from 'optimoptions'
 problem.objective   = solveFun;                                             % function to be solved
-
-if size(varargin,2) > 0; lb = cell2mat(varargin(1)); else; lb = zeros(numStores,1); end
-if size(varargin,2) > 1; ub = cell2mat(varargin(2)); else; ub = inf(numStores,1); end
-problem.lb = lb(:);
-problem.ub = ub(:);
 
 % Start the re-sampling
 % Re-sampling uses different starting points for the solver to see if

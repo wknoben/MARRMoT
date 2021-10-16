@@ -62,6 +62,7 @@ classdef m_36_modhydrolog_15p_5s < MARRMoT_model
         
         % INITialisation function
         function obj = init(obj)
+            obj.store_min(4) = -Inf;
         end
         
         % MODEL_FUN are the model governing equations in state-space formulation

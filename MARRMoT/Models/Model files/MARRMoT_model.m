@@ -175,13 +175,9 @@ classdef MARRMoT_model < handle
             % if NewtonRaphson doesn't find a good enough solution, run FSOLVE
             if tmp_resnorm > resnorm_tolerance  
                 [tmp_Snew,tmp_fval,~,tmp_iter] = ...
-                            rerunSolver('fsolve', ...              
-                                        solver_opts.fsolve, ...            % solver options
-                                        @obj.ODE_approx_IE,...              % system of ODEs
-                                        solver_opts.rerun_maxiter, ...     % maximum number of re-runs
-                                        resnorm_tolerance, ...             % convergence tolerance
-                                        tmp_Snew, ...                      % recent estimates
-                                        Sold);                             % storages at previous time step
+                            obj.rerunSolver('fsolve', ...              
+                                            tmp_Snew, ...                  % recent estimates
+                                            Sold);                         % storages at previous time step
                 
                 tmp_resnorm = sum(tmp_fval.^2);
                 
@@ -192,15 +188,9 @@ classdef MARRMoT_model < handle
                 % if FSOLVE doesn't find a good enough solution, run LSQNONLIN
                 if tmp_resnorm > resnorm_tolerance
                     [tmp_Snew,tmp_fval,~,tmp_iter] = ...
-                            rerunSolver('lsqnonlin', ...              
-                                        solver_opts.lsqnonlin, ...         % solver options
-                                        @obj.ODE_approx_IE,...              % system of ODEs
-                                        solver_opts.rerun_maxiter, ...     % maximum number of re-runs
-                                        resnorm_tolerance, ...             % convergence tolerance
-                                        tmp_Snew, ...                      % recent estimates
-                                        Sold, ...                          % storages at previous time step
-                                        obj.store_min, ...                 % lower bounds
-                                        obj.store_max);                    % upper bounds
+                            obj.rerunSolver('lsqnonlin', ...              
+                                            tmp_Snew, ...                  % recent estimates
+                                            Sold);                         % storages at previous time step
                     
                     tmp_resnorm = sum(tmp_fval.^2);
 
@@ -218,6 +208,93 @@ classdef MARRMoT_model < handle
             solvers = ["NewtonRaphson", "fsolve", "lsqnonlin"];
             solver = solvers(solver_id);
             
+        end
+        
+        % RERUNSOLVER Restarts a root-finding solver with different 
+        % starting points
+        
+        function [ Snew, fval, stopflag, stopiter ] = ...
+                                 rerunSolver( obj,...
+                                              solverName,...
+                                              initGuess,...
+                                              Sold)
+        % get out useful attributes
+        solver_opts = obj.solver_opts.(solverName);
+        solve_fun = @obj.ODE_approx_IE;
+        max_iter = obj.solver_opts.rerun_maxiter;
+        resnorm_tolerance = obj.solver_opts.resnorm_tolerance * min(min(Sold) + 1E-5, 1);
+        
+        % Initialize iteration counter, sampling checker and find number of ODEs
+        iter      = 1;
+        resnorm   = resnorm_tolerance + 1;                                           % i.e. greater than the required accuracy
+        numStores = obj.numStores;
+        stopflag  = 1;                                                               % normal function run
+
+        % Initialise vector of sNew and fval for each iteration, this way you can
+        % keep the best one, not the last one.
+        Snew_v    = zeros(numStores, max_iter);
+        fval_v    = inf(numStores,max_iter);
+        resnorm_v = inf(1, max_iter);
+        Snew = -1 * ones(numStores, 1);
+
+        % Create the constant parts of the PROBLEM structure
+        problem.solver      = solverName;                                           % I.e. 'fsolve' or 'lsqnonlin'
+        problem.options     = solver_opts;                                        % option structure from 'optimoptions'
+        problem.objective   = solve_fun;                                             % function to be solved
+
+        % Start the re-sampling
+        % Re-sampling uses different starting points for the solver to see if
+        % solution accuracy improves. Starting points are alternated as follows:
+        % 1. location where the solver got stuck
+        % 2. storages at previous time step
+        % 3. minimum values
+        % 4. maximum values
+        % 5. randomized values close to solution of previous time steps
+
+        while resnorm > resnorm_tolerance
+
+            % Select the starting points
+            switch iter
+                case 1
+                    problem.x0 = initGuess(:);                             % 1. Location where solver got stuck
+                case 2
+                    problem.x0 = Sold(:);                                  % 2. Stores at t-1
+                case 3
+                    problem.x0 = obj.store_min(:);                         % 3. Low values (store minima or zero)
+                case 4
+                    problem.x0 = min(2*10^4.*ones(numStores,1),...
+                                     obj.store_max(:));                    % 4. High values (store maxima or 2E4)
+
+                otherwise
+                    problem.x0 = max(zeros(numStores,1),...
+                                     Sold(:)+(rand(numStores,1)-0.5));     % 5. Randomized values close to starting location
+            end
+
+            % Re-run the solver
+            solver_string = string(solverName);
+            if solver_string == "fsolve"
+                [Snew_v(:,iter), fval_v(:,iter), stopflag] = feval(solverName, problem);
+            elseif solver_string == "lsqnonlin"
+                [Snew_v(:,iter), ~,  fval_v(:,iter), stopflag] = feval(solverName, problem);
+            else
+                error('Only fsolve and lsqnonlin are supported');
+            end
+
+            resnorm_v(iter) = sum(fval_v(:,iter).^2);
+            [resnorm,stopiter] = min(resnorm_v);
+            fval = fval_v(:,stopiter);
+            Snew = Snew_v(:,stopiter);
+
+            % Increase the iteration counter
+            iter = iter + 1;
+
+            % Break out of the loop of iterations exceed the specified maximum
+            if iter >= max_iter
+                stopflag = 0;                                                          % function stopped due to iteration count
+                break
+            end
+        end
+
         end
         
         % RUN runs the model with a given climate input, initial stores,

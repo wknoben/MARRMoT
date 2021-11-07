@@ -222,7 +222,7 @@ classdef MARRMoT_model < handle
         solver_opts = obj.solver_opts.(solverName);
         solve_fun = @obj.ODE_approx_IE;
         max_iter = obj.solver_opts.rerun_maxiter;
-        resnorm_tolerance = obj.solver_opts.resnorm_tolerance * min(min(Sold) + 1E-5, 1);
+        resnorm_tolerance = obj.solver_opts.resnorm_tolerance * min(min(abs(Sold)) + 1E-5, 1);
         
         % Initialize iteration counter, sampling checker and find number of ODEs
         iter      = 1;

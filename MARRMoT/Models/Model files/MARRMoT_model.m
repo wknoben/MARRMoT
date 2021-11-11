@@ -267,7 +267,7 @@ classdef MARRMoT_model < handle
 
                 otherwise
                     problem.x0 = max(zeros(numStores,1),...
-                                     Sold(:)+(rand(numStores,1)-0.5));     % 5. Randomized values close to starting location
+                                     Sold(:)+randn(numStores,1).*Sold(:)/10);     % 5. Randomized values close to starting location
             end
 
             % Re-run the solver
@@ -285,14 +285,14 @@ classdef MARRMoT_model < handle
             fval = fval_v(:,stopiter);
             Snew = Snew_v(:,stopiter);
 
-            % Increase the iteration counter
-            iter = iter + 1;
-
             % Break out of the loop of iterations exceed the specified maximum
             if iter >= max_iter
                 stopflag = 0;                                                          % function stopped due to iteration count
                 break
             end
+            
+            % Increase the iteration counter
+            iter = iter + 1;
         end
 
         end

@@ -260,7 +260,8 @@ classdef MARRMoT_model < handle
                 case 2
                     problem.x0 = Sold(:);                                  % 2. Stores at t-1
                 case 3
-                    problem.x0 = obj.store_min(:);                         % 3. Low values (store minima or zero)
+                    problem.x0 = max(-2*10^4.*ones(numStores,1),...
+                                     obj.store_min(:));                    % 3. Low values (store minima or -2E4)
                 case 4
                     problem.x0 = min(2*10^4.*ones(numStores,1),...
                                      obj.store_max(:));                    % 4. High values (store maxima or 2E4)

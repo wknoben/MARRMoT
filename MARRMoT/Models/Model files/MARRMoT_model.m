@@ -226,9 +226,9 @@ classdef MARRMoT_model < handle
         
         % Initialize iteration counter, sampling checker and find number of ODEs
         iter      = 1;
-        resnorm   = resnorm_tolerance + 1;                                           % i.e. greater than the required accuracy
+        resnorm   = resnorm_tolerance + 1;                                 % i.e. greater than the required accuracy
         numStores = obj.numStores;
-        stopflag  = 1;                                                               % normal function run
+        stopflag  = 1;                                                     % normal function run
 
         % Initialise vector of sNew and fval for each iteration, this way you can
         % keep the best one, not the last one.
@@ -238,9 +238,10 @@ classdef MARRMoT_model < handle
         Snew = -1 * ones(numStores, 1);
 
         % Create the constant parts of the PROBLEM structure
-        problem.solver      = solverName;                                           % I.e. 'fsolve' or 'lsqnonlin'
-        problem.options     = solver_opts;                                        % option structure from 'optimoptions'
-        problem.objective   = solve_fun;                                             % function to be solved
+        problem.solver      = solverName;                                  % I.e. 'fsolve' or 'lsqnonlin'
+        problem.options     = solver_opts;                                 % option structure from 'optimoptions'
+        problem.objective   = solve_fun;                                   % function to be solved
+        problem.lb          = obj.store_min;
 
         % Start the re-sampling
         % Re-sampling uses different starting points for the solver to see if

@@ -153,7 +153,7 @@ classdef MARRMoT_model < handle
             % This reduces the tolerance to a fraction of the smallest store,
             % if stores are very small, with 1E-6 as minimum
             % (if resnorm_tolerance is 0.1 as default)
-            resnorm_tolerance = solver_opts.resnorm_tolerance * min(min(Sold) + 1E-5, 1);
+            resnorm_tolerance = solver_opts.resnorm_tolerance * min(min(abs(Sold)) + 1E-5, 1);
             
             % create vectors for each of the three solutions (NewtonRaphon,
             % fsolve and lsqnonlin), this way if all three run it takes the

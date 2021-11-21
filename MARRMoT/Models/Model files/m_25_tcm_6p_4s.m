@@ -89,7 +89,7 @@ classdef m_25_tcm_6p_4s < MARRMoT_model
             flux_pby    = split_1(phi,flux_pn);
             flux_pin    = split_1(1-phi,flux_pn);
             flux_ea     = evap_1(S1,Ep,delta_t);
-            flux_et     = evap_16(gam,S2,S1,0.01,Ep,delta_t);
+            flux_et     = evap_16(gam,Inf,S1,0.01,Ep,delta_t);
             flux_qex1   = saturation_1(flux_pin,S1,rc);
             flux_qex2   = saturation_9(flux_qex1,S2,0.01);
             flux_quz    = baseflow_1(k1,S3);

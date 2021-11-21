@@ -79,7 +79,7 @@ classdef m_17_penman_4p_3s < MARRMoT_model
             flux_qex  = saturation_1(P,S1,smax);
             flux_u1   = split_1(phi,flux_qex);
             flux_q12  = split_1(1-phi,flux_qex);
-            flux_et   = evap_16(gam,S2,S1,0.01,Ep,delta_t);
+            flux_et   = evap_16(gam,Inf,S1,0.01,Ep,delta_t);
             flux_u2   = saturation_9(flux_q12,S2,0.01);
             flux_q    = baseflow_1(k1,S3);
 

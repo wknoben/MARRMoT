@@ -38,7 +38,7 @@ classdef m_12_alpine2_6p_2s < MARRMoT_model
             obj.FluxNames  = ["ps", "pr", "qn", "ea", "qse", "qin", "qbf"];% Names for the fluxes
             
             obj.FluxGroups.Ea = [4];                                       % Index or indices of fluxes to add to Actual ET
-            obj.FluxGroups.Q  = [5 6 7];                                   % Index or indices of fluxes to add to Streamflow
+            obj.FluxGroups.Q  = [5 7 6];                                   % Index or indices of fluxes to add to Streamflow
             
         end
         

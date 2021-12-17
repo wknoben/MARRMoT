@@ -120,8 +120,8 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             flux_refr = refreeze_1(cfr,cfmax,ttm,T,S2,delta_t);
             flux_melt = melt_1(cfmax,ttm,T,S1,delta_t);
             flux_rf   = rainfall_2(P,T,tt,tti);
-            flux_in   = infiltration_3(flux_rf+flux_melt,S2,whc*S1);
-            flux_se   = excess_1(S2old,whc*S1,delta_t);
+            flux_in   = infiltration_3(flux_rf+flux_melt,S2,max(whc*S1,0));
+            flux_se   = excess_1(S2old,max(whc*S1,0),delta_t);
             flux_cf   = capillary_1(cflux,S3,fc,S4,delta_t);
             flux_ea   = evap_3(lp,S3,fc,Ep,delta_t);
             flux_r    = recharge_2(beta,S3,fc,flux_in+flux_se);

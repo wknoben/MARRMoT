@@ -17,7 +17,7 @@ function [out] = melt_1(p1,p2,T,S,dt)
 %               S    - current storage [mm]
 %               dt   - time step size [d]
 
-out = max(min(p1*(T-p2),S/dt),0);
+out = min(max(p1*(T-p2),0),S/dt);
 
 end
 

@@ -48,7 +48,7 @@ classdef m_35_mopex5_12p_5s < MARRMoT_model
             obj.FluxNames  = ["epc", "ps", "pr",  "qn",  "et1", "i",...
                               "q1f", "qw", "et2", "q2f", "q2u", "qf", "qs"];% Names for the fluxes
             
-            obj.FluxGroups.Ea = [5 6 9];                                   % Index or indices of fluxes to add to Actual ET
+            obj.FluxGroups.Ea = [5 9 6];                                   % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [12 13];                                   % Index or indices of fluxes to add to Streamflow
             
         end

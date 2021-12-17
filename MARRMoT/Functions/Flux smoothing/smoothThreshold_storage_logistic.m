@@ -39,7 +39,6 @@ elseif nargin == 3
 end
 
 % Calculate multiplier
-Smax = max(Smax,0);   % this avoids numerical instabilities when Smax<0
 if r*Smax == 0
     out = 1 ./ (1+exp((S-Smax+r*e*Smax)/(r)));
 else

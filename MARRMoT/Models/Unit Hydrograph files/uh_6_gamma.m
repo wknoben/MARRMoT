@@ -52,7 +52,7 @@ while true
     % if the new value of the UH is less than 0.1% of the peak, end the
     % loop. NOTE: this works because the gamma distr is monomodal, hence on
     % the way to the peak UH(t) = max(UH) > max(UH) * .001.
-    if UH(t) < (max(UH) * .001); break; end
+    if t>1&&UH(t-1) < (max(UH) * .001); break; end
     
     % go to the next step
     t = t+1;

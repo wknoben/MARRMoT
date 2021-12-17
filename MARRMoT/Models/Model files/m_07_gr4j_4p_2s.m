@@ -55,9 +55,6 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             x3 = theta(3);     % Maximum routing store storage [mm]
             x4 = theta(4);     % Flow delay [d]
             
-            % max of stores
-            obj.store_max = [x1, x3];
-            
             % initialise the unit hydrographs and still-to-flow vectors            
             uh_q9 = uh_1_half(x4,delta_t);
             uh_q1 = uh_2_full(2*x4,delta_t);

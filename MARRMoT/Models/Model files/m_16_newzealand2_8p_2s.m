@@ -54,9 +54,6 @@ classdef m_16_newzealand2_8p_2s < MARRMoT_model
             s2max   = theta(2);     % Maximum soil moisture storage [mm] 
             d       = theta(8);     % Routing delay [d]
             
-            % maximum store values
-            obj.store_max = [s1max, s2max];
-            
             % initialise the unit hydrographs and still-to-flow vectors            
             uh = uh_4_full(d,delta_t);
             

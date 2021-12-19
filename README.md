@@ -1,29 +1,28 @@
 # MARRMoT
-Modular Assessment of Rainfall-Runoff Models Toolbox - Matlab code for 46 conceptual hydrologic models.
+Modular Assessment of Rainfall-Runoff Models Toolbox - Matlab code for 47 conceptual hydrologic models.
 
 <p align="center">
 <img src="Figures/logo.jpg" alt="MARRMoT logo" width="200"/>
 </p>
-
 MARRMoT is a novel rainfall-runoff model comparison framework that allows objective comparison between different conceptual hydrological model structures. 
-The framework provides Matlab code for 46 unique model structures, standardized parameter ranges across all model structures and robust numerical implementation of each model.
+The framework provides Matlab code for 47 unique model structures, standardized parameter ranges across all model structures and robust numerical implementation of each model.
 The framework is provided with extensive documentation, a User Manual and several workflow scripts that give examples of how to use the framework.
 MARRMoT is based around individual flux functions and aggregated model functions, allowing a wide range of possible applications.
 
-If you have any questions about using or running the code, or are willing to contribute, please contact wouter.knoben[-at-]usask.ca. 
-
-[![DOI](https://zenodo.org/badge/161804123.svg)](https://zenodo.org/badge/latestdoi/161804123)
+If you have any questions about using or running the code, or are willing to contribute, please contact wouter.knoben[-at-]usask.ca or l.trotter[-at-] unimelb.edu.au
 
 ## Changes after peer review
 MARRMoT v1.2 has been accepted through peer review. Since then, users have found various bugs which are corrected on the current master branch. Summary:
 
+- Typos in m_09, m_17, m_25, m_30, m_31, m_32, m_34, m_36 and m_37 were found and fixed by Luca Trotter.
+
 - 'interflow_9' was missing a non-negativity constraint. This has been added and included in MARRMoT v1.3.
-- Water balance calculations did not properly account for time step sizes different than 1 day. This has been corrected on the master branch but not been released yet.
-- Models m05, m15, m37 and m44 did not properly account for time step size in certain flux calculations. This has been corrected on the master branch but not been released yet.
-- Workflow_example_4 now works under Octave, after Octave update 5.2.0 and code contribution by Mustafa Kemal Türkeri. This has been integrated on the master branch but not been released yet.
-- A new model m47 (m_47_IHM19_16p_4s) has been added after a contribution by Clara Brandes and her supervisors.  This has been integrated on the master branch but not been released yet.
-- Several additional efficiency metrics have been added, thanks to Thomas Whöling.  This has been integrated on the master branch but not been released yet.
-- Efficiency metrics now accept a warmup period (number of initial time steps to ignore when calculating efficiency metrics) as an optional argument. Should be backwards compatible with existing scripts. Thanks to Thomas Whöling.  This has been integrated on the master branch but not been released yet.
+- Water balance calculations did not properly account for time step sizes different than 1 day.
+- Models m05, m15, m37 and m44 did not properly account for time step size in certain flux calculations.
+- Workflow_example_4 now works under Octave, after Octave update 5.2.0 and code contribution by Mustafa Kemal Türkeri.
+- A new model m47 (m_47_IHM19_16p_4s) has been added after a contribution by Clara Brandes and her supervisors.
+- Several additional efficiency metrics have been added, thanks to Thomas Whöling.
+- Efficiency metrics now accept a warmup period (number of initial time steps to ignore when calculating efficiency metrics) as an optional argument. Should be backwards compatible with existing scripts. Thanks to Thomas Whöling.
 
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases. 
@@ -88,11 +87,13 @@ In addition to a range of unnamed models, the following models provided inspirat
 - ECHO
 - PRMS
 - CLASSIC
+- IHM19
 
 ## License
 MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for details.
 
 ## DOIs of previous releases
+- v1.3: dx.doi.org/10.5281/zenodo.3552961
 - v1.2: dx.doi.org/10.5281/zenodo.3235664
 - v1.1: dx.doi.org/10.5281/zenodo.2677728
 - v1.0: dx.doi.org/10.5281/zenodo.2482542 

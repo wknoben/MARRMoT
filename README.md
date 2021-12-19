@@ -9,7 +9,7 @@ The framework provides Matlab code for 47 unique model structures, standardized 
 The framework is provided with extensive documentation, a User Manual and several workflow scripts that give examples of how to use the framework.
 MARRMoT is based around individual flux functions and aggregated model functions, allowing a wide range of possible applications.
 
-If you have any questions about using or running the code, or are willing to contribute, please contact wouter.knoben[-at-]usask.ca or l.trotter[-at-] unimelb.edu.au
+If you have any questions about using or running the code, or are willing to contribute, please contact l.trotter[-at-] unimelb.edu.au or wouter.knoben[-at-]usask.ca
 
 ## Changes after peer review
 MARRMoT v1.2 has been accepted through peer review. Since then, users have found various bugs which are corrected on the current master branch. Summary:
@@ -49,16 +49,16 @@ Download a copy of the files from this repository (note: do not use the folder '
 The User Manual provides further details.
 
 ## Documentation
-The article describing MARRMoT development will soon be submitted to the scientific journal 'Geoscientific Model Development'.
-This paper, its Supporting Material and the User Manual cover the following topics:
+The article describing MARRMoT's v2.- update will soon be submitted to the scientific journal 'Geoscientific Model Development'.
 
-- **Paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. https://doi.org/10.5194/gmd-12-2463-2019
-- **Supporting Material (full)**: https://www.geosci-model-dev.net/12/2463/2019/gmd-12-2463-2019-supplement.pdf
-- **Supporting Material (section 2)**: detailed description of each model structure, giving Ordinary Differential Equations and constitutive functions for each model store
-- **Supporting Material (section 3)**: translation of constitutive functions (fluxes) to Matlab code
-- **Supporting Material (section 4)**: overview of Unit Hydrograph code
-- **Supporting Material (section 5)**: rationale behind generalised parameter ranges (use of these ranges is optional)
-- **User Manual**: covers a variety of topics including (i) understanding model files, (ii) application examples, (iii) creating a new model or flux function, and (iv) Octave-specific instructions. https://github.com/wknoben/MARRMoT/blob/master/MARRMoT%20User%20manual%20v1.2.pdf
+MARRMoT's documentation includes:
+
+- **New paper**: object-oriented implementation, changes from MARRMoT v1.- to v2.-
+- **Original paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. https://doi.org/10.5194/gmd-12-2463-2019
+- **User manual**: description on how to use MARRMoT v2.- and how to contribute to it.
+- **User manual appendices**: detailed model descriptions (A), flux equations (B) and unit hydrographs (C)
+
+User manual and appendices are found in this repository in "./MARRMoT/User manual"
 
 ## Model structure summary
 MARRMoT model structures are based on a wide variety of different models. 

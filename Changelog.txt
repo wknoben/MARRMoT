@@ -1,5 +1,18 @@
 This file highlights the most important changes made during version updates. The changes listed here are limited to those changes that directly impact model code. Changes to comments or workflow example files are not included.
 
+=== v1.4 ===
+Updated from v1.2 to v1.3 to incorporate bug fixes in a few models and to publish m_47. Main changes:
+
+- Added m_47 and necessary additional flux files.
+
+- Fixed a typo in m_09: sign error in S2 equation
+
+- Fixed a typo in m_36: flux_INT missing from S5 equation
+
+- Fixed typos in m_17 and m_25: error in boundary conditions for evap_16, S2 is bottomless
+
+- Fixed error in m_37: added costraint that Smax>0, this otherwise causes numerical instability to the logistic smoother.
+
 === v1.3 ===
 Updated from v1.2 to v1.3 to incorporate a bug fix in 'interflow_9'. Main changes:
 

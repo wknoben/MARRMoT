@@ -1,0 +1,193 @@
+\contentsline {chapter}{\numberline {A}Model descriptions}{1}
+\contentsline {section}{Example model (model ID: nn)}{3}
+\contentsline {section}{\numberline {A.1}Collie River Basin 1 (model ID: 01)}{5}
+\contentsline {subsection}{\numberline {A.1.1}MARRMoT model name}{5}
+\contentsline {subsection}{\numberline {A.1.2}Model equations}{5}
+\contentsline {subsection}{\numberline {A.1.3}Parameter overview}{5}
+\contentsline {section}{\numberline {A.2}Wetland model (model ID: 02)}{6}
+\contentsline {subsection}{\numberline {A.2.1}MARRMoT model name}{6}
+\contentsline {subsection}{\numberline {A.2.2}Model equations}{6}
+\contentsline {subsection}{\numberline {A.2.3}Parameter overview}{7}
+\contentsline {section}{\numberline {A.3}Collie River Basin 2 (model ID: 03)}{8}
+\contentsline {subsection}{\numberline {A.3.1}MARRMoT model name}{8}
+\contentsline {subsection}{\numberline {A.3.2}Model equations}{8}
+\contentsline {subsection}{\numberline {A.3.3}Parameter overview}{9}
+\contentsline {section}{\numberline {A.4}New Zealand model v1 (model ID: 04)}{10}
+\contentsline {subsection}{\numberline {A.4.1}MARRMoT model name}{10}
+\contentsline {subsection}{\numberline {A.4.2}Model equations}{10}
+\contentsline {subsection}{\numberline {A.4.3}Parameter overview}{12}
+\contentsline {section}{\numberline {A.5}IHACRES (model ID: 05)}{13}
+\contentsline {subsection}{\numberline {A.5.1}MARRMoT model name}{13}
+\contentsline {subsection}{\numberline {A.5.2}Model equations}{13}
+\contentsline {subsection}{\numberline {A.5.3}Parameter overview}{14}
+\contentsline {section}{\numberline {A.6}Alpine model v1 (model ID: 06)}{15}
+\contentsline {subsection}{\numberline {A.6.1}MARRMoT model name}{15}
+\contentsline {subsection}{\numberline {A.6.2}Model equations}{15}
+\contentsline {subsection}{\numberline {A.6.3}Parameter overview}{16}
+\contentsline {section}{\numberline {A.7}GR4J (model ID: 07)}{17}
+\contentsline {subsection}{\numberline {A.7.1}MARRMoT model name}{17}
+\contentsline {subsection}{\numberline {A.7.2}Model equations}{17}
+\contentsline {subsection}{\numberline {A.7.3}Parameter overview}{18}
+\contentsline {section}{\numberline {A.8}United States model (model ID: 08)}{19}
+\contentsline {subsection}{\numberline {A.8.1}MARRMoT model name}{19}
+\contentsline {subsection}{\numberline {A.8.2}Model equations}{19}
+\contentsline {subsection}{\numberline {A.8.3}Parameter overview}{20}
+\contentsline {section}{\numberline {A.9} Susannah Brook model v1-5 (model ID: 09)}{21}
+\contentsline {subsection}{\numberline {A.9.1}MARRMoT model name}{21}
+\contentsline {subsection}{\numberline {A.9.2}Model equations}{21}
+\contentsline {subsection}{\numberline {A.9.3}Parameter overview}{22}
+\contentsline {section}{\numberline {A.10}Susannah Brook model v2 (model ID: 10)}{23}
+\contentsline {subsection}{\numberline {A.10.1}MARRMoT model name}{23}
+\contentsline {subsection}{\numberline {A.10.2}Model equations}{23}
+\contentsline {subsection}{\numberline {A.10.3}Parameter overview}{24}
+\contentsline {section}{\numberline {A.11}Collie River Basin 3 (model ID: 11)}{25}
+\contentsline {subsection}{\numberline {A.11.1}MARRMoT model name}{25}
+\contentsline {subsection}{\numberline {A.11.2}Model equations}{25}
+\contentsline {subsection}{\numberline {A.11.3}Parameter overview}{26}
+\contentsline {section}{\numberline {A.12}Alpine model v2 (model ID: 12)}{27}
+\contentsline {subsection}{\numberline {A.12.1}MARRMoT model name}{27}
+\contentsline {subsection}{\numberline {A.12.2}Model equations}{27}
+\contentsline {subsection}{\numberline {A.12.3}Parameter overview}{28}
+\contentsline {section}{\numberline {A.13}Hillslope model (model ID: 13)}{29}
+\contentsline {subsection}{\numberline {A.13.1}MARRMoT model name}{29}
+\contentsline {subsection}{\numberline {A.13.2}Model equations}{29}
+\contentsline {subsection}{\numberline {A.13.3}Parameter overview}{30}
+\contentsline {section}{\numberline {A.14}TOPMODEL (model ID: 14)}{31}
+\contentsline {subsection}{\numberline {A.14.1}MARRMoT model name}{31}
+\contentsline {subsection}{\numberline {A.14.2}Model equations}{31}
+\contentsline {subsection}{\numberline {A.14.3}Parameter overview}{33}
+\contentsline {section}{\numberline {A.15}Plateau model (model ID: 15)}{34}
+\contentsline {subsection}{\numberline {A.15.1}MARRMoT model name}{34}
+\contentsline {subsection}{\numberline {A.15.2}Model equations}{34}
+\contentsline {subsection}{\numberline {A.15.3}Parameter overview}{35}
+\contentsline {section}{\numberline {A.16}New Zealand model v2 (model ID: 16)}{36}
+\contentsline {subsection}{\numberline {A.16.1}MARRMoT model name}{36}
+\contentsline {subsection}{\numberline {A.16.2}Model equations}{36}
+\contentsline {subsection}{\numberline {A.16.3}Parameter overview}{37}
+\contentsline {section}{\numberline {A.17}Penman model (model ID: 17)}{38}
+\contentsline {subsection}{\numberline {A.17.1}MARRMoT model name}{38}
+\contentsline {subsection}{\numberline {A.17.2}Model equations}{38}
+\contentsline {subsection}{\numberline {A.17.3}Parameter overview}{39}
+\contentsline {section}{\numberline {A.18}SIMHYD (model ID: 18)}{40}
+\contentsline {subsection}{\numberline {A.18.1}MARRMoT model name}{40}
+\contentsline {subsection}{\numberline {A.18.2}Model equations}{40}
+\contentsline {subsection}{\numberline {A.18.3}Parameter overview}{42}
+\contentsline {section}{\numberline {A.19}Australia model (model ID: 19)}{43}
+\contentsline {subsection}{\numberline {A.19.1}MARRMoT model name}{43}
+\contentsline {subsection}{\numberline {A.19.2}Model equations}{43}
+\contentsline {subsection}{\numberline {A.19.3}Parameter overview}{45}
+\contentsline {section}{\numberline {A.20}Generalized Surface inFiltration Baseflow model (model ID: 20)}{46}
+\contentsline {subsection}{\numberline {A.20.1}MARRMoT model name}{46}
+\contentsline {subsection}{\numberline {A.20.2}Model equations}{46}
+\contentsline {subsection}{\numberline {A.20.3}Parameter overview}{47}
+\contentsline {section}{\numberline {A.21}Flex-B (model ID: 21)}{48}
+\contentsline {subsection}{\numberline {A.21.1}MARRMoT model name}{48}
+\contentsline {subsection}{\numberline {A.21.2}Model equations}{48}
+\contentsline {subsection}{\numberline {A.21.3}Parameter overview}{49}
+\contentsline {section}{\numberline {A.22}Variable Infiltration Capacity (VIC) model (model ID: 22)}{50}
+\contentsline {subsection}{\numberline {A.22.1}MARRMoT model name}{50}
+\contentsline {subsection}{\numberline {A.22.2}Model equations}{50}
+\contentsline {subsection}{\numberline {A.22.3}Parameter overview}{52}
+\contentsline {section}{\numberline {A.23}Large-scale catchment water and salt balance model element (model ID: 23)}{53}
+\contentsline {subsection}{\numberline {A.23.1}MARRMoT model name}{53}
+\contentsline {subsection}{\numberline {A.23.2}Model equations}{53}
+\contentsline {subsection}{\numberline {A.23.3}Parameter overview}{57}
+\contentsline {section}{\numberline {A.24}MOPEX-1 (model ID: 24)}{58}
+\contentsline {subsection}{\numberline {A.24.1}MARRMoT model name}{58}
+\contentsline {subsection}{\numberline {A.24.2}Model equations}{58}
+\contentsline {subsection}{\numberline {A.24.3}Parameter overview}{59}
+\contentsline {section}{\numberline {A.25}Thames Catchment Model (model ID: 25)}{60}
+\contentsline {subsection}{\numberline {A.25.1}MARRMoT model name}{60}
+\contentsline {subsection}{\numberline {A.25.2}Model equations}{60}
+\contentsline {subsection}{\numberline {A.25.3}Parameter overview}{62}
+\contentsline {section}{\numberline {A.26}Flex-I (model ID: 26)}{63}
+\contentsline {subsection}{\numberline {A.26.1}MARRMoT model name}{63}
+\contentsline {subsection}{\numberline {A.26.2}Model equations}{63}
+\contentsline {subsection}{\numberline {A.26.3}Parameter overview}{65}
+\contentsline {section}{\numberline {A.27}Tank model (model ID: 27)}{66}
+\contentsline {subsection}{\numberline {A.27.1}MARRMoT model name}{66}
+\contentsline {subsection}{\numberline {A.27.2}Model equations}{66}
+\contentsline {subsection}{\numberline {A.27.3}Parameter overview}{68}
+\contentsline {section}{\numberline {A.28}Xinanjiang model (model ID: 28)}{69}
+\contentsline {subsection}{\numberline {A.28.1}MARRMoT model name}{69}
+\contentsline {subsection}{\numberline {A.28.2}Model equations}{69}
+\contentsline {subsection}{\numberline {A.28.3}Parameter overview}{71}
+\contentsline {section}{\numberline {A.29}HyMOD (model ID: 29)}{72}
+\contentsline {subsection}{\numberline {A.29.1}MARRMoT model name}{72}
+\contentsline {subsection}{\numberline {A.29.2}Model equations}{72}
+\contentsline {subsection}{\numberline {A.29.3}Parameter overview}{73}
+\contentsline {section}{\numberline {A.30}MOPEX-2 (model ID: 30)}{74}
+\contentsline {subsection}{\numberline {A.30.1}MARRMoT model name}{74}
+\contentsline {subsection}{\numberline {A.30.2}Model equations}{74}
+\contentsline {subsection}{\numberline {A.30.3}Parameter overview}{76}
+\contentsline {section}{\numberline {A.31}MOPEX-3 (model ID: 31)}{77}
+\contentsline {subsection}{\numberline {A.31.1}MARRMoT model name}{77}
+\contentsline {subsection}{\numberline {A.31.2}Model equations}{77}
+\contentsline {subsection}{\numberline {A.31.3}Parameter overview}{79}
+\contentsline {section}{\numberline {A.32}MOPEX-4 (model ID: 32)}{80}
+\contentsline {subsection}{\numberline {A.32.1}MARRMoT model name}{80}
+\contentsline {subsection}{\numberline {A.32.2}Model equations}{80}
+\contentsline {subsection}{\numberline {A.32.3}Parameter overview}{82}
+\contentsline {section}{\numberline {A.33}SACRAMENTO model (model ID: 33)}{83}
+\contentsline {subsection}{\numberline {A.33.1}MARRMoT model name}{83}
+\contentsline {subsection}{\numberline {A.33.2}Model equations}{83}
+\contentsline {subsection}{\numberline {A.33.3}Parameter overview}{87}
+\contentsline {section}{\numberline {A.34}FLEX-IS (model ID: 34)}{88}
+\contentsline {subsection}{\numberline {A.34.1}MARRMoT model name}{88}
+\contentsline {subsection}{\numberline {A.34.2}Model equations}{88}
+\contentsline {subsection}{\numberline {A.34.3}Parameter overview}{90}
+\contentsline {section}{\numberline {A.35}MOPEX-5 (model ID: 35)}{91}
+\contentsline {subsection}{\numberline {A.35.1}MARRMoT model name}{91}
+\contentsline {subsection}{\numberline {A.35.2}Model equations}{91}
+\contentsline {subsection}{\numberline {A.35.3}Parameter overview}{93}
+\contentsline {section}{\numberline {A.36}MODHYDROLOG (model ID: 36)}{94}
+\contentsline {subsection}{\numberline {A.36.1}MARRMoT model name}{94}
+\contentsline {subsection}{\numberline {A.36.2}Model equations}{94}
+\contentsline {subsection}{\numberline {A.36.3}Parameter overview}{97}
+\contentsline {section}{\numberline {A.37}HBV-96 (model ID: 37)}{98}
+\contentsline {subsection}{\numberline {A.37.1}MARRMoT model name}{98}
+\contentsline {subsection}{\numberline {A.37.2}Model equations}{98}
+\contentsline {subsection}{\numberline {A.37.3}Parameter overview}{100}
+\contentsline {section}{\numberline {A.38}Tank Model - SMA (model ID: 38)}{101}
+\contentsline {subsection}{\numberline {A.38.1}MARRMoT model name}{101}
+\contentsline {subsection}{\numberline {A.38.2}Model equations}{101}
+\contentsline {subsection}{\numberline {A.38.3}Parameter overview}{105}
+\contentsline {section}{\numberline {A.39}Midlands Catchment Runoff Model (model ID: 39)}{106}
+\contentsline {subsection}{\numberline {A.39.1}MARRMoT model name}{106}
+\contentsline {subsection}{\numberline {A.39.2}Model equations}{106}
+\contentsline {subsection}{\numberline {A.39.3}Parameter overview}{109}
+\contentsline {section}{\numberline {A.40}SMAR (model ID: 40)}{110}
+\contentsline {subsection}{\numberline {A.40.1}MARRMoT model name}{110}
+\contentsline {subsection}{\numberline {A.40.2}Model equations}{110}
+\contentsline {subsection}{\numberline {A.40.3}Parameter overview}{114}
+\contentsline {section}{\numberline {A.41}NAM model (model ID: 41)}{115}
+\contentsline {subsection}{\numberline {A.41.1}MARRMoT model name}{115}
+\contentsline {subsection}{\numberline {A.41.2}Model equations}{115}
+\contentsline {subsection}{\numberline {A.41.3}Parameter overview}{117}
+\contentsline {section}{\numberline {A.42}HYCYMODEL (model ID: 42)}{118}
+\contentsline {subsection}{\numberline {A.42.1}MARRMoT model name}{118}
+\contentsline {subsection}{\numberline {A.42.2}Model equations}{118}
+\contentsline {subsection}{\numberline {A.42.3}Parameter overview}{121}
+\contentsline {section}{\numberline {A.43}GSM-SOCONT model (model ID: 43)}{122}
+\contentsline {subsection}{\numberline {A.43.1}MARRMoT model name}{122}
+\contentsline {subsection}{\numberline {A.43.2}Model equations}{122}
+\contentsline {subsection}{\numberline {A.43.3}Parameter overview}{125}
+\contentsline {section}{\numberline {A.44}ECHO model (model ID: 44)}{126}
+\contentsline {subsection}{\numberline {A.44.1}MARRMoT model name}{126}
+\contentsline {subsection}{\numberline {A.44.2}Model equations}{126}
+\contentsline {subsection}{\numberline {A.44.3}Parameter overview}{129}
+\contentsline {section}{\numberline {A.45}Precipitation-Runoff Modelling System (PRMS) (model ID: 45)}{130}
+\contentsline {subsection}{\numberline {A.45.1}MARRMoT model name}{130}
+\contentsline {subsection}{\numberline {A.45.2}Model equations}{130}
+\contentsline {subsection}{\numberline {A.45.3}Parameter overview}{134}
+\contentsline {section}{\numberline {A.46}Climate and Land-use Scenario Simulation in Catchments model (model ID: 46)}{135}
+\contentsline {subsection}{\numberline {A.46.1}MARRMoT model name}{135}
+\contentsline {subsection}{\numberline {A.46.2}Model equations}{135}
+\contentsline {subsection}{\numberline {A.46.3}Parameter overview}{138}
+\contentsline {section}{\numberline {A.47}IHM19 model (model ID: 47)}{139}
+\contentsline {subsection}{\numberline {A.47.1}MARRMoT model name}{139}
+\contentsline {subsection}{\numberline {A.47.2}Model equations}{139}
+\contentsline {subsection}{\numberline {A.47.3}Parameter overview}{142}
+\contentsline {chapter}{\numberline {B}Flux equations}{144}
+\contentsline {chapter}{\numberline {C}Unit hydrographs}{163}
+\contentsline {chapter}{Bibliography}{171}

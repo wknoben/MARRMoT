@@ -1,0 +1,68 @@
+\chapter{Model descriptions}
+This appendix contains mathematical descriptions of all models that are included in the Modular Assessment of Rainfall-Runoff Models Toolbox v2.- (MARRMoT). All descriptions follow the same layout (see the example model at the end of this section):
+
+\begin{itemize}
+	\item Title: gives an informal name for the model structure followed by a unique ID;
+	\item Introduction: gives a brief description of the model, including one or more original reference(s), the number of stores and parameters, a list containing parameter names and occasionally note-worthy deviations from the original model;
+	\item Process list: a brief overview of the main processes the model is intended to represent;
+	\item Figure: a wiring diagram that shows the names of model stores and fluxes;
+	\item Matlab name section: gives the name of the file that contains Matlab code for this model;
+	\item Model equations section: a mathematical description of the model. This uses Ordinary Differential Equations (ODEs) to describe the changes in model storage(s) and constitutive functions that detail how individual fluxes operate.
+\end{itemize}
+
+MARRMoT models intend to stay close to the original models they are based on but differences are unavoidable. We strongly recommend users to read the original paper cited for each model as well as our interpretation given in this document. In many cases, more than one version of a model exists, but these are not always easily distinguishable. There is a certain degree of model name equifinility, where a single name is used to refer to various different version of the same base model. A good example is TOPMODEL, of which many variants exist based around the initial concept of topographic indices. MARRMoT models tend to be based on older rather than newer publications for any given model (to stay close to the "intended" model by the original author(s)) but our selection has been pragmatic to achieve greater variety in the available fluxes and model structures in MARRMoT. The description of each model lists the papers that form the basis of the MARRMoT version of that model.
+
+MARRMoT is set up to work with arbitrary user-defined time step sizes for climate input data. For consistency of parameter values across different time step sizes, the internal dynamics of each model are specified using the base units $[mm]$ and $[d]$. The temporal resolution of climate data is converted to $[mm/d]$ within each model, and model output is converted back to the user-specified time step size. Internal fluxes in each MARRMoT model use the base units and are in $[mm/d]$ and parameter values are specified in the base or derived units (e.g. $[d^{-1}]$ for time coefficients). These units are kept throughout this document. 
+
+% insert the example model
+%\noindent\rule{\textwidth}{1pt}
+\include{./AppA_files/nn_example}
+
+% Insert all model descriptions
+\include{./AppA_files/01_collie1}
+\include{./AppA_files/02_wetland}
+\include{./AppA_files/03_collie2}
+\include{./AppA_files/04_newzealand1}
+\include{./AppA_files/05_ihacres}
+\include{./AppA_files/06_alpine1}
+\include{./AppA_files/07_gr4j}
+\include{./AppA_files/08_us1}
+\include{./AppA_files/09_susannah1}
+\include{./AppA_files/10_susannah2}
+\include{./AppA_files/11_collie3}
+\include{./AppA_files/12_alpine2}
+\include{./AppA_files/13_hillslope}
+\include{./AppA_files/14_topmodel}
+\include{./AppA_files/15_plateau}
+\include{./AppA_files/16_newzealand2}
+\include{./AppA_files/17_penman}
+\include{./AppA_files/18_simhyd}
+\include{./AppA_files/19_australia}
+\include{./AppA_files/20_gsfb}
+\include{./AppA_files/21_flexb}
+\include{./AppA_files/22_vic}
+\include{./AppA_files/23_lascam}
+\include{./AppA_files/24_mopex1}
+\include{./AppA_files/25_tcm}
+\include{./AppA_files/26_flexi}
+\include{./AppA_files/27_tank}
+\include{./AppA_files/28_xinanjiang}
+\include{./AppA_files/29_hymod}
+\include{./AppA_files/30_mopex2}
+\include{./AppA_files/31_mopex3}
+\include{./AppA_files/32_mopex4}
+\include{./AppA_files/33_sacramento}
+\include{./AppA_files/34_flexis}
+\include{./AppA_files/35_mopex5}
+\include{./AppA_files/36_modhydrolog}
+\include{./AppA_files/37_hbv}
+\include{./AppA_files/38_tank2}
+\include{./AppA_files/39_mcrm}
+\include{./AppA_files/40_smar}
+\include{./AppA_files/41_nam}
+\include{./AppA_files/42_hycymodel}
+\include{./AppA_files/43_gsmsocont}
+\include{./AppA_files/44_echo}
+\include{./AppA_files/45_prms}
+\include{./AppA_files/46_classic}
+\include{./AppA_files/47_ihm19}

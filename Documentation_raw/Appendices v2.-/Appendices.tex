@@ -1,0 +1,158 @@
+\documentclass[oneside]{book} 
+
+%\usepackage{savetrees}
+%\usepackage{lmodern}
+\usepackage{amsmath} 	% better math
+\usepackage{graphicx} 	% enables images
+\usepackage{wrapfig} 	% enable text wrapping around figure
+\usepackage{dblfloatfix} 	% fixes positioning of page-wide floats
+\usepackage{fixltx2e}     	% fixes order and numbering with page-wide floats
+\usepackage[T1]{fontenc}	% needed by savetrees (I think)
+\usepackage{geometry} 	% needed by savetrees (I think)
+\geometry{a4paper} 		% needed by savetrees (I think)
+\usepackage[round]{natbib}% bibliography
+\usepackage{booktabs} 	% better lines in tables \toprule, \midrule, \bottomrule
+%\usepackage{pdfpages}
+\usepackage{subcaption} 	% caption for sub figures
+%\usepackage{placeins}
+%\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{url} 		% display url's
+\usepackage{tocloft}
+\setlength{\cftsubsecnumwidth}{1cm}
+\usepackage{enumitem}
+\usepackage{multirow}
+
+\usepackage[paper=A4,pagesize]{typearea} % needed for mid-document A3 size pages
+
+% Combine figure and table on same row
+\usepackage{floatrow}
+\newfloatcommand{capbtabbox}{table}[][\FBwidth]
+%\usepackage{float} 		% custom floats
+
+% Import matlab code
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage[numbered,framed]{matlab-prettifier}
+
+% Big tables in landscape
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+
+% import pdf's
+\usepackage{pdfpages}
+
+
+% nice headers
+\usepackage{fancyhdr}
+\fancyhead{}
+\fancyhead[L]{MARRMoT v2.- user manual}
+\fancyhead[R]{\leftmark}
+
+% Define the A3 page numbering
+\fancypagestyle{styleLandscapeA3}{
+       \fancyheadoffset{14.5cm}
+	\fancyfootoffset{0pt} 			% cheeky way to force fancyhdr to recognize changes in page size (i.e. A4 to A3)
+	\setlength{\footskip}{-19cm} 	% move footer to very bottom of page
+	\setlength{\topmargin}{-2cm}
+	\fancyfoot[C]{\thepage}
+%	\cfoot{\colorbox{white}{\thepage}}
+	%\renewcommand{\headrulewidth}{0pt} % don't want any lines
+	\renewcommand{\footrulewidth}{0pt}
+}
+
+% Define the A4 page numbering
+\fancypagestyle{styleLandscapeA4}{
+    
+	\fancyfootoffset{0pt} 			% cheeky way to force fancyhdr to recognize changes in page size (i.e. A4 to A3)
+	\fancyhead{}
+	\fancyfoot{}
+%	\setlength{\footskip}{-6cm} 	% move footer to very bottom of page
+	\fancyfoot[C]{\thepage}
+%	\cfoot{\colorbox{white}{\thepage}}
+	\renewcommand{\headrulewidth}{0pt} % don't want any lines
+	\renewcommand{\footrulewidth}{0pt}
+}
+
+% Define custom floats etc
+	% Code float
+	\newfloat{code}{thb}{lop}
+	\floatname{code}{Matlab code}
+ 
+	% Create environment for coding font 
+	\newenvironment{codeFont}{\fontfamily{phv}\selectfont}{\par}
+
+	% Shorter lists
+	\newenvironment{itemizecompact}
+	{ \begin{itemize}
+    	\setlength{\itemsep}{1pt}
+   	\setlength{\parskip}{1pt}
+	    \setlength{\parsep}{1pt}     }
+	{ \end{itemize}                  }
+
+	% Create custom paragraph command that starts text on a new line after the paragraph header
+	\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
+
+	% Custom degree symbol
+	\newcommand{\degree}{$^{\circ}$}
+
+% Make the ToC show sections only
+\setcounter{tocdepth}{1}
+\renewcommand{\cftsecfont}{}
+\setlength{\cftbeforesecskip}{.5ex}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsecpagefont}{}
+\setlength{\cftsecnumwidth}{3em}
+
+% change chapter names to appendix and use letters
+\renewcommand{\chaptername}{Appendix}
+\renewcommand\thechapter{\Alph{chapter}}
+
+%% Define new section, figure, table numbering scheme
+%\renewcommand{\thesection}{\thechapter\arabic{section}}
+%\renewcommand{\thefigure}{\thechapter\arabic{figure}}
+%\renewcommand{\thetable}{\thechapter\arabic{table}}
+
+\begin{document}
+\thispagestyle{empty}
+\pagenumbering{roman}
+\begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
+\parbox[t]{\textwidth}{
+		\centering
+		\fontsize{20pt}{25pt}\sffamily\bfseries 
+		{Modular Assessment of Rainfall-Runoff Models Toolbox (MARRMoT) v2.-}
+}
+\vfill
+\parbox[t]{\textwidth}{
+		\raggedright
+		\fontsize{18pt}{20pt}\sffamily
+		{User manual --- Appendices}
+}
+\vfill\vfill
+\parbox[t]{\textwidth}{
+		\raggedright
+		\large
+ 		{Most of the content of this document was originally published as Supporting Information by \citet{Knoben2019} for MARRMoT v1.2\\[4pt]
+               Updated for MARRMoT v2.- by L. Trotter, Dec 2021}
+	}
+	
+\end{titlepage}
+\tableofcontents
+
+\pagestyle{fancy}
+\newpage
+\pagenumbering{arabic}
+
+\input{AppendixA_modeldesc.tex}
+\input{AppendixB_fluxes.tex}
+\input{AppendixC_uhs}
+
+%% REFERENCES
+\newpage
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{copernicus}
+\bibliography{marrmot_model_references}
+
+
+\end{document}

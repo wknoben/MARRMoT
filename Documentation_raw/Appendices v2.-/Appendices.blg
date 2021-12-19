@@ -1,0 +1,71 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: Appendices.aux
+A level-1 auxiliary file: ./AppA_files/nn_example.aux
+A level-1 auxiliary file: ./AppA_files/01_collie1.aux
+A level-1 auxiliary file: ./AppA_files/02_wetland.aux
+A level-1 auxiliary file: ./AppA_files/03_collie2.aux
+A level-1 auxiliary file: ./AppA_files/04_newzealand1.aux
+A level-1 auxiliary file: ./AppA_files/05_ihacres.aux
+A level-1 auxiliary file: ./AppA_files/06_alpine1.aux
+A level-1 auxiliary file: ./AppA_files/07_gr4j.aux
+A level-1 auxiliary file: ./AppA_files/08_us1.aux
+A level-1 auxiliary file: ./AppA_files/09_susannah1.aux
+A level-1 auxiliary file: ./AppA_files/10_susannah2.aux
+A level-1 auxiliary file: ./AppA_files/11_collie3.aux
+A level-1 auxiliary file: ./AppA_files/12_alpine2.aux
+A level-1 auxiliary file: ./AppA_files/13_hillslope.aux
+A level-1 auxiliary file: ./AppA_files/14_topmodel.aux
+A level-1 auxiliary file: ./AppA_files/15_plateau.aux
+A level-1 auxiliary file: ./AppA_files/16_newzealand2.aux
+A level-1 auxiliary file: ./AppA_files/17_penman.aux
+A level-1 auxiliary file: ./AppA_files/18_simhyd.aux
+A level-1 auxiliary file: ./AppA_files/19_australia.aux
+A level-1 auxiliary file: ./AppA_files/20_gsfb.aux
+A level-1 auxiliary file: ./AppA_files/21_flexb.aux
+A level-1 auxiliary file: ./AppA_files/22_vic.aux
+A level-1 auxiliary file: ./AppA_files/23_lascam.aux
+A level-1 auxiliary file: ./AppA_files/24_mopex1.aux
+A level-1 auxiliary file: ./AppA_files/25_tcm.aux
+A level-1 auxiliary file: ./AppA_files/26_flexi.aux
+A level-1 auxiliary file: ./AppA_files/27_tank.aux
+A level-1 auxiliary file: ./AppA_files/28_xinanjiang.aux
+A level-1 auxiliary file: ./AppA_files/29_hymod.aux
+A level-1 auxiliary file: ./AppA_files/30_mopex2.aux
+A level-1 auxiliary file: ./AppA_files/31_mopex3.aux
+A level-1 auxiliary file: ./AppA_files/32_mopex4.aux
+A level-1 auxiliary file: ./AppA_files/33_sacramento.aux
+A level-1 auxiliary file: ./AppA_files/34_flexis.aux
+A level-1 auxiliary file: ./AppA_files/35_mopex5.aux
+A level-1 auxiliary file: ./AppA_files/36_modhydrolog.aux
+A level-1 auxiliary file: ./AppA_files/37_hbv.aux
+A level-1 auxiliary file: ./AppA_files/38_tank2.aux
+A level-1 auxiliary file: ./AppA_files/39_mcrm.aux
+A level-1 auxiliary file: ./AppA_files/40_smar.aux
+A level-1 auxiliary file: ./AppA_files/41_nam.aux
+A level-1 auxiliary file: ./AppA_files/42_hycymodel.aux
+A level-1 auxiliary file: ./AppA_files/43_gsmsocont.aux
+A level-1 auxiliary file: ./AppA_files/44_echo.aux
+A level-1 auxiliary file: ./AppA_files/45_prms.aux
+A level-1 auxiliary file: ./AppA_files/46_classic.aux
+A level-1 auxiliary file: ./AppA_files/47_ihm19.aux
+The style file: copernicus.bst
+Illegal, another \bibstyle command---line 114 of file Appendices.aux
+ : \bibstyle
+ :          {copernicus}
+I'm skipping whatever remains of this command
+Illegal, another \bibdata command---line 115 of file Appendices.aux
+ : \bibdata
+ :         {marrmot_model_references}
+I'm skipping whatever remains of this command
+Illegal, another \bibstyle command---line 172 of file Appendices.aux
+ : \bibstyle
+ :          {copernicus}
+I'm skipping whatever remains of this command
+Illegal, another \bibdata command---line 173 of file Appendices.aux
+ : \bibdata
+ :         {marrmot_model_references}
+I'm skipping whatever remains of this command
+Database file #1: marrmot_model_references.bib
+Warning--missing institution in Markstrom2015
+Warning--empty journal in Nathan1990
+Warning--missing publisher in NationalWeatherService2005
+(There were 4 error messages)

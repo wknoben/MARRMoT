@@ -1,0 +1,441 @@
+Each model function in MARRMoT is accompanied by a file that specifies suitable sampling ranges for each parameter used in the model, that could be applied if the user chooses to pair MARRMoT with a calibration or parameter sampling procedure. This section gives the reasoning behind our choices of parameter ranges used within MARRMoT.
+
+\subsection{Model-specific ranges versus generalised process-specific ranges}
+There are two different approaches to determining parameter ranges for model calibration or parameter sampling studies: (1) make a choice for appropriate parameter ranges per model, based on previous applications of the model, or (2) try to make consistent choices for all models based on literature (e.g. ensure that all 'slow' linear reservoirs, regardless of which model they are part of, have the same limits for the drainage time scale parameter). 
+Generalization of parameter ranges across models is difficult because models use different flux formulations and thus different parameter values might be appropriate, even if the fluxes are intended to represent the same hydrologic process. 
+On the other hand, using model-specific parameter ranges based on earlier studies might limit a model's potential. 
+Especially if the model has only been applied to a small number of places, published 'appropriate' parameter ranges might also reflect the climate or catchment characteristics of the few study catchments the model has been applied to. 
+MARRMoT is intended as a model comparison framework. 
+We thus attempt to generalize parameter ranges across all models in the framework, to facilitate fair comparison of different models. 
+We try to err on the side of caution and intentionally set these ranges wide. 
+Table \ref{tab:sm4_1} shows the parameter ranges used in MARRMoT and specifies in which model(s) each parameter range is used.
+
+% BIIIIIIG table
+
+% switch to landscape
+\clearpage
+\KOMAoptions{paper=A4,paper=landscape,pagesize}
+\recalctypearea
+
+% reset pagestyle to have proper footers
+\pagestyle{styleLandscapeA4}
+
+%\afterpage{\clearpage}
+%\begin{landscape}
+%\pagestyle{empty}
+%\centering
+
+\setlength\LTleft{-2in}
+\setlength\LTright{-2in}
+
+\begin{longtable}{p{11.215em}ccccp{13em}p{13em}l}
+\caption{Parameter ranges used in MARRMoT\label{tab:sm4_1}}\\
+\toprule
+\textbf{Description} & \multicolumn{1}{p{3.57em}}{\textbf{Min(lit)}} & \multicolumn{1}{p{3.785em}}{\textbf{Max(lit) }} & \multicolumn{1}{p{4.645em}}{\textbf{Min(used) }} & \multicolumn{1}{p{4.785em}}{\textbf{Max(used) }} & \textbf{Reference(s)} & \textbf{Notes} & \multicolumn{1}{p{10em}}{\textbf{Model}} \\
+\midrule
+\endfirsthead
+\multicolumn{8}{@{}l}{\ldots continued}\\
+\toprule
+\textbf{Description} & \multicolumn{1}{p{3.57em}}{\textbf{Min(lit)}} & \multicolumn{1}{p{3.785em}}{\textbf{Max(lit) }} & \multicolumn{1}{p{4.645em}}{\textbf{Min(used) }} & \multicolumn{1}{p{4.785em}}{\textbf{Max(used) }} & \textbf{Reference(s)} & \textbf{Notes} & \multicolumn{1}{p{10em}}{\textbf{Model}} \\
+\midrule
+\endhead % all the lines above this will be repeated on every page
+
+\bottomrule
+\multicolumn{8}{r@{}}{continued \ldots}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+% Snow
+\textbf{Snow} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Threshold temperature for snowfall (and melt, if not specified otherwise) $[^oC]$ & \multicolumn{1}{p{3.57em}}{Table \ref{tab:sm4_ts}} & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_ts}} & -3    & 5     & \cite{Kienzle2008,Kollat2012} & \multicolumn{1}{l}{} & \multicolumn{1}{p{10em}}{6, 12, 30, 31, 32, 34, 35, 37, 43, 44, 45} \\
+    Threshold interval width for snowfall $[^oC]$ & 0     & 7     & 0     & 17    & \cite{Kienzle2008} & 0 is a physical limit & 37 \\
+    Threshold temperature for melt $[^oC]$ &       &       & -3    & 3     & \multicolumn{1}{l}{} & Not easy to find any interval. Temperature for melt tends be treated as constant at 0 & \multicolumn{1}{p{10em}}{37, 43, 44} \\
+    Degree-day-factor for snow or ice melt $[mm/^oC/d]$ & 0     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_ddf}} & 0     & 20    & \multicolumn{1}{l}{} & 0 is a physical limit & \multicolumn{1}{p{10em}}{6, 12, 30, 31, 32, 34, 35, 37, 41, 43, 44, 45} \\
+    Water holding content of snow pack [-] & 0     & 0.8   & 0     & 1     & \cite{Kollat2012} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{37, 44} \\
+    Refreezing factor of retained liquid water [-] & 0     & 1     & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{37, 44 (given as fraction [0,1] of degree-day-factor)} \\
+    Maximum melt rate due to ground-heat flux [mm/d] & 0     & 2     & 0     & 2     & \cite{Schaefli2014} & \multicolumn{1}{l}{} & 44 \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+\newpage
+
+% Interception
+	\textbf{Interception} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Maximum store depth [mm] & 0     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_int}} & 0     & 5     & \cite{Chiew1994,Gerrits2010} & 0 is a physical limit. \cite{Gerrits2010} (table 1.1) reports 3.8mm as maximum value used out of 15 studies. \cite{Chiew1994} (table 3) report 5.6mm as a maximum value for 28 catchments  & \multicolumn{1}{p{10em}}{2, 13, 15, 16, 18, 22, 23, 26, 34, 36, 39, 42, 44, 45} \\
+    Maximum intercepted fraction of precipitation [-] & 0     & 0.42  & 0     & 1     & \cite{Gerrits2010} & [0,1] are physical limits. \cite{Gerrits2010} (table 1.1) reports 42\% as maximum intercepted fraction out of 15 studies & \multicolumn{1}{p{10em}}{8, 23, 32, 35, 45} \\
+    Seasonal variation in LAI as fraction of mean [-] &       &       & 0     & 1     & \multicolumn{1}{l}{} & 0 is a physical limit & 22 \\
+    Timing of maximum Leaf Area Index [d] &       &       & 1     & 365   & \multicolumn{1}{l}{} & Refers to days in a normal calendar year & \multicolumn{1}{p{10em}}{22, 32, 35} \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+% Depression
+\textbf{Surface depression} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Maximum surface area contributing to store [-] & 0     & 1     & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{36, 45} \\
+    Maximum store depth [mm] & 0     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_dep}} & 0     & 50    & \cite{Chiew1994} & 0 is physical limit. 50 is recommended in \cite{Chiew1994} & \multicolumn{1}{p{10em}}{36, 45} \\
+    Filling parameter [-] & 1     & 1     & 0.99  & 1     & \cite{Chiew1990,Porter1971} & Controls the exponential rate of depression store inflow flux but is usually set at 1 because no studies are available that can be used to set plausible ranges  & 36 \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+% Infiltration
+\textbf{Infiltration} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Maximum loss [mm] & 0     & 400   & 0     & 600   & \cite{Chiew2002} & Fig 11.11a shows calibrated parameter values for 339 catchments. Pattern indicates that limit was set at 400 & \multicolumn{1}{p{10em}}{18, 36} \\
+    Loss exponent [-] & 0     & 12    & 0     & 15    & \cite{Chiew2002} & Fig 11.11a shows calibrated parameter values for 339 catchments. Pattern indicates that limit was set at 10 & \multicolumn{1}{p{10em}}{18, 36} \\
+    Maximum infiltration rate [mm/d] & \multicolumn{1}{p{3.57em}}{Table \ref{tab:sm4_inf}} & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_inf}} & 0     & 200   & \multicolumn{1}{l}{} & Infiltration rates can be very high. However, to have a practical effect on modelling, (i.e. generate infiltration excess flow), Inf\_rate < P(t). In the context of a follow-up study, Inf\_rate is capped at 200mm/d because the maximum daily P in the study area is 200mm/d. & \multicolumn{1}{p{10em}}{15, 20, 23, 40, 44} \\
+    Infiltration decline non-linearity parameter [-] &       &       & 0     & 5     & \cite{Sivapalan1996a} & Very difficult to find information for (original paper mentions nothing) & \multicolumn{1}{p{10em}}{23, 43} \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+% Evaporation
+\textbf{Evaporation} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Plant-controlled maximum rate [mm/d] & 5     & 24.5  & 0     & 20    & \cite{Chiew1994} & Although the study reports an upper value of 24.5, the recommended range is capped at 20 (paper appendix) & \multicolumn{1}{p{10em}}{20, 36} \\
+    Wilting point as fraction of Soil moisture capacity [-] & 0.1   & 0.25  & 0.05  & 0.95  & \cite{Son2007} & 0 is a physical limit but can break model equations through "divide-by-zero" errors. 1 is a physical limit & \multicolumn{1}{p{10em}}{3, 4, 8, 9, 10, 12, 14, 15, 16, 19, 20, 21, 26, 31, 32, 34, 35, 37, 44} \\
+    Moisture constrained rate parameter [-] &       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & 15 \\
+    Forest fraction for separate soil/vegetation evap [-] & 0     & 1     & 0.05  & 0.95  & \multicolumn{1}{l}{} & [0,1] are physical limits, but using these limits can result in divide-by-zero-errors in certain fluxes & \multicolumn{1}{p{10em}}{3, 4, 8, 9, 16} \\
+    Phenology: minimum temperature where transpiration stops $[^oC]$ & -5    & -5    & 0     & -10   & \cite{Ye2012} & \multicolumn{1}{l}{} & 35 \\
+    Phenology: maximum temperature above which transpiration fully utilizes Ep $[^oC]$ & 10    & 10    & 1     & 20    & \cite{Ye2012} & The setup of minimum and maximum temperature used in Ye et al. (2012) is here changed to a minimum temperature + temperature range (Tmax = Tmin + Trange) to avoid overlap in parameter values & 35 \\
+    Evaporation reduction with depth coefficient [-] & 0.083 & 1     & 0     & 1     & \cite{PENMAN1950,Tan1996} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{17, 23, 25, 40} \\
+    Shape parameter for evaporation reduction in a deficit store [-] &       &       & 0     & 1     & \cite{Moore2001} & This uses a sigmoid function to determine a fraction of Ep to evaporate. Values >1 make the transition very steep & 39 \\
+    Evaporation non-linearity coefficient [-] &       &       & 0     & 10    & \cite{Sivapalan1996a} & Very difficult to find information for. Assumption made to be in line with other non-linearity coefficients. & \multicolumn{1}{p{10em}}{23, 43} \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+% Soil moisture
+\textbf{Soil moisture} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Maximum store depth [mm] & 1     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_sm}} & 1     & 2000  & \multicolumn{1}{l}{} & 0 is a physical limit & \multicolumn{1}{p{10em}}{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46} \\
+    Capillary rise [mm/d] & 0     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_cap}} & 0     & 4     & \multicolumn{1}{l}{} & 0 is a physical limit & \multicolumn{1}{p{10em}}{13, 15, 37, 38} \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & SMHI gives a default value of 1 mm/d for use with HBV. We use a wider range here &  \\
+    Percolation rate [mm/d] & 0     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_perc}} & 0     & 20    & \cite{Bethune2008} & Some modelling studies report very large percolation rates (100 mm/d). \cite{Bethune2008} report ~11mm/d from field observations.  & \multicolumn{1}{p{10em}}{21, 26, 34, 37, 39, 44, 45} \\
+    Percolation fraction [-] & 0.013 & 0.533 & 0     & 1     & \cite{Ye2012} (Table 1) & [0,1] are physical limits & \multicolumn{1}{p{10em}}{14, 22, 23, 24, 27, 30, 31, 32, 35, 45} \\
+    Recharge nonlinearity [-] & 0     & 7     & 0     & 10    & \cite{Kollat2012} & Also seen as a soil depth distribution & \multicolumn{1}{p{10em}}{5, 22, 33, 37} \\
+    Soil depth distribution [-] & 0     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_soilnl}} & 0     & 10    & \multicolumn{1}{l}{} & For cases where the soil depth is not considered constant. Most studies limit this to 0-2.5 but this seems based on a single source \citep{Wagener2004} which is UK only. Thus we use a wider range here & \multicolumn{1}{p{10em}}{2, 13, 15, 21, 22, 26, 28, 29, 34} \\
+    Porosity [-] & 0.35  & 0.5   & 0.05  & 0.95  & \cite{Son2007} & [0,1] are theoretical physical limits, but no (0) porosity and full (1) porosity are not sensible: there would be no soil moisture or soil respectively & \multicolumn{1}{p{10em}}{10, 19} \\
+    Gamma distribution for topographic indices - phi [-] & 0.4   & 3.5   & 0.1   & 5     & \cite{Clark2008a} & \multicolumn{1}{l}{} & 14 \\
+    Gamma distribution for topographic indices - chi [-] & 2     & 5     & 1     & 7.5   & \cite{Clark2008a} & \multicolumn{1}{l}{} & 14 \\
+    Fraction area with permeable soils [-] &       &       & 0     & 1     & \cite{Crooks2007} & [0,1] are physical limits & 46 \\
+    Fraction area with semi-permeable soils [-] &       &       & 0     & 1     & \cite{Crooks2007} & [0,1] are physical limits & 46 \\
+    Fraction area with impermeable soils [-] &       &       & 0     & 1     & \cite{Crooks2007} & [0,1] are physical limits & 46 \\
+    Variable contributing area scaling [-]  &       &       & 0     & 5     & \cite{Sivapalan1996a} & Very difficult to find information about this. Assumption made  & 23 \\
+    Variable contributing area non-linearity [-] &       &       &       &       & \cite{Sivapalan1996a} & See: \textbf{Soil depth distribution} above & 23 \\
+    Fraction of D50 that is D16 [-] &       &       & 0.01  & 0.99  & \multicolumn{1}{l}{} & Note: re-writing of D16 parameter in \cite{Fukushima1988} & 42 \\
+    Variable contributing area equation inflection point [-] & -0.5  & 0.5   & -0.5  & 0.5   & \cite{Jayawardena2000} & \multicolumn{1}{l}{} & 28 \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+% Groundwater
+\textbf{Groundwater} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Leakage coefficient [-] & 0.07  & 0.13  & 0     & 0.5   & \cite{Chiew1994} & 0 is physical limit. 0.5 is recommended in the paper's appendix & 36 \\
+    Leakage rate [mm/d] &       &       &       &       & \multicolumn{1}{l}{} & See: \textbf{Percolation rate} above &  \\
+    Level compared to channel level [mm] & -2.8  & 3.9   & -10   & 10    & \cite{Chiew1994} & Range recommended in appendix of the paper & 36 \\
+    Base flow rate at no deficit [mm/d] & 0     & 201.6 & 0.1   & 200   & \cite{Beven1997} & Based on Table 2 \citep{Beven1997} & \multicolumn{1}{p{10em}}{14, 23} \\
+    Baseflow deficit scaling parameter [-] &       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{14, 23} \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+% Flow distribution
+\textbf{Flow distribution} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Interflow and saturation excess [-] & 0     & 1     & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{18, 36} \\
+    Preferential recharge [-]& 0     & 2     & 0     & 1     & \cite{Chiew1994} & 0 is a physical limit. Later paper sets max limit to 1 & \multicolumn{1}{p{10em}}{18, 25, 36, 46} \\
+    Surface/groundwater division  [-]&       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{13, 17, 33} \\
+    Fast and slow flow [-]& 0     & 1     & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{21, 26, 29, 34, 46} \\
+    Groundwater recharge and interflow [-]& 0.05  & 0.3   & 0     & 1     & \cite{Son2007} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{10, 11, 20, 40} \\
+    Infiltration and direct runoff [-] & 0.161 & 0.422 & 0     & 1     & \cite{Tan1996} & [0,1] are physical limits & 40 \\
+    Impervious and infiltration area [-]&       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{28, 33, 45} \\
+    Contributing area to overland flow [-]&       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & \multicolumn{1}{p{10em}}{39, 45} \\
+    Tension water and free water [-]&       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & 33 \\
+    Threshold for overland flow generation [-] & 0     & \multicolumn{1}{p{3.785em}}{<1} & 0     & 0.99  & \cite{Nielsen1973} & [0,1] are physical limits & 41 \\
+    Threshold for overland flow generation [-]& 0     & \multicolumn{1}{p{3.785em}}{<1} & 0     & 0.99  & \cite{Nielsen1973} & [0,1] are physical limits & 41 \\
+    Channel and land division [-]&       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & 42 \\
+    Throughfall/stem flow division [-]&       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & 42 \\
+    Glacier/non-glacier precipitation [-]&       &       & 0     & 1     & \multicolumn{1}{l}{} & [0,1] are physical limits & 43 \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+% Flow scale and shape
+\textbf{Flow time scale and shape} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Fast reservoir time scale [d-1] & 0.05  & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_kf}} & 0     & 1     & \multicolumn{1}{l}{} & 0 is a physical limit & \multicolumn{1}{p{10em}}{12, 21, 24, 26, 28, 29, 30, 31, 32, 33, 34, 35, 37, 39, 41, 42, 43, 44, 46} \\
+    Slow reservoir time scale [d-1] & 0.01  & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_ks}} & 0     & 1     & \multicolumn{1}{l}{} & 0 is a physical limit & \multicolumn{1}{p{10em}}{2, 3, 4, 6, 8, 10, 13, 15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 29, 30, 31, 32, 33, 34, 35, 37, 39, 40, 41, 42, 43, 44, 46} \\
+    Flow non-linearity S\^x [-] & 0     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_flownl}} & 1     & 5     & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} & \multicolumn{1}{p{10em}}{4, 9, 10, 11, 16, 19, 22, 23, 37, 39, 42, 44, 45} \\
+    Flow reduction (S/X) [mm] & 5     & 40    & 1     & 50    & \cite{Son2007} & \multicolumn{1}{l}{} & 9 \\
+    Exponential shape parameter [mm-1] &       &       & 0     & 2     & \cite{Moore2001} & Very difficult to find documentation for & 39 \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    \textbf{Routing } &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Routing delay to fast flow [d] & 0     & 1     & 1     & 5     & \cite{Fenicia2008} & \multicolumn{1}{l}{} & \multicolumn{1}{p{10em}}{21, 26, 34} \\
+    Routing delay to slow flow [d] & 0     & 8     & 1     & 15    & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} & \multicolumn{1}{p{10em}}{7, 21, 26, 34} \\
+    Routing delay [d] & 1     & \multicolumn{1}{p{3.785em}}{Table \ref{tab:sm4_rout}} & 1     & 120   & \cite{Kollat2012} & 1 is the limit (water shouldn't speed up). 120 because it seems very high & \multicolumn{1}{p{10em}}{13, 15, 16, 21, 37, 39, 40} \\
+    IHACRES routing delay [d] & 0.8 & 641 & 1 & 700 & \cite{Sefton1998} & These Unit Hydrograps are intended to represent linear reservoirs. Large values chosen for consistency with other models that rely on linear reservoirs & 5 \\
+    Pure delay (no transformation) [d] & 1     & \multicolumn{1}{p{3.785em}}{} & 0     & 119   & See \textbf{Routing delay} & Alternative formulation of the information in \textbf{Routing delay} for a function that does not transform a flux \emph{over} several time steps but delays the flux \emph{by} a certain time & \multicolumn{1}{p{10em}}{5} \\
+%    Pure delay (no transformation) [d] &       & \multicolumn{1}{p{3.785em}}{ } & 1     & 120   & \cite{Kollat2012} & 1 is the limit (water shouldn't speed up). 120 because it seems very high & \multicolumn{1}{p{10em}}{13, 15, 16, 21, 37, 39, 40} \\
+    Routing store depth [mm] & 1     & 300   & 1     & 300   & \cite{Perrin2003} & \multicolumn{1}{l}{} & \multicolumn{1}{p{10em}}{7, 20, 39, 45} \\
+    Gamma function, number of Nash cascade reservoirs [-] & 0.75  & 9.79  & 1     & 10    & \cite{Tan1996} & 0 would mean no routing, so slightly above that & 40 \\
+    \multicolumn{1}{l}{} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+
+% Water exchange
+    \textbf{Water exchange parameters} &       &       &       &       & \multicolumn{1}{l}{} & \multicolumn{1}{l}{} &  \\
+    Coefficient 1 [-]  & 0.005 & 0.54  & 0     & 1     & \cite{Chiew1994} & Although the study only reports values up to 0.54, an upper range of 1 is recommended in the study's appendix & 36 \\
+    Coefficient 2 [-]  & 0.01  & 0.29  & 0     & 1     & \cite{Chiew1994} & Although the study only reports values up to 0.29, an upper range of 1 is recommended in the study's appendix & 36 \\
+    Coefficient 3 [-]  & 0     & 13    & 0     & 100   & \cite{Chiew1994} & Although the study only reports values up to 13, an upper range of 100 is recommended in the study's appendix & 36 \\
+    Water exchange coefficient [mm/d] & -10   & 14    & -10   & 15    & \cite{Perrin2003,Santos2017} & Parameter x2 in GR4J model & 7 \\
+\end{longtable}
+
+%\end{landscape}
+
+% Reset page style
+\clearpage
+\KOMAoptions{paper=A4,paper=portrait,pagesize}
+\recalctypearea
+\pagestyle{fancy}
+
+% SMALL TABLES
+% Temp_snow
+\begin{table}[htbp]
+  \centering
+  \caption[References: Threshold temperature for snowfall]{Literature-based ranges for snowmelt parameter ''threshold temperature for snowfall''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Threshold temperature for snowfall $[^oC]$} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Table 2 in \cite{Seibert1997} & -2.5  & 2.5 \\
+    Table 1 in \cite{Kollat2012} & -3    & 3 \\
+    Table 2 in \cite{Kienzle2008} Note: always coupled with a snow interval [10,17] & 1.1   & 4.5 \\
+    Table A3 in \cite{Seibert2012} & -1.5  & 2.5 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_ts}%
+\end{table}%
+
+% DDF
+\begin{table}[htbp]
+  \centering
+  \caption[References: Degree-day-factor]{Literature-based ranges for snowmelt parameter ''degree-day-factor''}
+    \begin{tabular}{lrr}
+	\toprule
+    \textbf{Degree-day factor for snowmelt $[mm/\^oC/d]$} & \textbf{Min} & \textbf{Max} \\
+	\midrule
+    Table 2 in \cite{Seibert1997} & 1     & 10 \\
+    Table 1 in \cite{Kollat2012} & 0     & 20 \\
+    Table A3 in \cite{Seibert2012} & 1     & 10 \\
+	\bottomrule
+    \end{tabular}%
+  \label{tab:sm4_ddf}%
+\end{table}%
+
+% Interception
+\begin{table}[htbp]
+  \centering
+  \caption[References: Interception capacity]{Literature-based ranges for interception parameter ''maximum interception capacity''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Interception bucket [mm]} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Figure 11.11a  in \cite{Chiew2002} & 0     & 5 \\
+    Table 3 in \cite{Chiew1994} & 0.5   & 5.6 \\
+    Table 1.1 in \cite{Gerrits2010} & 0     & 3.8 \\
+    Table 2 in \cite{Son2007} &       & 0.4 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_int}%
+\end{table}%
+
+% Depression
+\begin{table}[htbp]
+  \centering
+  \caption[References: Depression capacity]{Literature-based ranges for depression parameter ''maximum depression capacity''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Depression bucket [mm]} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Table 3 in \cite{Chiew1994} & 1     & 100 \\
+    Table 1  in \cite{Amoah2013} & 5     & 110 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_dep}%
+\end{table}%
+
+% Infiltration
+\begin{table}[htbp]
+  \centering
+  \caption[References: Infiltration rate]{Literature-based ranges for infiltration parameter ''maximum infiltration rate''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Infiltration rate } & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Figure 2 in \cite{Assouline2013} [mm/d] & 40    & 100 \\
+    Table 3.3  in \cite{Jones1997} [mm/h] & 6     & 76 \\
+    Table 3 in \cite{Cerda1996} [mm/h] & 50    & 770 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_inf}%
+\end{table}%
+
+
+% Soil moisture
+\begin{table}[htbp]
+  \centering
+  \caption[References: Soil moisture capacity]{Literature-based ranges for soil moisture parameter ''maximum soil moisture capacity''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Soil moisture bucket [mm]} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Figure 11.11b in \cite{Chiew2002} & 0     & 500 \\
+    Table 3 in \cite{Chiew1994} & 65    & 400 \\
+    Table 2 in \cite{Seibert1997} & 50    & 500 \\
+    Table 1 in \cite{Rusli2015} & 100   & 800 \\
+    Table 1 in \cite{Kollat2012} & 0     & 2000 \\
+    Table A3 in \cite{Seibert2012} & 50    & 500 \\
+    Table 3 in \cite{Sun2015} & 1     & 500 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_sm}%
+\end{table}%
+
+% Cappilary rise
+\begin{table}[htbp]
+  \centering
+  \caption[References: Capillary rise rate]{Literature-based ranges for capillary rise parameter ''maximum capillary rise rate''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Capillary rise [mm/d]} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Table 1 in \cite{Rusli2015} & 0.1   & 1 \\
+    Default value in \cite{SMHI2004} & 1     & 1 \\
+    Figure 3 in \cite{Bethune2008} & 0     & 0.06 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_cap}%
+\end{table}%
+
+
+% Percolation
+\begin{table}[htbp]
+  \centering
+  \caption[References: Percolation rate]{Literature-based ranges for percolation parameter ''maximum percolation rate''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Percolation rate [mm/d]} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Table 2 in \cite{Seibert1997} & 0     & 6 \\
+    Table 1 in \cite{Rusli2015} & 0.1   & 5 \\
+    Table 1 in \cite{Kollat2012} & 0     & 100 \\
+    Figure 3 in \cite{Bethune2008} & 0     & 10.4 \\
+    Table A3 in \cite{Seibert2012} & 0     & 3 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_perc}%
+\end{table}%
+
+
+% Soil depth distribution
+\begin{table}[htbp]
+  \centering
+  \caption[References: Soil-depth distribution non-linearity]{Literature-based ranges for soil moisture parameter ''soil depth distribution non-linearity''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Soil depth distribution [-]} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Table 3 in \cite{Sun2015} & 0     & 2 \\
+    Figure 9 in \cite{Lamb1999} & 0     & 2.5 \\
+    Table 4 in \cite{Bulygina2009} & 0     & 2.5 \\
+    Figure 4.12 in \cite{Wagener2004}  & 0     & 2 \\
+    Page 700 in \cite{Sivapalan1995} &       & 4.03 \\
+    Figure 4 in \cite{Huang2003} Note: estimated values, ~97\% < 6 & 0     & 11.5 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_soilnl}%
+\end{table}%
+
+% Fast flow time
+\begin{table}[htbp]
+  \centering
+  \caption[References: Fast flow time scale]{Literature-based ranges for flow parameter ''fast flow time scale''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Fast flow time scale $[d^{-1}]$} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Table 2 in \cite{Seibert1997} & 0.05  & 0.5 \\
+    Table 1 in \cite{Rusli2015} & 0.05  & 0.8 \\
+    Table 1 in \cite{Kollat2012} & 0.01  & 1 \\
+    Table A3 in \cite{Seibert2012} & 0.01  & 0.4 \\
+    Table 3 in \cite{Sun2015} & 0.5   & 1.2 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_kf}%
+\end{table}%
+
+% Slow flow time
+\begin{table}[htbp]
+  \centering
+  \caption[References: Slow flow time scale]{Literature-based ranges for flow parameter ''slow flow time scale''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Slow flow time scale $[d^{-1}]$} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Figure 11.11b in \cite{Chiew2002} & 0     & 0.3 \\
+    Table 2 in \cite{Son2007} & 2.40E-05 & 0.1 \\
+    Table 2 in \cite{Seibert1997} & 0.001 & 0.1 \\
+    Table 1 in \cite{Rusli2015} & 0.0005 & 0.1 \\
+    Table 1 in \cite{Kollat2012} & 0.00005 & 0.05 \\
+    Table A3 in \cite{Seibert2012} & 0.001 & 0.15 \\
+    Table 3 in \cite{Sun2015} & 0.001 & 0.5 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_ks}%
+\end{table}%
+
+% Flow non-linearity
+\begin{table}[htbp]
+  \centering
+  \caption[References: Flow non-linearityy]{Literature-based ranges for flow parameter ''flow non-linearity''}
+    \begin{tabular}{lrr}
+    \toprule
+    \textbf{Flow non-linearity} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Table 3 in \cite{Liden2000} – non-linearity shape $= S^{1+var}$ & 0     & 3 \\
+    Table 1 in \cite{Son2007} – non-linearity shape $= S^{1/var}$ & 0.45  & 0.5 \\
+    Table 3 in \cite{Jothityangkoon2001} & 0.5   & 0.5 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_flownl}%
+\end{table}%
+
+% Routing delay
+\begin{table}[htbp]
+  \centering
+  \caption[References: Routing delay]{Literature-based ranges for routing parameter ''routing delay''}
+    \begin{tabular}{p{0.8\linewidth}rr}
+    \toprule
+    \textbf{Routing delay [d]} & \textbf{Min} & \textbf{Max} \\
+    \midrule
+    Table 2 in \cite{Seibert1997} & 1     & 5 \\
+    Table 1 in \cite{Kollat2012} & 24    & 120 \\
+    Table 3 in \cite{Liden2000} & 1     & 4 \\
+    Table 1 in \cite{Perrin2003} & 0.5   & 4 \\
+    Table A3 in \cite{Seibert2012} & 1     & 7 \\
+    Table 2 in \cite{Atkinson2003} Note: converted from a flow speed of 0.5m/s and catchment area of 47$km^2$ &       & <1 \\
+    Table 3 in \cite{Goswami2010} & 12    & 36 \\
+    Table 2 in \cite{Vinogradov2011} Note: approximated from flow velocities and catchment sizes & 0.01  & 4 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:sm4_rout}%
+\end{table}%
+
+\clearpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

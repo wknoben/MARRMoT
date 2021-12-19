@@ -1,5 +1,10 @@
 This file highlights the most important changes made during version updates. The changes listed here are limited to those changes that directly impact model code. Changes to comments or workflow example files are not included.
 
+=== v2.1 ===
+Updated from v2.0 to v2.1 to incorporate changes in the root-finding method.
+
+- Inclusion of NewtonRaphson solver before fsolve to speeed up the framework
+
 === v2.0 ===
 Updated from v1.- to v2.- to incorporate the new object-oriented structure
 

@@ -14,7 +14,7 @@ function [out] = percolation_3(S,Smax)
 % @(Inputs):    S    - current storage [mm]
 %               Smax - maximum contributing storage [mm]
 
-out = Smax^(-4)./(4)*(4/9)^(-4)*S^5;
+out = Smax^(-4)./(4)*(4/9)^(4)*S^5;
 
 end
 

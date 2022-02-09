@@ -38,9 +38,9 @@ classdef m_21_flexb_9p_3s < MARRMoT_model
                              0, 1;          % Kf, Fast runoff coefficient [d-1]
                              0, 1];         % Ks, Slow runoff coefficient [d-1]
             
-            obj.StoreNames = ["S1" "S2" "S3"];                             % Names for the stores
-            obj.FluxNames  = ["ru", "eur",  "ps", "rf", "rs"...
-                              "rfl", "rsl", "qf", "qs"];                   % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3"};                             % Names for the stores
+            obj.FluxNames  = {"ru", "eur",  "ps", "rf", "rs"...
+                              "rfl", "rsl", "qf", "qs"};                   % Names for the fluxes
             
             obj.FluxGroups.Ea = 2;                                         % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [8 9];                                     % Index or indices of fluxes to add to Streamflow

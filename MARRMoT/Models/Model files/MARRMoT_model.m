@@ -36,9 +36,18 @@ classdef MARRMoT_model < handle
         uhs               % unit hydrographs and still-to-flow fluxes
         solver_data       % step-by-step info of solver used and residuals
         status            % 0 = model created, 1 = simulation ended
+        % attribute to store whether we are running MATLAB or Octave
+        isOctave          % 1 if we're on Octave, 0 if MATLAB
     end
     methods
-        
+        % This will run as soon as any model object is created
+        function [obj] = MARRMoT_model()
+            obj.isOctave = exist('OCTAVE_VERSION', 'builtin')~=0;
+            % if running in Octave, load the optim package
+            % (which contains fsolve and lsqnonlin)
+            if obj.isOctave; pkg load optim; end
+        end
+
         % Set methods with checks on inputs for attributes set by the user:
         function [] = set.delta_t(obj, value)
             if numel(value) == 1
@@ -115,7 +124,7 @@ classdef MARRMoT_model < handle
             
             % empty struct with the solver data
             obj.solver_data.resnorm   = zeros(t_end,1);
-            obj.solver_data.solver = strings(t_end,1);
+            obj.solver_data.solver = cell(t_end,1);
             obj.solver_data.iter   = zeros(t_end,1);
             
             % model specific initialisation
@@ -163,10 +172,17 @@ classdef MARRMoT_model < handle
             iter_v    = ones(3,1);
             
             % first try to solve the ODEs using NewtonRaphson
-            [tmp_Snew, tmp_fval] = ...
+            if(~obj.isOctave) %if MATLAB
+                [tmp_Snew, tmp_fval] = ...
                             NewtonRaphson(@obj.ODE_approx_IE,...
                                           Sold,...
                                           solver_opts.NewtonRaphson);
+            else              % if Octave
+                [tmp_Snew, tmp_fval] = ...
+                            NewtonRaphson_octave(@obj.ODE_approx_IE,...
+                                                 Sold,...
+                                                 solver_opts.NewtonRaphson);
+            end
             tmp_resnorm = sum(tmp_fval.^2);
             
             Snew_v(1,:)  = tmp_Snew;
@@ -230,18 +246,12 @@ classdef MARRMoT_model < handle
         numStores = obj.numStores;
         stopflag  = 1;                                                     % normal function run
 
-        % Initialise vector of sNew and fval for each iteration, this way you can
+        % Initialise vector of Snew and fval for each iteration, this way you can
         % keep the best one, not the last one.
         Snew_v    = zeros(numStores, max_iter);
         fval_v    = inf(numStores,max_iter);
         resnorm_v = inf(1, max_iter);
         Snew = -1 * ones(numStores, 1);
-
-        % Create the constant parts of the PROBLEM structure
-        problem.solver      = solverName;                                  % I.e. 'fsolve' or 'lsqnonlin'
-        problem.options     = solver_opts;                                 % option structure from 'optimoptions'
-        problem.objective   = solve_fun;                                   % function to be solved
-        problem.lb          = obj.store_min;
 
         % Start the re-sampling
         % Re-sampling uses different starting points for the solver to see if
@@ -257,27 +267,25 @@ classdef MARRMoT_model < handle
             % Select the starting points
             switch iter
                 case 1
-                    problem.x0 = initGuess(:);                             % 1. Location where solver got stuck
+                    x0 = initGuess(:);                                     % 1. Location where solver got stuck
                 case 2
-                    problem.x0 = Sold(:);                                  % 2. Stores at t-1
+                    x0 = Sold(:);                                          % 2. Stores at t-1
                 case 3
-                    problem.x0 = max(-2*10^4.*ones(numStores,1),...
-                                     obj.store_min(:));                    % 3. Low values (store minima or -2E4)
+                    x0 = max(-2*10^4.*ones(numStores,1),obj.store_min(:)); % 3. Low values (store minima or -2E4)
                 case 4
-                    problem.x0 = min(2*10^4.*ones(numStores,1),...
-                                     obj.store_max(:));                    % 4. High values (store maxima or 2E4)
-
+                    x0 = min(2*10^4.*ones(numStores,1),obj.store_max(:));  % 4. High values (store maxima or 2E4)
                 otherwise
-                    problem.x0 = max(zeros(numStores,1),...
-                                     Sold(:)+randn(numStores,1).*Sold(:)/10);     % 5. Randomized values close to starting location
+                    x0 = max(zeros(numStores,1),...
+                             Sold(:)+randn(numStores,1).*Sold(:)/10);      % 5. Randomized values close to starting location
             end
 
             % Re-run the solver
-            solver_string = string(solverName);
-            if solver_string == "fsolve"
-                [Snew_v(:,iter), fval_v(:,iter), stopflag] = feval(solverName, problem);
-            elseif solver_string == "lsqnonlin"
-                [Snew_v(:,iter), ~,  fval_v(:,iter), stopflag] = feval(solverName, problem);
+            if strcmpi(solverName, 'fsolve')
+                [Snew_v(:,iter), fval_v(:,iter), stopflag] = ...
+                    fsolve(solve_fun, x0, solver_opts);
+            elseif strcmpi(solverName, 'lsqnonlin')
+                [Snew_v(:,iter), ~,  fval_v(:,iter), stopflag] = ...
+                    lsqnonlin(solve_fun, x0, obj.store_min, [], solver_opts);
             else
                 error('Only fsolve and lsqnonlin are supported');
             end
@@ -344,7 +352,7 @@ classdef MARRMoT_model < handle
                obj.stores(t,:) = Sold + dS' * obj.delta_t;
                
                obj.solver_data.resnorm(t) = resnorm;
-               obj.solver_data.solver(t) = solver;
+               obj.solver_data.solver{t} = solver;
                obj.solver_data.iter(t) = iter;
                
                obj.step();
@@ -378,13 +386,13 @@ classdef MARRMoT_model < handle
             % --- Fluxes internal to the model ---
             fluxInternal = struct;
             for i = 1:obj.numFluxes
-                fluxInternal.(obj.FluxNames(i)) = obj.fluxes(:,i)';
+                fluxInternal.(obj.FluxNames{i}) = obj.fluxes(:,i)';
             end
             
             % --- Stores ---
             storeInternal = struct;
             for i = 1:obj.numStores
-                storeInternal.(obj.StoreNames(i)) = obj.stores(:,i)';
+                storeInternal.(obj.StoreNames{i}) = obj.stores(:,i)';
             end
             
             % --- Water balance, if requested ---
@@ -405,7 +413,6 @@ classdef MARRMoT_model < handle
             if nargin > 1 || isempty(obj.status) || obj.status == 0 
                 obj.run(varargin{:});
             end
-            
             % Get variables
             P  = obj.input_climate(:,1);
             fg = fieldnames(obj.FluxGroups);
@@ -416,7 +423,7 @@ classdef MARRMoT_model < handle
                 OutFluxes(k) = sum(sum(signs.*obj.fluxes(:,idx), 1),2);
             end
             if isempty(obj.StoreSigns); obj.StoreSigns = repelem(1, obj.numStores); end
-            dS = obj.StoreSigns .* (obj.stores(end,:) - obj.S0');          % difference of final and initial storage for each store
+            dS = obj.StoreSigns(:) .* (obj.stores(end,:)' - obj.S0);          % difference of final and initial storage for each store
             if isempty(obj.uhs); obj.uhs = {}; end
             R = cellfun(@(uh) sum(uh(2,:)), obj.uhs);                      % cumulative of each flows still to be routed
             
@@ -532,13 +539,20 @@ classdef MARRMoT_model < handle
             solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
             solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
             solver_opts.NewtonRaphson = optimset('MaxIter', obj.numStores * 10);
-            solver_opts.fsolve = optimoptions('fsolve',...
-                                              'Display','none',...                     % Disable display settings
-                                              'JacobPattern', obj.JacobPattern);
-            solver_opts.lsqnonlin = optimoptions('lsqnonlin',...                       % lsqnonlin settings for cases where fsolve fails
-                                                 'Display','none',...
-                                                 'JacobPattern',obj.JacobPattern,...
-                                                 'MaxFunEvals',1000);
+            % if MATLAB
+            if(~obj.isOctave)
+              solver_opts.fsolve = optimoptions('fsolve',...
+                                                'Display','none',...                     % Disable display settings
+                                                'JacobPattern', obj.JacobPattern);
+              solver_opts.lsqnonlin = optimoptions('lsqnonlin',...                       % lsqnonlin settings for cases where fsolve fails
+                                                  'Display','none',...
+                                                  'JacobPattern',obj.JacobPattern,...
+                                                  'MaxFunEvals',1000);
+            else % if OCTAVE
+              solver_opts.fsolve = optimset('Display', 'off');
+              solver_opts.lsqnonlin = optimset('Display', 'off', 'MaxFunEvals',1000);
+            end
+                                              
          end
          
          % function to add new solver opts to the default ones
@@ -547,7 +561,7 @@ classdef MARRMoT_model < handle
              if nargin == 1 || isempty(opts)
                  solver_opts = def_opts;
              else
-                 def_fields = fields(def_opts);
+                 def_fields = fieldnames(def_opts);
                  % for each field in the default options (5 at the moment)
                  for k = 1:length(def_fields)
                      field = def_fields{k};

@@ -37,8 +37,8 @@ classdef m_17_penman_4p_3s < MARRMoT_model
                              0, 1;       % gam, Evaporation reduction in lower zone [-]
                              0, 1];      % k1, Runoff coefficient [d-1]
             
-            obj.StoreNames = ["S1" "S2" "S3"];                             % Names for the stores
-            obj.FluxNames  = ["ea", "qex", "u1", "q12", "et", "u2", "q"];  % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3"};                             % Names for the stores
+            obj.FluxNames  = {"ea", "qex", "u1", "q12", "et", "u2", "q"};  % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 5];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [7];                                       % Index or indices of fluxes to add to Streamflow

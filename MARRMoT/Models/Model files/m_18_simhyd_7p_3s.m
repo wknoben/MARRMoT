@@ -36,9 +36,9 @@ classdef m_18_simhyd_7p_3s < MARRMoT_model
                              0,     1;      % CRAK, Proportionality constant, [-]
                              0,     1];     % K, Slow flow time scale, [d-1]  
             
-            obj.StoreNames = ["S1", "S2", "S3"];                           % Names for the stores
-            obj.FluxNames  = ["Ei", "EXC", "INF", "INT", "REC",...
-                              "Et", "GWF", "BAS", "SRUN", "Qt"];           % Names for the fluxes
+            obj.StoreNames = {"S1", "S2", "S3"};                           % Names for the stores
+            obj.FluxNames  = {"Ei", "EXC", "INF", "INT", "REC",...
+                              "Et", "GWF", "BAS", "SRUN", "Qt"};           % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 6];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 10;                                        % Index or indices of fluxes to add to Streamflow

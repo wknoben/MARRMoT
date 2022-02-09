@@ -46,9 +46,9 @@ classdef m_22_vic_10p_3s < MARRMoT_model
                                 0   ,1;         % k2,       Baseflow time parameter [d-1]
                                 1   , 5];       % c2,       Baseflow non-linearity parameter
 
-            obj.StoreNames = ["S1" "S2" "S3"];                             % Names for the stores
-            obj.FluxNames  = ["ei",   "peff", "iex", "qie",  "inf", "et1",...
-                              "qex1", "pc",   "et2", "qex2", "qb"];        % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3"};                             % Names for the stores
+            obj.FluxNames  = {"ei",   "peff", "iex", "qie",  "inf", "et1",...
+                              "qex1", "pc",   "et2", "qex2", "qb"};        % Names for the fluxes
 
             obj.FluxGroups.Ea = [1 6 9];                                   % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [4 7 10 11];                               % Index or indices of fluxes to add to Streamflow

@@ -49,10 +49,10 @@ classdef m_34_flexis_12p_5s < MARRMoT_model
                             -3, 5;          % TT, Threshold temperature for snowfall/snowmelt [oC]
                              0, 20];        % ddf, Degree-day factor for snowmelt [mm/d/oC]
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5"];                   % Names for the stores
-            obj.FluxNames  = ["ps", "pi", "m", "peff", "ei",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5"};                   % Names for the stores
+            obj.FluxNames  = {"ps", "pi", "m", "peff", "ei",...
                               "ru", "eur", "rp", "rf", "rs",...
-                              "rf1", "rs1", "qf", "qs"];                   % Names for the fluxes
+                              "rf1", "rs1", "qf", "qs"};                   % Names for the fluxes
             
             obj.FluxGroups.Ea = [5 7];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [13 14];                                   % Index or indices of fluxes to add to Streamflow

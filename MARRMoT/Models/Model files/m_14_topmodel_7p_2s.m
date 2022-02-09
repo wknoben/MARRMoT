@@ -49,8 +49,8 @@ classdef m_14_topmodel_7p_2s < MARRMoT_model
                              1, 7.5;     % chi, Gamma distribution parameter [-]
                              0.1, 5];    % phi, Gamma distribution parameter [-]
             
-            obj.StoreNames = ["S1" "S2"];                                  % Names for the stores
-            obj.FluxNames  = ["qof", "peff", "ea", "qex", "qv", "qb"];     % Names for the fluxes
+            obj.StoreNames = {"S1", "S2"};                                  % Names for the stores
+            obj.FluxNames  = {"qof", "peff", "ea", "qex", "qv", "qb"};     % Names for the fluxes
             
             obj.FluxGroups.Ea = 3;                                         % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [1 4 6];                                   % Index or indices of fluxes to add to Streamflow

@@ -34,9 +34,9 @@ classdef m_13_hillslope_7p_2s < MARRMoT_model
                              0   , 4;      % c, capillary rise [mm/d]
                              0   , 1];     % kw, base flow time parameter [d-1]
             
-            obj.StoreNames = ["S1" "S2"];                                  % Names for the stores
-            obj.FluxNames  = ["pe",   "ei", "ea",    "qse",  "qses",...
-                              "qseg", "c",  "qhsrf", "qhgw", "qt"];        % Names for the fluxes
+            obj.StoreNames = {"S1", "S2"};                                  % Names for the stores
+            obj.FluxNames  = {"pe",   "ei", "ea",    "qse",  "qses",...
+                              "qseg", "c",  "qhsrf", "qhgw", "qt"};        % Names for the fluxes
             
             obj.FluxGroups.Ea = [2 3];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 10;                                        % Index or indices of fluxes to add to Streamflow

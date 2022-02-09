@@ -54,10 +54,10 @@ classdef m_23_lascam_24p_3s < MARRMoT_model
                                 0, 1;           % gb, B-store evaporation scaling [-]
                                 0, 10];         % db, B-store evaporation non-linearity [-]
             
-            obj.StoreNames = ["S1" "S2" "S3"];                             % Names for the stores
-            obj.FluxNames  = ["ei",   "pg",   "qse", "qie", "pc",...
+            obj.StoreNames = {"S1", "S2" "S3"};                             % Names for the stores
+            obj.FluxNames  = {"ei",   "pg",   "qse", "qie", "pc",...
                               "qsse", "qsie", "fa",  "ef",  "rf",...
-                              "ea1",  "ea2",  "qa",  "ra",  "qb", "eb"];   % Names for the fluxes
+                              "ea1",  "ea2",  "qa",  "ra",  "qb", "eb"};   % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 9 11 12 16];                            % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [3 4 13];                                  % Index or indices of fluxes to add to Streamflow

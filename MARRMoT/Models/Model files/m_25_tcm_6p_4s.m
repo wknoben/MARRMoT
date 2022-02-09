@@ -36,9 +36,9 @@ classdef m_25_tcm_6p_4s < MARRMoT_model
                                 0, 1;     % fa, Fraction of mean(P) that forms abstraction rate [mm/d]
                                 0, 1];    % k2, Runoff coefficient [mm-1 d-1]
 
-            obj.StoreNames = ["S1" "S2" "S3" "S4"];                        % Names for the stores
-            obj.FluxNames  = ["pn", "en",   "pby",   "pin",  "ea",...
-                              "et", "qex1", "qex2", "quz", "a", "q"];      % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3" "S4"};                        % Names for the stores
+            obj.FluxNames  = {"pn", "en",   "pby",   "pin",  "ea",...
+                              "et", "qex1", "qex2", "quz", "a", "q"};      % Names for the fluxes
 
             obj.FluxGroups.Ea = [2 5 6];                                   % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 11;                                        % Index or indices of fluxes to add to Streamflow

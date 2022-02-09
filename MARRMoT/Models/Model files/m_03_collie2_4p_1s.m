@@ -31,8 +31,8 @@ classdef m_03_collie2_4p_1s < MARRMoT_model
                              0   , 1 ;        % a, subsurface runoff coefficient [d-1]
                              0.05, 0.95];     % M, fraction forest cover [-]
             
-            obj.StoreNames = ["S1"];                                       % Names for the stores
-            obj.FluxNames  = ["eb", "ev", "qse", "qss"];                   % Names for the fluxes
+            obj.StoreNames = {"S1"};                                       % Names for the stores
+            obj.FluxNames  = {"eb", "ev", "qse", "qss"};                   % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 2];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [3 4];                                     % Index or indices of fluxes to add to Streamflow

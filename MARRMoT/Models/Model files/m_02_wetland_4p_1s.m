@@ -30,8 +30,8 @@ classdef m_02_wetland_4p_1s < MARRMoT_model
                              1   , 2000;   % Swmax, soil misture depth [mm]
                              0   , 1];     % kw, base flow time parameter [d-1]
             
-            obj.StoreNames = ["S1"];                                       % Names for the stores
-            obj.FluxNames  = ["pe",  "ei",  "ew",  "qwsof", "qwgw"];       % Names for the fluxes
+            obj.StoreNames = {"S1"};                                       % Names for the stores
+            obj.FluxNames  = {"pe",  "ei",  "ew",  "qwsof", "qwgw"};       % Names for the fluxes
             
             obj.FluxGroups.Ea = [2 3];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [4 5];                                     % Index or indices of fluxes to add to Streamflow

@@ -133,8 +133,7 @@ figure('color','w');
         h(1+i) = plot(t,results_sampling{1+i,3}.Q);
     end
         
-    lh = legend(h,['Observed',model_list]);
-%    lh.Interpreter = 'none';                 % This changes the model names in the legend to look nicer, but this doesn't work in Octave
+    legend(h,['Observed',model_list], 'interpreter','none');
     title('Model sampling results')
     ylabel('Streamflow [mm/d]')
     xlabel('Time [d]')

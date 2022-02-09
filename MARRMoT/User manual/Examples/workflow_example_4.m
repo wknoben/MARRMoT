@@ -49,8 +49,7 @@ input_climatology.delta_t  = 1;                                                 
 Q_obs = data_MARRMoT_examples.streamflow;
 
 %% 2. Define the model settings and create the model object
-
-model     = 'm_37_hbv_15p_5s';                                             % Name of the model function (these can be found in Supporting Material 2)
+model     = 'm_05_ihacres_7p_1s';                                          % Name of the model function (these can be found in Supporting Material 2)
 m = feval(model);
 parRanges = m.parRanges;                                                   % Parameter ranges
 numParams = m.numParams;                                                   % Number of parameters
@@ -61,7 +60,9 @@ input_s0  = zeros(numStores,1);                                            % Ini
 % Create a solver settings data input structure. 
 % NOTE: the names of all structure fields are hard-coded in each model
 % file. These should not be changed.
-input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance; users have reported differences in simulation accuracy (KGE scores) during calibration between Matlab and Octave for a given tolerance. In certain cases, Octave seems to require tigther tolerances to obtain the same KGE scores as Matlab does.
+input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance;
+% users have reported differences in simulation accuracy (KGE scores) during calibration between Matlab and Octave for a given tolerance.
+% In certain cases, Octave seems to require tigther tolerances to obtain the same KGE scores as Matlab does.
 input_solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
 
 %% 4. Define calibration settings
@@ -82,9 +83,10 @@ optim_opts.PopSize  = 4 + floor(3*log(numParams));                         % pop
 optim_opts.TolX       = 1e-6 * min(optim_opts.insigma);                    % stopping criterion on changes to parameters 
 optim_opts.TolFun     = 1e-4;                                              % stopping criterion on changes to fitness function
 optim_opts.TolHistFun = 1e-5;                                              % stopping criterion on changes to fitness function
-%optim_opts.MaxIter    = 5;                                                 % just do 5 iterations, to check if it works
 optim_opts.SaveFilename      = 'wf_ex_4_cmaesvars.mat';                    % output file of cmaes variables
 optim_opts.LogFilenamePrefix = 'wf_ex_4_';                                 % prefix for cmaes log-files
+% note that saving to ".mat" file of CMA-ES output is disabled for Octave
+% (lines 1795 and 1839 of my_cmaes.m) due to a bug that otherwise crashes the calibration.
 
 % Other useful options
     % change to true to run in parallel on a pool of CPUs (e.g. on a cluster)
@@ -94,6 +96,10 @@ optim_opts.EvalParallel = false;
 % optim_opts.Restarts  = r;
 % optim_opts.RestartIf = 'fmin > -.8'; % OF is inverted, so this restarts
 %                                        unless the OF (KGE here) > 0.8
+
+% debugging options
+%optim_opts.MaxIter = 5;                                                    % just do 5 iterations, to check if it works
+%optim_opts.Seed = 1234;                                                    % for reproducibility
 
 % initial parameter set
 par_ini = mean(parRanges,2);                                               % same as default value

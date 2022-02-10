@@ -237,7 +237,7 @@ classdef MARRMoT_model < handle
         % get out useful attributes
         solver_opts = obj.solver_opts.(solverName);
         solve_fun = @obj.ODE_approx_IE;
-        max_iter = obj.solver_opts.rerun_maxiter;
+        max_iter = obj.solver_opts.resnorm_maxiter;
         resnorm_tolerance = obj.solver_opts.resnorm_tolerance * min(min(abs(Sold)) + 1E-5, 1);
         
         % Initialize iteration counter, sampling checker and find number of ODEs
@@ -537,7 +537,7 @@ classdef MARRMoT_model < handle
          % function to return default solver options
          function solver_opts = default_solver_opts(obj)
             solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
-            solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
+            solver_opts.resnorm_maxiter   = 6;                                         % Maximum number of re-runs used in rerunSolver
             solver_opts.NewtonRaphson = optimset('MaxIter', obj.numStores * 10);
             % if MATLAB
             if(~obj.isOctave)

@@ -49,7 +49,7 @@ input_climatology.delta_t  = 1;                                                 
 Q_obs = data_MARRMoT_examples.streamflow;
 
 %% 2. Define the model settings and create the model object
-model     = 'm_05_ihacres_7p_1s';                                          % Name of the model function (these can be found in Supporting Material 2)
+model     = 'm_29_hymod_5p_5s';                                          % Name of the model function (these can be found in Supporting Material 2)
 m = feval(model);
 parRanges = m.parRanges;                                                   % Parameter ranges
 numParams = m.numParams;                                                   % Number of parameters
@@ -63,7 +63,7 @@ input_s0  = zeros(numStores,1);                                            % Ini
 input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance;
 % users have reported differences in simulation accuracy (KGE scores) during calibration between Matlab and Octave for a given tolerance.
 % In certain cases, Octave seems to require tigther tolerances to obtain the same KGE scores as Matlab does.
-input_solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
+input_solver_opts.resnorm_maxiter   = 6;                                           % Maximum number of re-runs
 
 %% 4. Define calibration settings
 % Settings for 'my_cmaes'

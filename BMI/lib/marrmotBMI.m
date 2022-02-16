@@ -1,4 +1,4 @@
-classdef m01BMI < BMI
+classdef marrmotBMI < BMI
     % MARRMoT m01 implemented as a BMI model
     
     
@@ -18,8 +18,7 @@ classdef m01BMI < BMI
                          'pet',0,...                % time series of potential evapotranspiration
                          'delta_t',0,...            % time step size in [days]
                          'time_unit','str');        % string with time units
-        solver = struct('name','str',...            % string with solver function name
-                        'resnorm_tolerance',0,...   % approximation accuracy
+        solver = struct('resnorm_tolerance',0,...   % approximation accuracy
                         'resnorm_maxiter',0);       % max number of re-runs
         
             % Output storage for a single time-step
@@ -64,7 +63,7 @@ classdef m01BMI < BMI
             obj.model_name = model_name;
             obj.startTime  = time_start;
             obj.endTime    = time_end;
-            obj.dt         = forcing.delta_t_days;
+            obj.dt         = forcing.delta_t;
             obj.time_unit  = forcing.time_unit;
             obj.forcing    = forcing;
             obj.solver     = solver;
@@ -83,15 +82,15 @@ classdef m01BMI < BMI
             input_forcing.precip       = obj.forcing.precip(obj.time);
             input_forcing.temp         = obj.forcing.temp(obj.time);
             input_forcing.pet          = obj.forcing.pet(obj.time);
-            input_forcing.delta_t_days = obj.forcing.delta_t;
-                
+            input_forcing.delta_t      = obj.forcing.delta_t;
+              
            % Run model for 1 time step
+            m = feval(obj.model_name);
             [output_ex,...                                                  % Fluxes leaving the model: simulated flow (Q) and evaporation (Ea)
              output_in,...                                                  % Internal model fluxes
              output_ss,...                                                  % Internal storages
              output_wb] = ...                                               % Water balance check
-                                feval(obj.model_name,...                    % Model function name
-                                      input_forcing,...                     % Time series of climatic fluxes in simulation period
+                         m.get_output(input_forcing,...                     % Time series of climatic fluxes in simulation period
                                       obj.store_cur,...                     % Initial storages
                                       obj.parameters,...                    % Parameter values
                                       obj.solver);                          % Solver settings

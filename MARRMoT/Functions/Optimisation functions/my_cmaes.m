@@ -508,14 +508,32 @@ else % flgresume
   maxdx = myeval(inopts.DiffMaxChange); % maximal sensible variable change
   mindx = myeval(inopts.DiffMinChange); % minimal sensible variable change 
 				      % can both also be defined as Nx1 vectors
-  lbounds = myeval(inopts.LBounds);		     
-  ubounds = myeval(inopts.UBounds);
-  if length(lbounds) == 1
-    lbounds = repmat(lbounds, N, 1);
+
+  % rescale 
+  original_lbounds = myeval(inopts.LBounds);		     
+  original_ubounds = myeval(inopts.UBounds);
+
+  if length(original_lbounds) == 1
+    original_lbounds = repmat(original_lbounds, N, 1);
   end
-  if length(ubounds) == 1
-    ubounds = repmat(ubounds, N, 1);
+  if length(original_ubounds) == 1
+    original_ubounds = repmat(original_ubounds, N, 1);
   end
+
+  % We'll use fixed bounds [0;10] and rescale the parameters linearly
+  % withing this bounds, if original bounds are given - otherwise no
+  % scaling happens
+  if all(original_lbounds > -Inf) && all(original_ubounds < Inf) 
+     lbounds = zeros(N, 1);
+     ubounds = repmat(10, N, 1);
+     xmean = scale_linear(xmean, original_lbounds, original_ubounds, lbounds, ubounds);
+     fitfun = @(x, varargin) fitfun(scale_linear(x, lbounds, ubounds, original_lbounds, original_ubounds), varargin{:});
+     if ~isempty(insigma); insigma = scale_linear(insigma, original_lbounds, original_ubounds, lbounds, ubounds); end
+  else
+      lbounds = original_lbounds;
+      ubounds = original_ubounds;
+  end
+
   if isempty(insigma) % last chance to set insigma
     if all(lbounds > -Inf) && all(ubounds < Inf)
       if any(lbounds>=ubounds)
@@ -639,7 +657,7 @@ else % flgresume
   % ooo initial feval, for output only
   if irun == 1 
     out.algorithm = 'Evolution Strategy with Covariance Matrix Adaptation (CMA-ES)';
-    out.solutions.bestever.x = xmean;
+    out.solutions.bestever.x = scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds);
     out.solutions.bestever.f = Inf;  % for simpler comparison below
     out.solutions.bestever.evals = counteval;
     bestever = out.solutions.bestever;
@@ -651,7 +669,7 @@ else % flgresume
     fitness.histsel(1)=fitness.hist(1);
     counteval = counteval + 1;
     if fitness.hist(1) < out.solutions.bestever.f 
-	out.solutions.bestever.x = xmean;
+	out.solutions.bestever.x = scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds);
 	out.solutions.bestever.f = fitness.hist(1);
 	out.solutions.bestever.evals = counteval;
 	bestever = out.solutions.bestever;
@@ -740,7 +758,7 @@ else % flgresume
 	    fprintf(fid, '%ld %ld 0 0 0 ', 0, counteval); 
 	    % fprintf(fid, '%ld %ld 0 0 %e ', countiter, counteval, fmean); 
 %qqq	    fprintf(fid, msprintf('%e ', genophenotransform(out.genopheno, xmean)) + '\n'); 
-	    fprintf(fid, '%e ', xmean);
+	    fprintf(fid, '%e ', scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds));
             fprintf(fid, '\n'); 
 	  end
 	  fclose(fid); 
@@ -1570,17 +1588,17 @@ while isempty(stopflag)
   % Keep overall best solution
   out.evals = counteval;
   out.solutions.evals = counteval;
-  out.solutions.mean.x = xmean;
+  out.solutions.mean.x = scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds);
   out.solutions.mean.f = fmean;
   out.solutions.mean.evals = counteval;
-  out.solutions.recentbest.x = arxvalid(:, fitness.idx(1));
+  out.solutions.recentbest.x = scale_linear(arxvalid(:, fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds);
   out.solutions.recentbest.f = fitness.raw(1);
   out.solutions.recentbest.evals = counteval + fitness.idx(1) - lambda;
-  out.solutions.recentworst.x = arxvalid(:, fitness.idx(end));
+  out.solutions.recentworst.x = scale_linear(arxvalid(:, fitness.idx(end)), lbounds, ubounds, original_lbounds, original_ubounds);
   out.solutions.recentworst.f = fitness.raw(end);
   out.solutions.recentworst.evals = counteval + fitness.idx(end) - lambda;
   if fitness.hist(1) < out.solutions.bestever.f
-    out.solutions.bestever.x = arxvalid(:, fitness.idx(1));
+    out.solutions.bestever.x = scale_linear(arxvalid(:, fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds);
     out.solutions.bestever.f = fitness.hist(1);
     out.solutions.bestever.evals = counteval + fitness.idx(1) - lambda;
     bestever = out.solutions.bestever;
@@ -1739,12 +1757,12 @@ while isempty(stopflag)
 	    else
 	      fprintf(fid, '%ld %ld 0 0 %e ', countiter, counteval, fmean); 
 	    end
-	    fprintf(fid, '%e ', xmean); 
+	    fprintf(fid, '%e ', scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds));
             fprintf(fid, '\n');
 	  elseif strcmp(name, 'xrecentbest')
             % TODO: fitness is inconsistent with x-value
 	    fprintf(fid, '%ld %ld %25.18e 0 0 ', countiter, counteval, fitness.raw(1)); 
-	    fprintf(fid, '%e ', arx(:,fitness.idx(1))); 
+	    fprintf(fid, '%e ', scale_linear(arx(:,fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds)); 
             fprintf(fid, '\n');
 	  end
 	  fclose(fid); 
@@ -1784,7 +1802,7 @@ while isempty(stopflag)
   % save everything
   time.t3 = clock;
   if ~isempty(stopflag) || time.saving < 0.05 * time.nonoutput || countiter == 100
-    xmin = arxvalid(:, fitness.idx(1));
+    xmin = scale_linear(arxvalid(:, fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds);
     fmin = fitness.raw(1);
     if flgsaving && countiter > 2
       clear idx; % prevents error under octave
@@ -1811,7 +1829,7 @@ end
 
 % Evaluate xmean and return best point as xmin
 fmin = fitness.raw(1);
-xmin = arxvalid(:, fitness.idx(1)); % Return best point of last generation.
+xmin = scale_linear(arxvalid(:, fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds); % Return best point of last generation.
 if length(stopflag) > sum(strcmp(stopflag, 'stoptoresume')) % final stopping
   out.solutions.mean.f = ...
     fitfun(xintobounds(xmean, lbounds, ubounds), varargin{:});
@@ -1821,7 +1839,7 @@ if length(stopflag) > sum(strcmp(stopflag, 'stoptoresume')) % final stopping
   out.solutions.mean.evals = counteval;
   if out.solutions.mean.f < out.solutions.bestever.f
     out.solutions.bestever = out.solutions.mean; % Return xmean as bestever point
-    out.solutions.bestever.x = xintobounds(xmean, lbounds, ubounds); 
+    out.solutions.bestever.x = scale_linear(xintobounds(xmean, lbounds, ubounds), lbounds, ubounds, original_lbounds, original_ubounds); 
     bestever = out.solutions.bestever;
   end
 
@@ -1856,7 +1874,7 @@ if flgdisplay
         num2str(out.solutions.bestever.f, '%.11e') ' | ' ...
 	strstop{1:end}]);
   if N < 102
-     disp(['mean solution:' sprintf(' %+.1e', xmean)]);
+     disp(['mean solution:' sprintf(' %+.1e', scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds))]);
      disp(['std deviation:' sprintf('  %.1e', sigma*sqrt(diagC))]);
      disp(sprintf('use plotcmaesdat.m for plotting the output at any time (option LogModulo must not be zero)'));
   end
@@ -1874,6 +1892,16 @@ end
   end
 end % while irun <= Restarts
 
+% ---------------------------------------------------------------  
+% --------------------------------------------------------------- 
+function xscaled = scale_linear(x, old_lbs, old_ubs, new_lbs, new_ubs)
+    if all(old_lbs == new_lbs) && all(old_ubs == new_ubs)
+        xscaled = x;
+    else
+        xscaled = new_lbs + (new_ubs - new_lbs) .* (x - old_lbs) ./ (old_ubs - old_lbs);
+    end
+
+ 
 % ---------------------------------------------------------------  
 % ---------------------------------------------------------------  
 function [x, idx] = xintobounds(x, lbounds, ubounds)

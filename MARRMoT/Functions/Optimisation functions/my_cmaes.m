@@ -1809,7 +1809,7 @@ if flgEvalParallel
     delete(poolobj);
 end
 
-% Evaluate xmean and return best recent point in xmin
+% Evaluate xmean and return best point as xmin
 fmin = fitness.raw(1);
 xmin = arxvalid(:, fitness.idx(1)); % Return best point of last generation.
 if length(stopflag) > sum(strcmp(stopflag, 'stoptoresume')) % final stopping
@@ -1819,15 +1819,14 @@ if length(stopflag) > sum(strcmp(stopflag, 'stoptoresume')) % final stopping
     %feval(fitfun, xintobounds(xmean, lbounds, ubounds), varargin{:});
   counteval = counteval + 1;
   out.solutions.mean.evals = counteval;
-  if out.solutions.mean.f < fitness.raw(1)
-    fmin = out.solutions.mean.f;
-    xmin = xintobounds(xmean, lbounds, ubounds); % Return xmean as best point
-  end
   if out.solutions.mean.f < out.solutions.bestever.f
     out.solutions.bestever = out.solutions.mean; % Return xmean as bestever point
     out.solutions.bestever.x = xintobounds(xmean, lbounds, ubounds); 
     bestever = out.solutions.bestever;
   end
+
+  fmin = bestever.f;
+  xmin = bestever.x;
 end
 
 % Save everything and display final message

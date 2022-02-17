@@ -140,7 +140,7 @@ m.S0            = input_s0;
                           par_ini,...                                      % initial parameter estimates
                           optim_opts,...                                   % options to optim_fun
                           of_name,...                                      % name of objective function to use
-                          1,...                                            % should the OF be inversed?
+                          1,1,...                                          % should the OF be inversed?   Should I display details about the calibration?
                           weights);                                        % additional arguments to of_name
                    
 %% 6. Evaluate the calibrated parameters on unseen data

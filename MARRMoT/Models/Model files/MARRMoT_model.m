@@ -482,6 +482,7 @@ classdef MARRMoT_model < handle
                                        optim_opts,...                      % options to optim_fun
                                        of_name,...                         % name of objective function to use
                                        inverse_flag,...                    % should the OF be inversed?
+                                       display,...                         % should I display information about the calibration?
                                        varargin)                           % additional arguments to the objective function
              
              if isempty(obj.input_climate) || isempty(obj.delta_t) ||...
@@ -497,6 +498,11 @@ classdef MARRMoT_model < handle
                  cal_idx = 1:length(Q_obs);
              end
              
+             % use display by default
+             if isempty(display)
+                 display = true;
+             end
+
              % use the data from the start to the last value of cal_idx to
              % run the simulation
              if islogical(cal_idx); cal_idx = find(cal_idx); end
@@ -517,6 +523,41 @@ classdef MARRMoT_model < handle
                  fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, cal_idx, varargin{:});
              end
              
+             % display some useful things for the user to make sure they
+             % used the right settings
+             if display
+                 disp('---')
+                 disp(['Starting calibration of model ' class(obj) '.'])
+                 disp(['Simulation will run for timesteps 1-' num2str(max(cal_idx)) '.'])
+                 
+                   % this is a bit ugly, but it formats the list of cal_idx in
+                   % a pretty and concise way
+                 cal_idx = sort(cal_idx);
+                 i = 1;
+                 previous = cal_idx(i);
+                 cal_idx_str = num2str(previous);
+                 while i < numel(cal_idx)
+                     i = i + 1;
+                     if cal_idx(i)-previous == 1
+                         i = find(diff(cal_idx(i:end)) ~= 1, 1) + i - 1;
+                         if isempty(i); i = numel(cal_idx); end
+                         previous = cal_idx(i);
+                         cal_idx_str = append(cal_idx_str, '-', num2str(previous));
+                     else
+                         previous = cal_idx(i);
+                         cal_idx_str = append(cal_idx_str, ', ', num2str(previous));
+                     end
+                 end
+    
+                 disp(['Objective function ' of_name ' will be calculated in time steps ' cal_idx_str '.'])
+                 disp(['The optimiser ' optim_fun ' will be used to optimise the objective function.'])
+                 disp(['Options passed to the optimiser:'])
+                 disp(optim_opts)
+                 disp('All other options are left to their default,')
+                 disp('check the source code of the optimiser to find these default values.')
+                 disp('---')
+             end
+
              [par_opt,...                                                  % optimal parameter set at the end of the optimisation
                  of_cal,...                                                % value of the objective function at par_opt
                  stopflag,...                                              % flag indicating reason the algorithm stopped

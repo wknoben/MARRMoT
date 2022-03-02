@@ -124,7 +124,8 @@ classdef MARRMoT_model < handle
             
             % empty struct with the solver data
             obj.solver_data.resnorm   = zeros(t_end,1);
-            obj.solver_data.solver = cell(t_end,1);
+            obj.solver_data.solver = zeros(t_end,1);
+            if(~obj.isOctave); obj.solver_data.solver = categorical(obj.solver_data.solver); end;
             obj.solver_data.iter   = zeros(t_end,1);
             
             % model specific initialisation
@@ -221,8 +222,12 @@ classdef MARRMoT_model < handle
             [resnorm, solver_id] = min(resnorm_v);
             Snew = Snew_v(solver_id,:);
             iter = iter_v(solver_id);
-            solvers = ["NewtonRaphson", "fsolve", "lsqnonlin"];
-            solver = solvers(solver_id);
+            if(obj.isOctave)
+                solver = solver_id;
+            else
+                solvers = ["NewtonRaphson", "fsolve", "lsqnonlin"];
+                solver = solvers(solver_id);
+            end
             
         end
         
@@ -352,7 +357,7 @@ classdef MARRMoT_model < handle
                obj.stores(t,:) = Sold + dS' * obj.delta_t;
                
                obj.solver_data.resnorm(t) = resnorm;
-               obj.solver_data.solver{t} = solver;
+               obj.solver_data.solver(t) = solver;
                obj.solver_data.iter(t) = iter;
                
                obj.step();

@@ -142,7 +142,7 @@ for t = 1:t_end
                         QEX(P(t),S1,smax));                                 
 
     tmpf_S2 = @(S1,S2,S3) ...
-                        (ET(gam,S2,S1,0.01,Ep(t),delta_t) + ...
+                        (ET(gam,Inf,S1,0.01,Ep(t),delta_t) + ...
                          U2(Q12(1-phi,QEX(P(t),S1,smax)),S2,0.01) - ...
                          Q12(1-phi,QEX(P(t),S1,smax)));
     
@@ -192,7 +192,7 @@ for t = 1:t_end
     flux_qex(t)  = QEX(P(t),tmp_sFlux(1),smax);
     flux_u1(t)   = U1(phi,flux_qex(t));
     flux_q12(t)  = Q12(1-phi,flux_qex(t));
-    flux_et(t)   = ET(gam,tmp_sFlux(2),tmp_sFlux(1),0.01,Ep(t),delta_t);
+    flux_et(t)   = ET(gam,Inf,tmp_sFlux(1),0.01,Ep(t),delta_t);
     flux_u2(t)   = U2(flux_q12(t),tmp_sFlux(2),0.01);
     flux_q(t)    = Q(k1,tmp_sFlux(3));
     

@@ -159,7 +159,7 @@ for t = 1:t_end
                 QEX1(PIN(1-phi,PN(P(t),Ep(t))),S1,rc));                     % store 1 function with current flux values
             
     tmpf_S2 = @(S1,S2,S3,S4) ...                                            % store 2: DEFICIT STORE
-               (ET(gam,S2,S1,0.01,Ep(t),delta_t) + ...
+               (ET(gam,Inf,S1,0.01,Ep(t),delta_t) + ...
                 QEX2(QEX1(PIN(1-phi,PN(P(t),Ep(t))),S1,rc),S2,0.01) - ...
                 QEX1(PIN(1-phi,PN(P(t),Ep(t))),S1,rc));
             
@@ -215,7 +215,7 @@ for t = 1:t_end
     flux_pby(t)    = PBY(phi,flux_pn(t));
     flux_pin(t)    = PIN(1-phi,flux_pn(t));
     flux_ea(t)     = EA(tmp_sFlux(1),Ep(t),delta_t);
-    flux_et(t)     = ET(gam,tmp_sFlux(2),tmp_sFlux(1),0.01,Ep(t),delta_t);
+    flux_et(t)     = ET(gam,Inf,tmp_sFlux(1),0.01,Ep(t),delta_t);
     flux_qex1(t)   = QEX1(flux_pin(t),tmp_sFlux(1),rc);
     flux_qex2(t)   = QEX2(flux_qex1(t),tmp_sFlux(2),0.01);
     flux_quz(t)    = QUZ(k1,tmp_sFlux(3));

@@ -7,9 +7,9 @@ function [ fluxOutput, fluxInternal, storeInternal, waterBalance ] = ...
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 %   
 % Model reference
-% Lindström, G., Johansson, B., Persson, M., Gardelin, M., & Bergström, S. 
+% Lindstrï¿½m, G., Johansson, B., Persson, M., Gardelin, M., & Bergstrï¿½m, S. 
 % (1997). Development and test of the distributed HBV-96 hydrological model. 
-% Journal of Hydrology, 201, 272–288. 
+% Journal of Hydrology, 201, 272ï¿½288. 
 % https://doi.org/https://doi.org/10.1016/S0022-1694(97)00041-3
 
 
@@ -123,10 +123,10 @@ MELT = melt_1;
 % RF(P,T,tt,tti): rainfall
 RF = rainfall_2;
 
-% IN(RF+MELT,S2,whc*S1): excess of liquid-water-in-snow storage
+% IN(RF+MELT,S2,max(whc*S1,0)): excess of liquid-water-in-snow storage
 IN = infiltration_3;
 
-% SE(S2old,whc*S1,delta_t): storage excess when store size changes
+% SE(S2old,max(whc*S1,0),delta_t): storage excess when store size changes
 SE = excess_1;
 
 % CF(cflux,S3,fc,S4,delta_t): capillary rise
@@ -149,7 +149,7 @@ Q1 = baseflow_1;
 
 %% 4. Determine numerical scheme and solver settings
 % Function name of the numerical scheme
-scheme  = solver.name;                                                      
+scheme  = solver.name;
 
 % Define which storage values should be used to update fluxes
 [~,store_fun]     = feval(scheme,storeInitial,delta_t);                     % storeInitial is used to find the number of stores, actual values are irrelevant here
@@ -160,7 +160,7 @@ fsolve_options = optimoptions('fsolve','Display','none',...
                                                  1,1,0,0,0;
                                                  1,1,1,1,0;
                                                  1,1,1,1,0;
-                                                 0,0,0,1,1]);               % Specify the Jacobian pattern                                             
+                                                 0,0,0,1,1]);               % Specify the Jacobian pattern
 lsqnonlin_options = optimoptions('lsqnonlin',...
                                  'Display','none',...
                                 'JacobPattern', [1,1,0,0,0;
@@ -169,7 +169,7 @@ lsqnonlin_options = optimoptions('lsqnonlin',...
                                                  1,1,1,1,0;
                                                  0,0,0,1,1],...
                                                  'MaxFunEvals',1000);
-                                            
+
 %% 5. Solve the system for the full time series
 for t = 1:t_end
 
@@ -179,8 +179,8 @@ for t = 1:t_end
     if t == 1; S2old = S20; else; S2old = store_S2(t-1); end                % store 2 at t-1
     if t == 1; S3old = S30; else; S3old = store_S3(t-1); end                % store 3 at t-1
     if t == 1; S4old = S40; else; S4old = store_S4(t-1); end                % store 4 at t-1
-    if t == 1; S5old = S50; else; S5old = store_S5(t-1); end                % store 5 at t-1    
-    
+    if t == 1; S5old = S50; else; S5old = store_S5(t-1); end                % store 5 at t-1
+
     % Create temporary store ODE's that need to be solved
     tmpf_S1 = @(S1,S2,S3,S4,S5) (SF(P(t),T(t),tt,tti) + ...
                                  REFR(cfr,cfmax,ttm,T(t),S2,delta_t) - ...
@@ -190,23 +190,23 @@ for t = 1:t_end
                                  MELT(cfmax,ttm,T(t),S1,delta_t) - ...
                                  REFR(cfr,cfmax,ttm,T(t),S2,delta_t) - ...
                                  IN(RF(P(t),T(t),tt,tti) + ...
-                                    MELT(cfmax,ttm,T(t),S1,delta_t),S2,whc*S1) - ...
-                                 SE(S2old,whc*S1,delta_t));                 % Store 2 function
+                                    MELT(cfmax,ttm,T(t),S1,delta_t),S2,max(whc*S1,0)) - ...
+                                 SE(S2old,max(whc*S1,0),delta_t));                 % Store 2 function
 
     tmpf_S3 = @(S1,S2,S3,S4,S5) (IN(RF(P(t),T(t),tt,tti) + ...
-                                    MELT(cfmax,ttm,T(t),S1,delta_t),S2,whc*S1) + ...
-                                 SE(S2old,whc*S1,delta_t) + ...
+                                    MELT(cfmax,ttm,T(t),S1,delta_t),S2,max(whc*S1,0)) + ...
+                                 SE(S2old,max(whc*S1,0),delta_t) + ...
                                  CF(cflux,S3,fc,S4,delta_t) - ...
                                  EA(lp,S3,fc,Ep(t),delta_t) - ...
                                  R(beta,S3,fc,...
                                    IN(RF(P(t),T(t),tt,tti) + ...
-                                      MELT(cfmax,ttm,T(t),S1,delta_t),S2,whc*S1) + ...
-                                      SE(S2old,whc*S1,delta_t)));           % Store 3 function
+                                      MELT(cfmax,ttm,T(t),S1,delta_t),S2,max(whc*S1,0)) + ...
+                                      SE(S2old,max(whc*S1,0),delta_t)));           % Store 3 function
 
     tmpf_S4 = @(S1,S2,S3,S4,S5) (R(beta,S3,fc,...
                                    IN(RF(P(t),T(t),tt,tti) + ...
-                                      MELT(cfmax,ttm,T(t),S1,delta_t),S2,whc*S1) + ...
-                                      SE(S2old,whc*S1,delta_t)) - ...
+                                      MELT(cfmax,ttm,T(t),S1,delta_t),S2,max(whc*S1,0)) + ...
+                                      SE(S2old,max(whc*S1,0),delta_t)) - ...
                                  CF(cflux,S3,fc,S4,delta_t) - ...
                                  Q0(k0,S4,alpha,delta_t) - ...
                                  PERC(perc,S4,delta_t));                    % Store 4 function
@@ -220,25 +220,25 @@ for t = 1:t_end
                       delta_t,...
                       tmpf_S1,tmpf_S2,tmpf_S3,tmpf_S4,tmpf_S5);             % this returns a new anonymous function that we solve in the next step
 
-% Model solving -----------------------------------------------------------            
+% Model solving -----------------------------------------------------------
     % --- Use the specified numerical scheme to solve storages ---
     [tmp_sNew,tmp_fval] = fsolve(@(eq_sys) solve_fun(...
                         eq_sys(1),eq_sys(2),eq_sys(3),eq_sys(4),...
                             eq_sys(5)),...                                  % system of storage equations
                         [S1old,S2old,S3old,S4old,S5old],...                 % storage values on previous time step
                         fsolve_options);                                    % solver options
-                    
+
     % --- Check if the solver has found an acceptable solution and re-run
-    % if not. The re-run uses the 'lsqnonlin' solver which is slower but 
+    % if not. The re-run uses the 'lsqnonlin' solver which is slower but
     % more robust. It runs solver.resnorm_iterations times, with different
     % starting points for the solver on each iteration ---
     tmp_resnorm = sum(tmp_fval.^2);
-     
+
     if tmp_resnorm > solver.resnorm_tolerance
         [tmp_sNew,~,~] = rerunSolver('lsqnonlin', ...                       
                                         lsqnonlin_options, ...              % solver options
                                         @(eq_sys) solve_fun(...
-                                            eq_sys(1),eq_sys(2),eq_sys(3),...   
+                                            eq_sys(1),eq_sys(2),eq_sys(3),...
                                             eq_sys(4),eq_sys(5)), ...       % system of ODEs
                                         solver.resnorm_maxiter, ...         % maximum number of re-runs
                                         solver.resnorm_tolerance, ...       % convergence tolerance
@@ -246,34 +246,33 @@ for t = 1:t_end
                                         [S1old,S2old,S3old,S4old,S5old], ...% storages ate previous time step
                                         store_min, ...                      % lower bounds
                                         store_upp);                         % upper bounds
-                                              
     end
 
-% Model states and fluxes -------------------------------------------------    
+% Model states and fluxes -------------------------------------------------
     % Find the storages needed to update fluxes: update 'tmp_sFlux'
-    eval(store_fun);                                                        % creates/updates tmp_sFlux 
+    eval(store_fun);                                                        % creates/updates tmp_sFlux
 
     % Calculate the fluxes
     flux_sf(t)   = SF(P(t),T(t),tt,tti);
     flux_refr(t) = REFR(cfr,cfmax,ttm,T(t),tmp_sFlux(2),delta_t);
     flux_melt(t) = MELT(cfmax,ttm,T(t),tmp_sFlux(1),delta_t);
     flux_rf(t)   = RF(P(t),T(t),tt,tti);
-    flux_in(t)   = IN(flux_rf(t)+flux_melt(t),tmp_sFlux(2),whc*tmp_sFlux(1));
-    flux_se(t)   = SE(S2old,whc*tmp_sFlux(1),delta_t);
+    flux_in(t)   = IN(flux_rf(t)+flux_melt(t),tmp_sFlux(2),max(whc*tmp_sFlux(1),0));
+    flux_se(t)   = SE(S2old,max(whc*tmp_sFlux(1),0),delta_t);
     flux_cf(t)   = CF(cflux,tmp_sFlux(3),fc,tmp_sFlux(4),delta_t);
     flux_ea(t)   = EA(lp,tmp_sFlux(3),fc,Ep(t),delta_t);
     flux_r(t)    = R(beta,tmp_sFlux(3),fc,flux_in(t)+flux_se(t));
     flux_q0(t)   = Q0(k0,tmp_sFlux(4),alpha,delta_t);
     flux_perc(t) = PERC(perc,tmp_sFlux(4),delta_t);
     flux_q1(t)   = Q1(k1,tmp_sFlux(5));
-    
+
     % Update the stores
     store_S1(t) = S1old + (flux_sf(t)   + flux_refr(t) - flux_melt(t)) * delta_t;
     store_S2(t) = S2old + (flux_rf(t)   + flux_melt(t) - flux_refr(t) - flux_in(t) - flux_se(t)) * delta_t;
     store_S3(t) = S3old + (flux_in(t)   + flux_se(t)   + flux_cf(t)   - flux_ea(t) - flux_r(t)) * delta_t;
     store_S4(t) = S4old + (flux_r(t)    - flux_cf(t)   - flux_q0(t)   - flux_perc(t)) * delta_t;
     store_S5(t) = S5old + (flux_perc(t) - flux_q1(t)) * delta_t;
-    
+
     % Total runoff Qt = Q0 + Q1. Apply a triangular routing scheme with
     % time base 'maxbas'
     tmp_Qt_cur    = (flux_q0(t) + flux_q1(t)).*uh_full;                     % find how the runoff of this time step will be distributed in time

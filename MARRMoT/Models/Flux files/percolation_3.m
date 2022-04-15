@@ -14,7 +14,7 @@ function [func] = percolation_3(~)
 %
 % WK, 08/10/2018
 
-func = @(S,Smax) Smax^(-4)./(4)*(4/9)^(-4)*S^5;
+func = @(S,Smax) Smax^(-4)./(4)*(4/9)^(4)*S^5;
 
 end
 

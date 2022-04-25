@@ -1,14 +1,13 @@
-function [func] = saturation_11(varargin)
+function [out] = saturation_11(p1,p2,S,Smin,Smax,In,varargin)
 %saturation_11 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% varargin(1): value of smoothing variable r (default 0.01)
-% varargin(2): value of smoothing variable e (default 5.00)
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Saturation excess flow from a store with different degrees 
 %               of saturation (min exponential variant)
@@ -19,21 +18,18 @@ function [func] = saturation_11(varargin)
 %               Smin - minimum contributing storage [mm]
 %               Smax - maximum contributing storage [mm]
 %               In   - incoming flux [mm/d]
-%
-% WK, 09/10/2018
+%               varargin(1) - smoothing variable r (default 0.01)
+%               varargin(2) - smoothing variable e (default 5.00)
 
 if size(varargin,2) == 0
-    func = @(p1,p2,S,Smin,Smax,In) ...
-        In.*min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
-        (1-smoothThreshold_storage_logistic(S,Smin));
+    out = In.*min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
+            (1-smoothThreshold_storage_logistic(S,Smin));
 elseif size(varargin,2) == 1
-    func = @(p1,p2,S,Smin,Smax,In) ...
-        In.*min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
-        (1-smoothThreshold_storage_logistic(S,Smin,varargin(1)));
+    out = In.*min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
+            (1-smoothThreshold_storage_logistic(S,Smin,varargin(1)));
 elseif size(varargin,2) == 2
-     func = @(p1,p2,S,Smin,Smax,In) ...
-        In.*min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
-        (1-smoothThreshold_storage_logistic(S,Smin,varargin(1),varargin(2)));   
+     out = In.*min(1,p1.*(max(0,S-Smin)./(Smax-Smin)).^p2).*...
+            (1-smoothThreshold_storage_logistic(S,Smin,varargin(1),varargin(2)));   
 end
 
 

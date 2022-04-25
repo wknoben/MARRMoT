@@ -1,12 +1,13 @@
-function [func] = infiltration_7(~)
-%infiltration_7
-% source: infiltration_1 with customization
-%
-% Copyright (C) 2021 Clara Brandes
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+function [out] = infiltration_7(p1,p2,S,Smax,fin)
+%infiltration_7: infiltration_1 with customization
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Infiltration as exponentially declining based on relative storage
 % Constraints:  f <= fin
@@ -16,7 +17,6 @@ function [func] = infiltration_7(~)
 %               Smax - maximum storage [mm]
 %               fin  - size of incoming flux [mm/d]
 
-func = @(p1,p2,S,Smax,fin) ((S < Smax) .* (min(p1.*exp((-1*p2*S)./Smax),fin))).*(smoothThreshold_storage_logistic(S,Smax));
-
+out = ((S < Smax) .* (min(p1.*exp((-1*p2*S)./Smax),fin))).*(smoothThreshold_storage_logistic(S,Smax));
 
 end

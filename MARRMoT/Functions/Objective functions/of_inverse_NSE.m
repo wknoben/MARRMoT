@@ -1,20 +1,24 @@
-function [val] = of_inverse_NSE(obs,sim,varargin)
+function [val, idx] = of_inverse_NSE(obs,sim,idx)
 % of_inverse_NSE Calculates the Nash-Sutcliffe Efficiency (Nash & Sutcliffe, 1970) 
 % of the log of simulated streamflow. Ignores time steps with negative flow
 % values. Adds a constant e of 1/100 of mean(obs) to avoid issues with zero
 % flows (Pushpalatha et al. 2012).
-%
-% Copyright (C) 2021 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 % In:
 % obs       - time series of observations       [nx1]
 % sim       - time series of simulations        [nx1]
-% varargin  - number of timesteps for warmup    [1x1]
+% idx       - optional vector of indices to use for calculation, can be
+%               logical vector [nx1] or numeric vector [mx1], with m <= n
 %
 % Out:
 % val       - objective function value          [1x1]
+% idx       - indices used for the calculation
 %
 % Nash, J. E.; Sutcliffe, J. V. (1970). "River flow forecasting through 
 % conceptual models part I — A discussion of principles". Journal of 
@@ -26,52 +30,29 @@ function [val] = of_inverse_NSE(obs,sim,varargin)
 % simulations". Journal of Hydrology. 420-421, 171-182. 
 % doi:10.1016/j.jhydrol.2011.11.055
 
-%% Check inputs and set defaults
+%% Check inputs and select timesteps
 if nargin < 2
-    error('Not enugh input arguments')
-elseif nargin > 3
-    error('Too many inputs.')    
+    error('Not enugh input arguments')    
 end
 
-% Defaults
-warmup = 0; % time steps to ignore when calculating
+if nargin < 3; idx = []; end
+[sim, obs, idx] = check_and_select(sim, obs, idx);
 
-% update default warmup period if needed
-if nargin == 3
-    if size(varargin{1}) == [1,1]
-        warmup = varargin{1};
-    else
-        error('Warm up period should be 1x1 scalar.')
-    end
-end
+%% invert the time series and add a small constant to avoid issues with 0 flows
+% Pushpalatha et al (2012) suggests to set e at 1/100th of the mean of the
+% observed flow, which is what we'll follow here. The constant is added
+% before transforming flows.
 
-% check time series size and rotate one if needed
-if checkTimeseriesSize(obs,sim) == 0
-    error('Time series not of equal size.')
-    
-elseif checkTimeseriesSize(obs,sim) == 2
-    sim = sim';                                                             % 2 indicates that obs and sim are the same size but have different orientations
-end
+% Find the constant
+e = mean(obs)/100;
 
-%% Apply warmup period
-obs = obs(1+warmup:end);
-sim = sim(1+warmup:end);
-
-%% check for missing values
-% -999 is used to denote missing values in observed data, but this is later
-% scaled by area. Therefore we check for all negative values, and ignore those.
-idx = find(obs >= 0); 
-
-%% Find the constant e
-e = mean(obs(idx))/100;
-
-%% Apply constant and transform flows
+% Apply the constant and transform flows
 obs = 1./(obs+e);
 sim = 1./(sim+e);
 
 %% Calculate metric
-top = sum((sim(idx) - obs(idx)).^2);
-bot = sum((obs(idx) - mean(obs(idx))).^2);
+top = sum((sim - obs).^2);
+bot = sum((obs - mean(obs)).^2);
 val = 1 - (top/bot);
 end
 

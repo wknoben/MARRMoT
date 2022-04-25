@@ -1,11 +1,13 @@
-function [func] = recharge_1(~)
+function [out] = recharge_1(p1,S,Smax,flux)
 %recharge_1 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Recharge as scaled fraction of incoming flux
 % Constraints:  -
@@ -13,10 +15,8 @@ function [func] = recharge_1(~)
 %               S    - current storage [mm]
 %               Smax - maximum contributing storage [mm]
 %               flux - incoming flux [mm/d]
-%
-% WK, 08/10/2018
 
-func = @(p1,S,Smax,flux) p1*S/Smax*flux;
+out = p1*S/Smax*flux;
 
 end
 

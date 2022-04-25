@@ -1,14 +1,21 @@
-function [ out,UH ] = uh_4_full( in, d_base, delta_t )
+function [ UH ] = uh_4_full( d_base, delta_t )
 %uh_4_half Unit Hydrograph [days] with a triangle (linear)
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 %   Inputs
-%   in      - volume to be routed
 %   d_base  - time base of routing delay [d]
-%   delta_t - time step size [d]    
+%   delta_t - time step size [d]
+%
+%   Output
+%   UH      - unit hydrograph [nx2]
+%               uh's first row contains coeficients to splut flow at each
+%               of n timesteps forward, the second row contains zeros now,
+%               these are the still-to-flow values.
 %
 %   Unit hydrograph spreads the input volume over a time period delay.
 %   Percentage runoff goes up, peaks, and goes down again.
@@ -17,9 +24,6 @@ function [ out,UH ] = uh_4_full( in, d_base, delta_t )
 %   UH(2) = 0.41
 %   UH(3) = 0.36
 %   UH(4) = 0.09
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = d_base/delta_t;
@@ -53,8 +57,7 @@ tmp_diff   = 1-sum(UH);
 tmp_weight = UH./sum(UH);
 UH         = UH + tmp_weight.*tmp_diff;
 
-%%DISPERSE VOLUME
-out = in.*UH;
+UH(2,:) = zeros(size(UH));
 
 end
 

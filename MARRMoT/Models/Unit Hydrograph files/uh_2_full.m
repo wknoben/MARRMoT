@@ -1,14 +1,21 @@
-function [ out, UH ] = uh_2_full( in,d_base,delta_t )
+function [ UH ] = uh_2_full( d_base,delta_t )
 %uh_2_full Unit Hydrograph [days] with a full bell curve. GR4J-based
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 %   Inputs
-%   in      - volume to be routed
 %   d_base  - time base of routing delay [d]
-%   delta_t - time step size [d]    
+%   delta_t - time step size [d]  
+%
+%   Output
+%   UH      - unit hydrograph [nx2]
+%               uh's first row contains coeficients to splut flow at each
+%               of n timesteps forward, the second row contains zeros now,
+%               these are the still-to-flow values.
 %
 %   Unit hydrograph spreads the input volume over a time period 2*x4.
 %   Percentage of input returned goes up (till x4), then down again.
@@ -21,9 +28,6 @@ function [ out, UH ] = uh_2_full( in,d_base,delta_t )
 %   UH(6) = 0.14
 %   UH(7) = 0.05
 %   UH(8) = 0.00
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = d_base/delta_t;
@@ -46,8 +50,7 @@ for t = tt
     UH(t) = SH(t+1)-SH(t);
 end
 
-%%DISPERSE VOLUME
-out = in.*UH;
+    UH(2,:) = zeros(size(UH));
 
 end
 

@@ -1,13 +1,14 @@
-function [func] = evap_4(~)
-%evap_4 Creates function for evaporation: evaporates based on scaled
-%current water storage, a walting point, a constraining factor and limited 
-%by potential rate.
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+function [out] = evap_4(Ep,p1,S,p2,Smax,dt)
+%evap_4 evaporation based on scaled current water storage, a walting point,
+%a constraining factor and limited by potential rate.
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Constrained, scaled evaporation if storage is above a wilting point
 % Constraints:  f <= S/dt
@@ -17,10 +18,8 @@ function [func] = evap_4(~)
 %               S    - current storage [mm]
 %               Smax - maximum storage [mm]
 %               dt   - time step size [d]
-%
-% WK, 05/10/2018
 
-func = @(Ep,p1,S,p2,Smax,dt) min(Ep.*max(0,p1*(S-p2.*Smax)./(Smax-p2.*Smax)),S/dt);
+out = min(Ep.*max(0,p1*(S-p2.*Smax)./(Smax-p2.*Smax)),S/dt);
 
 end
 

@@ -1,12 +1,13 @@
-function [func] = evap_23(~)
-% evap_23
-% combines evap_5 (evaporation) and evap_6 (transpiration)
-%
-% Copyright (C) 2021 Clara Brandes
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+function [out] = evap_23(p1,p2,S,Smax,Ep,dt)
+% evap_23 combines evap_5 (evaporation) and evap_6 (transpiration)
+
+% Copyright (C) 2021 Clara Brandes, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Transpiration from vegetation at the potential rate if 
 %               storage is above field capacity and scaled by relative 
@@ -22,6 +23,6 @@ function [func] = evap_23(~)
 %               Ep   - potential evapotranspiration rate [mm/d]
 %               dt   - time step size [d]
 
-func = @(p1,p2,S,Smax,Ep,dt) min([p1.*Ep+(1-p1).*S./Smax.*Ep, p1*Ep*S./(p2*Smax)+(1-p1).*S./Smax.*Ep,S/dt]);
+out = min([p1.*Ep+(1-p1).*S./Smax.*Ep, p1*Ep*S./(p2*Smax)+(1-p1).*S./Smax.*Ep,S/dt]);
 
 end

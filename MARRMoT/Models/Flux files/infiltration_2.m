@@ -1,11 +1,13 @@
-function [func] = infiltration_2(~)
+function [out] = infiltration_2(p1,p2,S1,S1max,flux,S2,dt)
 %infiltration_2 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Infiltration as exponentially declining based on relative storage
 % Constraints:  0 <= f <= S2/dt
@@ -17,10 +19,8 @@ function [func] = infiltration_2(~)
 %                       demand already fulfilled elsewhere [mm/d]
 %               S2    - storage available for infiltration [mm]
 %               dt    - time step size [d]
-%
-% WK, 07/10/2018
 
-func = @(p1,p2,S1,S1max,flux,S2,dt) max(min((p1.*exp(-1*p2*S1./S1max))-flux,S2/dt),0);
+out = max(min((p1.*exp(-1*p2*S1./S1max))-flux,S2/dt),0);
 
 end
 

@@ -1,20 +1,20 @@
-function [func] = infiltration_4(~)
+function [out] = infiltration_4(fluxIn,p1)
 %infiltration_4 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Constant infiltration rate 
 % Constraints:  f <= fin
 % @(Inputs):    p1   - Infiltration rate [mm/d]
 %               fin  - incoming flux [mm/d]
-%
-% WK, 07/10/2018
 
-func = @(fluxIn,p1) min(fluxIn,p1);
+out = min(fluxIn,p1);
 
 end
 

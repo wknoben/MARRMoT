@@ -2,9 +2,11 @@ function [ f1,f2 ] = deficitBasedDistribution( S1,S1max,S2,S2max )
 %DEFICITBASEDDISTRIBUTION Calculates a fractional split for two stores,
 %based on the relative deficit in each. Currently used in:
 % m_33_sacramento_11p_5s
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2018 Wouter J.M. Knoben
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 
 %%CALCULATE RELATIVE DEFICITS

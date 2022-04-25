@@ -1,14 +1,21 @@
-function [ out,UH ] = uh_8_delay( in, t_delay, delta_t )
+function [ UH ] = uh_8_delay( t_delay, delta_t )
 %uh_8_delay Unit Hydrograph [days] with a pure delay (no transformation).
-%
-% Copyright (C) 2019 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 %   Inputs
-%   in      - volume to be routed
 %   t_delay - flow delay [d]
-%   delta_t - time step size [d]    
+%   delta_t - time step size [d] 
+%
+%   Output
+%   UH      - unit hydrograph [nx2]
+%               uh's first row contains coeficients to splut flow at each
+%               of n timesteps forward, the second row contains zeros now,
+%               these are the still-to-flow values.
 %
 %   Unit hydrograph shifts the input volume over a time period.
 %   Input is spread over maximum 2 time steps.
@@ -18,9 +25,6 @@ function [ out,UH ] = uh_8_delay( in, t_delay, delta_t )
 %   UH(3) = 0.00
 %   UH(4) = 0.20
 %   UH(5) = 0.80
-
-%%INPUTS
-if any(size(in)) > 1; error('UH input should be a single value.'); end
 
 %%TIME STEP SIZE
 delay = t_delay/delta_t;
@@ -39,8 +43,7 @@ t_start = floor(delay);
 UH(1+t_start) = ord1;
 UH(1+t_start+1) = ord2;
 
-%%DISPERSE VOLUME
-out = in.*UH;
+UH(2,:) = zeros(size(UH));
 
 end
 

@@ -1,11 +1,13 @@
-function [func] = refreeze_1(~)
+function [out] = refreeze_1(p1,p2,p3,T,S,dt)
 %refreeze_1 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Refreezing of stored melted snow
 % Constraints:  f <= S/dt
@@ -15,10 +17,8 @@ function [func] = refreeze_1(~)
 %               T    - current temperature [oC]
 %               S    - current storage [mm]
 %               dt   - time step size [d]
-%
-% WK, 08/10/2018
 
-func = @(p1,p2,p3,T,S,dt) min(max(0,p1*p2*(p3-T)),S/dt);
+out = min(max(p1*p2*(p3-T),0),S/dt);
 
 end
 

@@ -1,12 +1,13 @@
-function [func] = interflow_12(~)
-% interflow_12 
-% source: interflow_3 with customization -> field capacity (FC) is lower
-%
-% Copyright (C) 2021 Clara Brandes
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+function [out] = interflow_12(p1,p2,p3,S,Smax,dt)
+% interflow_12: interflow_3 with customization -> field capacity (FC) is lower
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Non-linear interflow (variant) when current storage is over 
 %               a threshhold (FC) and zero otherwise
@@ -20,7 +21,7 @@ function [func] = interflow_12(~)
 %               Smax - maximum storage [mm]
 %               dt   - time step size [d]
 
-func = @(p1,p2,p3,S,Smax,dt) ((S >(p2*Smax)).*(min(p1*max((S-(p2*Smax)),0).^(p3),max(S/dt,0))));
+out = (S >(p2*Smax)).*(min(p1*max((S-(p2*Smax)),0).^(p3),max(S/dt,0)));
 
 end
 

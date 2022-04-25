@@ -1,11 +1,13 @@
-function [func] = evap_20(~)
+function [out] = evap_20(p1,p2,S,Smax,Ep,dt)
 %evap_20 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Evaporation limited by a maximum evaporation rate and 
 %               scaled below a wilting point
@@ -17,10 +19,8 @@ function [func] = evap_20(~)
 %               Smax - maximum storage [mm]
 %               Ep   - potential evapotranspiration rate [mm/d]
 %               dt   - time step size [d]
-%
-% WK, 05/10/2018
 
-func = @(p1,p2,S,Smax,Ep,dt) min([p1.*S./(p2.*Smax),Ep,S/dt]);
+out = min([p1.*S./(p2.*Smax),Ep,S/dt]);
 
 end
 

@@ -9,31 +9,20 @@ The framework provides Matlab code for 47 unique model structures, standardized 
 The framework is provided with extensive documentation, a User Manual and several workflow scripts that give examples of how to use the framework.
 MARRMoT is based around individual flux functions and aggregated model functions, allowing a wide range of possible applications.
 
-If you have any questions about using or running the code, or are willing to contribute, please contact wouter.knoben[-at-]usask.ca or l.trotter[-at-] unimelb.edu.au
+If you have any questions about using or running the code, or are willing to contribute, please contact l.trotter[-at-] unimelb.edu.au or wouter.knoben[-at-]usask.ca
 
-## Changes after peer review
-MARRMoT v1.2 has been accepted through peer review. Since then, users have found various bugs which are corrected on the current master branch. Summary:
+## MARRMoT v2
+The MARRMoT master branch has been updated to version 2. Main changes compared to v1 include code refactoring to rely on object-oriented programming. A paper describing these changes will be submitted to Geoscientific Model Development in the near future. Until such time, please be aware that this version of the code has not yet passed peer review.
 
-- 'interflow_9' was missing a non-negativity constraint. This has been added and included in MARRMoT v1.3.
-- Water balance calculations did not properly account for time step sizes different than 1 day. This has been corrected on the master branch but not been released yet.
-- Models m05, m15, m37 and m44 did not properly account for time step size in certain flux calculations. This has been corrected on the master branch but not been released yet.
-- Workflow_example_4 now works under Octave, after Octave update 5.2.0 and code contribution by Mustafa Kemal Türkeri. This has been integrated on the master branch but not been released yet.
-- A new model m47 (m_47_IHM19_16p_4s) has been added after a contribution by Clara Brandes and her supervisors.
-- Several additional efficiency metrics have been added, thanks to Thomas Whöling. This has been integrated on the master branch but not been released yet.
-- Efficiency metrics now accept a warmup period (number of initial time steps to ignore when calculating efficiency metrics) as an optional argument. Should be backwards compatible with existing scripts. Thanks to Thomas Whöling.
-- Model m09 contained a sign error in the equation for S2.
-- Model m36 contained a typo in the equation for S5, which was missing flux_INT.
-- Models m17 and m25 contained errors in the boundary conditions for 'evap_16' in S2.
-- Model m37 was missing a non-negativity constraint.
-- 'percolation_3' contained a sign error in the exponent, affecting the behaviour of m07.
+
+The last release of MARRMoT v1 is version 1.4 and can be found as a release here: dx.doi.org/10.5281/zenodo.6460624
 
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases.
 
 ### Requirements
-MARRMoT was developed on Matlab version 9.2.0.538062 (R2017a) and the Optimization Toolbox is required (tested with version 7.6).
-If using Octave, MARRMoT was tested on Octave 4.4.1 and requires the 'optim' package.  
-The following instructions assume that MARRMoT will be used with Matlab.
+MARRMoT has been developed on MATLAB version 9.11.0.1873467 (R2021b) and tested with Octave 6.4.0.
+To run in MATLAB, the Optimization Toolbox is required, while Octave requires the "optim" package.
 
 Note that the function `circshift()` that is used by routing routines has markedly different behaviour in Matlab 2016b and higher compared to previous versions. Routing results will be unreliable in Matlab 2016a and below but will **_not_** generate any warnings or error messages. User discretion is advised.
 
@@ -43,7 +32,6 @@ Download a copy of the files from this repository (note: do not use the folder '
 ### Try an example application
 - Open Matlab
 - Add the folder 'MARRMoT' and its subfolders 'Functions', 'Models' and 'User Manual' to the Matlab path
-- **Note:** Ensure that the folder "Octave" is **not** included, and remove this folder if it is
 - Navigate Matlab's current folder to './MARRMoT/User Manual'
 - Open the script 'workflow_example_1.m'
 - Run the script by pressing F5
@@ -52,16 +40,16 @@ Download a copy of the files from this repository (note: do not use the folder '
 The User Manual provides further details.
 
 ## Documentation
-The article describing MARRMoT development is published to Geoscientific Model Development.
-This paper, its Supporting Material and the User Manual cover the following topics:
+The article describing MARRMoT's v2 update will soon be submitted to the scientific journal 'Geoscientific Model Development'.
 
-- **Paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. https://doi.org/10.5194/gmd-12-2463-2019
-- **Supporting Material (full)**: https://www.geosci-model-dev.net/12/2463/2019/gmd-12-2463-2019-supplement.pdf
-- **Supporting Material (section 2)**: detailed description of each model structure, giving Ordinary Differential Equations and constitutive functions for each model store
-- **Supporting Material (section 3)**: translation of constitutive functions (fluxes) to Matlab code
-- **Supporting Material (section 4)**: overview of Unit Hydrograph code
-- **Supporting Material (section 5)**: rationale behind generalised parameter ranges (use of these ranges is optional)
-- **User Manual**: covers a variety of topics including (i) understanding model files, (ii) application examples, (iii) creating a new model or flux function, and (iv) Octave-specific instructions. https://github.com/wknoben/MARRMoT/blob/master/MARRMoT%20User%20manual%20v1.2.pdf
+MARRMoT's documentation includes:
+
+- **New paper**: object-oriented implementation, changes from MARRMoT v1 to v2, soon to be submitted for peer review.
+- **Original paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. https://doi.org/10.5194/gmd-12-2463-2019
+- **User manual**: description on how to use MARRMoT v2 and how to contribute to it.
+- **User manual appendices**: detailed model descriptions (A), flux equations (B) and unit hydrographs (C)
+
+User manual and appendices are found in this repository in "./MARRMoT/User manual"
 
 ## Model structure summary
 MARRMoT model structures are based on a wide variety of different models.
@@ -96,6 +84,7 @@ In addition to a range of unnamed models, the following models provided inspirat
 MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for details.
 
 ## DOIs of previous releases
+- v1.4: dx.doi.org/10.5281/zenodo.6460624
 - v1.3: dx.doi.org/10.5281/zenodo.3552961
 - v1.2: dx.doi.org/10.5281/zenodo.3235664
 - v1.1: dx.doi.org/10.5281/zenodo.2677728

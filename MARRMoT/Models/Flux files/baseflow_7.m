@@ -1,11 +1,13 @@
-function [func] = baseflow_7(~)
+function [out] = baseflow_7(p1,p2,S,dt)
 %baseflow_7 
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2019, 2021 Wouter J.M. Knoben, Luca Trotter
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
-% Anonymous function
+
+% Flux function
 % ------------------
 % Description:  Non-linear outflow from a reservoir
 % Constraints:  f <= S/dt
@@ -14,10 +16,8 @@ function [func] = baseflow_7(~)
 %               p2   - exponential scaling parameter [-]
 %               S    - current storage [mm]
 %               dt   - time step size [d]
-%
-% WK, 05/10/2018
 
-func = @(p1,p2,S,dt) min(S/dt,p1.*max(0,S).^p2);
+out = min(S/dt,p1.*max(0,S).^p2);
 
 end
 

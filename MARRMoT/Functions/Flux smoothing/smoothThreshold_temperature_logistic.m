@@ -1,10 +1,12 @@
 function [out] = smoothThreshold_temperature_logistic(T,Tt,r)
 %smoothThreshold_temperature_logistic Logisitic smoother for temperature threshold functions.
-%
-% Copyright (C) 2018 W. Knoben
-% This program is free software (GNU GPL v3) and distributed WITHOUT ANY
+
+% Copyright (C) 2018 Wouter J.M. Knoben
+% This file is part of the Modular Assessment of Rainfall-Runoff Models
+% Toolbox (MARRMoT).
+% MARRMoT is a free software (GNU GPL v3) and distributed WITHOUT ANY
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
-%
+
 %   Smooths the transition of threshold functions of the form:
 %
 %   Snowfall = { P, if T <  Tt

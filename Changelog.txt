@@ -1,5 +1,9 @@
 This file highlights the most important changes made during version updates. The changes listed here are limited to those changes that directly impact model code. Changes to comments or workflow example files are not included.
 
+
+=== v2.0 ===
+Updated from v1 to v2 to incorporate the new object-oriented structure
+
 === v1.4 ===
 Updated from v1.3 to v1.4 to incorporate bug fixes in a few models and to publish m_47. Main changes:
 

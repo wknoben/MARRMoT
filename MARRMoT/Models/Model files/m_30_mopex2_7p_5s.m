@@ -39,9 +39,9 @@ classdef m_30_mopex2_7p_5s < MARRMoT_model
                              1   , 2000;    % se, Root zone storage capacity [mm]
                              0   , 1];      % tc, Mean residence time [d-1]
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5"];                   % Names for the stores
-            obj.FluxNames  = ["ps", "pr",  "qn",  "et1", "q1f",...
-                              "qw", "et2", "q2u", "qf", "qs"];             % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5"};                   % Names for the stores
+            obj.FluxNames  = {"ps", "pr",  "qn",  "et1", "q1f",...
+                              "qw", "et2", "q2u", "qf", "qs"};             % Names for the fluxes
             
             obj.FluxGroups.Ea = [4 7];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [9 10];                                    % Index or indices of fluxes to add to Streamflow

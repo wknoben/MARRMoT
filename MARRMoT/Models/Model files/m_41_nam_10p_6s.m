@@ -43,9 +43,9 @@ classdef m_41_nam_10p_6s < MARRMoT_model
                                 0, 1;       % k1, Interflow routing delay [d-1]
                                 0, 1];      % kb, Baseflow routing delay [d-1]
                             
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5" "S6"];              % Names for the stores
-            obj.FluxNames  = ["ps", "pr", "m",  "eu", "pn", "of", "inf",...
-                              "if", "dl", "gw", "el", "qo", "qi", "qb"];   % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5" "S6"};              % Names for the stores
+            obj.FluxNames  = {"ps", "pr", "m",  "eu", "pn", "of", "inf",...
+                              "if", "dl", "gw", "el", "qo", "qi", "qb"};   % Names for the fluxes
             
             obj.FluxGroups.Ea = [4 11];                                    % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [12 13 14];                                % Index or indices of fluxes to add to Streamflow

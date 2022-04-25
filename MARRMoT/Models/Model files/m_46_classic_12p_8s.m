@@ -47,11 +47,11 @@ classdef m_46_classic_12p_8s < MARRMoT_model
                                 0, 1;       % cxs, Slow runoff coefficient for semi-permeable soil [d-1]
                                 0, 1];      % cu, Runoff coefficient for impermeable soil [d-1]
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5" "S6" "S7" "S8"];    % Names for the stores
-            obj.FluxNames  = ["pp",  "ps",  "pi",  "epx", "ppx",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5" "S6" "S7" "S8"};    % Names for the stores
+            obj.FluxNames  = {"pp",  "ps",  "pi",  "epx", "ppx",...
                               "epy", "ppe", "q",   "psd", "psi",...
                               "esx", "psx", "esy", "pse", "psq",...
-                              "pss", "xq",  "xs",  "ei",  "pie", "u"];     % Names for the fluxes
+                              "pss", "xq",  "xs",  "ei",  "pie", "u"};     % Names for the fluxes
             
             obj.FluxGroups.Ea = [4 6 11 13 19];                            % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [8 17 18 21];                              % Index or indices of fluxes to add to Streamflow

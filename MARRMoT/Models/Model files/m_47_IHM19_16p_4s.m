@@ -45,11 +45,11 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
                                 1,     5;      % 15 XQS2, runoff scale parameter second soil layer [-]
                                 0.01,  5];     % 16 D, Flow delay before surface runoff [d]
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4"];                        % Names for the stores
-            obj.FluxNames  = ["ei",    "pex", "pexmp",  "pexs1", "fmp",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4"};                        % Names for the stores
+            obj.FluxNames  = {"ei",    "pex", "pexmp",  "pexs1", "fmp",...
                               "qexmp", "qmp", "pqexsl", "fs1",   "etas1",...
                               "qs1",   "q0",  "q0r",    "qmps1", "pc",...
-                              "qh",    "qs2", "qgw"];                      % Names for the fluxes
+                              "qh",    "qs2", "qgw"};                      % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 10];                                    % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [13 16 17 18];                             % Index or indices of fluxes to add to Streamflow
@@ -126,17 +126,17 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
             flux_pex     = interception_1(P,S1,SIMAX);
             flux_pexmp   = split_1(A,flux_pex);
             flux_pexs1   = split_2(A,flux_pex);
-            flux_fmp     = infiltration_8(S2,SMPMAX,flux_pexmp);
+            flux_fmp     = infiltration_3(flux_pexmp,S2,SMPMAX);
             flux_qexmp   = flux_pexmp - flux_fmp;
             flux_qmp     = interflow_3(CQMP,XQMP,S2,delta_t);
             flux_pqexs1  = flux_pexs1 + flux_qexmp;
             flux_fs1     = infiltration_7(CFS1,XFS1,S3,SS1MAX,flux_pqexs1);
             flux_etas1   = evap_23(FF,FCCS1,S3,SS1MAX,Ep,delta_t);  
-            flux_qs1     = interflow_12(CQS1,FCCS1,XQS1,S3,SS1MAX,delta_t);
+            flux_qs1     = interflow_9(S3,CQS1,FCCS1*SS1MAX,XQS1,delta_t);
             flux_q0      = flux_pqexs1 - flux_fs1;
             flux_q0r     = route(flux_q0, uh_q0r);
             flux_qmps1   = flux_qmp + flux_qs1;
-            flux_pc      = infiltration_8(S4,SS2MAX,flux_qmps1);
+            flux_pc      = infiltration_3(flux_qmps1,S4,SS2MAX);
             flux_qh      = flux_qmps1 - flux_pc;
             flux_qs2     = interflow_3(CQS2,XQS2,S4,delta_t);
             flux_qgw     = 0.0195;

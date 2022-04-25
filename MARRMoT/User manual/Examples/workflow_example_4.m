@@ -22,8 +22,8 @@
 % optimisation, it is a wrapper around 'cmaes' to ensure inputs and outputs
 % are consistent with other MATLAB's optimisation algorithms (e.g.
 % 'fminsearch' or 'fminsearchbnd').
-% While the wrapper is provided as part of MARRMoT, it requires the source
-% code to 'cmaes' to function, it is available at:
+% While the wrapper is provided as part of MARRMoT, it requires the source 
+% code to 'cmaes' to function, it is available at: 
 % http://cma.gforge.inria.fr/cmaes.m
 %
 % The wrapper is necessary for the optimiser to function within the
@@ -37,7 +37,7 @@
 % Load the data
 load MARRMoT_example_data.mat
 
-% Create a climatology data input structure.
+% Create a climatology data input structure. 
 % NOTE: the names of all structure fields are hard-coded in each model
 % file. These should not be changed.
 input_climatology.precip   = data_MARRMoT_examples.precipitation;                   % Daily data: P rate  [mm/d]
@@ -56,12 +56,14 @@ numParams = m.numParams;                                                   % Num
 numStores = m.numStores;                                                   % Number of stores
 input_s0  = zeros(numStores,1);                                            % Initial storages (see note in paragraph 5 on model warm-up)
 
-%% 3. Define the solver settings
-% Create a solver settings data input structure.
+%% 3. Define the solver settings  
+% Create a solver settings data input structure. 
 % NOTE: the names of all structure fields are hard-coded in each model
 % file. These should not be changed.
-input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance; users have reported differences in simulation accuracy (KGE scores) during calibration between Matlab and Octave for a given tolerance. In certain cases, Octave seems to require tigther tolerances to obtain the same KGE scores as Matlab does.
-input_solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
+input_solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance;
+% users have reported differences in simulation accuracy (KGE scores) during calibration between Matlab and Octave for a given tolerance.
+% In certain cases, Octave seems to require tigther tolerances to obtain the same KGE scores as Matlab does.
+input_solver_opts.resnorm_maxiter   = 6;                                           % Maximum number of re-runs
 
 %% 4. Define calibration settings
 % Settings for 'my_cmaes'
@@ -78,21 +80,26 @@ optim_opts.insigma = .3*(parRanges(:,2) - parRanges(:,1));                 % sta
 optim_opts.LBounds  = parRanges(:,1);                                      % lower bounds of parameters
 optim_opts.UBounds  = parRanges(:,2);                                      % upper bounds of parameters
 optim_opts.PopSize  = 4 + floor(3*log(numParams));                         % population size (default)
-optim_opts.TolX       = 1e-6 * min(optim_opts.insigma);                    % stopping criterion on changes to parameters
+optim_opts.TolX       = 1e-6 * min(optim_opts.insigma);                    % stopping criterion on changes to parameters 
 optim_opts.TolFun     = 1e-4;                                              % stopping criterion on changes to fitness function
 optim_opts.TolHistFun = 1e-5;                                              % stopping criterion on changes to fitness function
-%optim_opts.MaxIter    = 5;                                                 % just do 5 iterations, to check if it works
 optim_opts.SaveFilename      = 'wf_ex_4_cmaesvars.mat';                    % output file of cmaes variables
 optim_opts.LogFilenamePrefix = 'wf_ex_4_';                                 % prefix for cmaes log-files
+% note that saving to ".mat" file of CMA-ES output is disabled for Octave
+% (lines 1795 and 1839 of my_cmaes.m) due to a bug that otherwise crashes the calibration.
 
 % Other useful options
     % change to true to run in parallel on a pool of CPUs (e.g. on a cluster)
-optim_opts.EvalParallel = false;
+optim_opts.EvalParallel = false;                                           
     % uncomment to restart r-times until the condition
 % r = 2;
 % optim_opts.Restarts  = r;
 % optim_opts.RestartIf = 'fmin > -.8'; % OF is inverted, so this restarts
 %                                        unless the OF (KGE here) > 0.8
+
+% debugging options
+%optim_opts.MaxIter = 5;                                                    % just do 5 iterations, to check if it works
+%optim_opts.Seed = 1234;                                                    % for reproducibility
 
 % initial parameter set
 par_ini = mean(parRanges,2);                                               % same as default value
@@ -133,50 +140,50 @@ m.S0            = input_s0;
                           par_ini,...                                      % initial parameter estimates
                           optim_opts,...                                   % options to optim_fun
                           of_name,...                                      % name of objective function to use
-                          1,...                                            % should the OF be inversed?
+                          1,1,...                                          % should the OF be inversed?   Should I display details about the calibration?
                           weights);                                        % additional arguments to of_name
-
+                   
 %% 6. Evaluate the calibrated parameters on unseen data
 % Run the model with calibrated parameters, get only the streamflow
-Q_sim = m.get_streamflow([],[],par_opt);
-
+Q_sim = m.get_streamflow([],[],par_opt);  
+             
 % Compute evaluation performance
 of_eval = feval(of_name,...                                                % Objective function name (here 'of_KGE')
                 Q_obs,...                                                  % Observed flow during evaluation period
-                Q_sim,...                                                  % Simulated flow during evaluation period, using calibrated parameters
+                Q_sim,...                                                  % Simulated flow during evaluation period, using calibrated parameters            
                 eval_idx,...                                               % Indices of evaluation period
                 weights);                                                  % KGE component weights
-
+                
 %% 7. Visualise the results
-
+              
 % Prepare a time vector
 t = data_MARRMoT_examples.dates_as_datenum;
 
 % Compare simulated and observed streamflow
-figure('color','w');
+figure('color','w'); 
     box on;
-    hold all;
-
+    hold all; 
+    
     % Flows
     l(1) = plot(t,Q_obs,'k');
     l(2) = plot(t,Q_sim,'r');
-
+    
     % Dividing line
     l(3) = plot([t(max(cal_idx)),t(max(cal_idx))],[0,170],'--b','linewidth',2);
     l(4) = plot([t(warmup),t(warmup)],[0,170],'--g','linewidth',2);
-
-    % Legend & text
+    
+    % Legend & text       
     l = legend(l,'Q_{obs}','Q_{sim}','Cal // Eval', 'warmup // Cal','Location','northwest');
     title('Model calibration and evaluation results')
     ylabel('Streamflow [mm/d]')
     xlabel('Time [d]')
-
+    
     txt_cal  = sprintf('Calibration period \nKGE = %.2f ',of_cal);
     txt_eval = sprintf('Evaluation period \nKGE = %.2f',of_eval);
     text(t(round(mean(cal_idx))),57,txt_cal,'fontsize',16,'HorizontalAlignment', 'center');
     text(t(round(mean(eval_idx))),57,txt_eval,'fontsize',16,'HorizontalAlignment', 'center');
     set(gca,'fontsize',16);
-
+    
     % Other settings
     datetick;
     ylim([0,60])

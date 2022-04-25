@@ -46,9 +46,9 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
                               0 ,   1;      % K1, runoff coefficient from lower zone [d-1]
                               1 ,   120];   % MAXBAS, flow routing delay [d]                 
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5"];                   % Names for the stores
-            obj.FluxNames  = ["sf", "refr", "melt", "rf",   "in", "se", "cf",...
-                              "ea", "r",    "q0",   "perc", "q1", "qt"];   % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5"};                   % Names for the stores
+            obj.FluxNames  = {"sf", "refr", "melt", "rf",   "in", "se", "cf",...
+                              "ea", "r",    "q0",   "perc", "q1", "qt"};   % Names for the fluxes
             
             obj.FluxGroups.Ea = 8;                                           % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 13;                                          % Index or indices of fluxes to add to Streamflow
@@ -120,8 +120,8 @@ classdef m_37_hbv_15p_5s < MARRMoT_model
             flux_refr = refreeze_1(cfr,cfmax,ttm,T,S2,delta_t);
             flux_melt = melt_1(cfmax,ttm,T,S1,delta_t);
             flux_rf   = rainfall_2(P,T,tt,tti);
-            flux_in   = infiltration_3(flux_rf+flux_melt,S2,max(whc*S1,0));
-            flux_se   = excess_1(S2old,max(whc*S1,0),delta_t);
+            flux_in   = infiltration_3(flux_rf+flux_melt,S2,whc*S1);
+            flux_se   = excess_1(S2old,whc*S1,delta_t);
             flux_cf   = capillary_1(cflux,S3,fc,S4,delta_t);
             flux_ea   = evap_3(lp,S3,fc,Ep,delta_t);
             flux_r    = recharge_2(beta,S3,fc,flux_in+flux_se);

@@ -12,8 +12,7 @@ MARRMoT is based around individual flux functions and aggregated model functions
 If you have any questions about using or running the code, or are willing to contribute, please contact l.trotter[-at-] unimelb.edu.au or wouter.knoben[-at-]usask.ca
 
 ## MARRMoT v2
-The MARRMoT master branch has been updated to version 2. Main changes compared to v1 include code refactoring to rely on object-oriented programming. A paper describing these changes will be submitted to Geoscientific Model Development in the near future. Until such time, please be aware that this version of the code has not yet passed peer review.
-
+The MARRMoT master branch has been updated to version 2.1. Main changes compared to v1 include code refactoring to rely on object-oriented programming and speed-ups in the model solving routines. A paper describing these changes will be submitted to Geoscientific Model Development in the near future. Until such time, please be aware that this version of the code has not yet passed peer review.
 
 The last release of MARRMoT v1 is version 1.4 and can be found as a release here: dx.doi.org/10.5281/zenodo.6460624
 
@@ -21,8 +20,7 @@ The last release of MARRMoT v1 is version 1.4 and can be found as a release here
 These instructions will help you install a copy of MARRMoT and run a few example cases.
 
 ### Requirements
-MARRMoT has been developed on MATLAB version 9.11.0.1873467 (R2021b) and tested with Octave 6.4.0.
-To run in MATLAB, the Optimization Toolbox is required, while Octave requires the "optim" package.
+MARRMoT has been developed on MATLAB version 9.11.0.1873467 (R2021b) and tested with Octave 6.4.0. To run in MATLAB, the Optimization Toolbox is required, while Octave requires the "optim" package.
 
 Note that the function `circshift()` that is used by routing routines has markedly different behaviour in Matlab 2016b and higher compared to previous versions. Routing results will be unreliable in Matlab 2016a and below but will **_not_** generate any warnings or error messages. User discretion is advised.
 
@@ -40,13 +38,13 @@ Download a copy of the files from this repository (note: do not use the folder '
 The User Manual provides further details.
 
 ## Documentation
-The article describing MARRMoT's v2 update will soon be submitted to the scientific journal 'Geoscientific Model Development'.
+The article describing MARRMoT's v2.1 update will soon be submitted to the scientific journal 'Geoscientific Model Development'.
 
 MARRMoT's documentation includes:
 
-- **New paper**: object-oriented implementation, changes from MARRMoT v1 to v2, soon to be submitted for peer review.
+- **New paper**: object-oriented implementation, changes from MARRMoT v1 to v2
 - **Original paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. https://doi.org/10.5194/gmd-12-2463-2019
-- **User manual**: description on how to use MARRMoT v2 and how to contribute to it.
+- **User manual**: description on how to use MARRMoT v2.- and how to contribute to it.
 - **User manual appendices**: detailed model descriptions (A), flux equations (B) and unit hydrographs (C)
 
 User manual and appendices are found in this repository in "./MARRMoT/User manual"
@@ -84,6 +82,7 @@ In addition to a range of unnamed models, the following models provided inspirat
 MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for details.
 
 ## DOIs of previous releases
+- v2.0: dx.doi.org/10.5281/zenodo.6483914
 - v1.4: dx.doi.org/10.5281/zenodo.6460624
 - v1.3: dx.doi.org/10.5281/zenodo.3552961
 - v1.2: dx.doi.org/10.5281/zenodo.3235664

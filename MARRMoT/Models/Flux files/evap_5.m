@@ -19,7 +19,7 @@ function [out] = evap_5(p1,S,Smax,Ep,dt)
 %               Ep   - potential evapotranspiration rate [mm/d]
 %               dt   - time step size [d]
 
-out = min((1-p1).*S./Smax.*Ep,S/dt);
+out = max(min((1-p1).*S./Smax.*Ep,S/dt),0);
 
 end
 

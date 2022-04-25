@@ -13,7 +13,7 @@ classdef m_27_tank_12p_4s < MARRMoT_model
 
     properties
         % model-specific attributes
-        aux_theta   % Auxiliary parameters
+        aux_theta % Auxiliary parameters
     end
     methods
         
@@ -41,10 +41,10 @@ classdef m_27_tank_12p_4s < MARRMoT_model
                                 0.01, 0.99;     % f1, Fraction of st-t2 that is added to t2 to find threshold 1 [-] (ensures t1 > t2)
                                 0.01, 0.99];    % f3, Fraction of st-t1-t2 that consitutes threshold 3 [-]
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4"];                        % Names for the stores
-            obj.FluxNames  = ["y1",  "y2",  "y3", "y4", "y5",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4"};                        % Names for the stores
+            obj.FluxNames  = {"y1",  "y2",  "y3", "y4", "y5",...
                               "e1",  "e2",  "e3", "e4",...
-                              "f12", "f23", "f34"];                        % Names for the fluxes
+                              "f12", "f23", "f34"};                        % Names for the fluxes
             
             obj.FluxGroups.Ea = [6 7 8 9];                                 % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [1 2 3 4 5];                               % Index or indices of fluxes to add to Streamflow

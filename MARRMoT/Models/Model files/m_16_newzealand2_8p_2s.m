@@ -36,9 +36,9 @@ classdef m_16_newzealand2_8p_2s < MARRMoT_model
                              0   , 1;      % tcbf, Baseflow runoff coefficient [d-1]
                              1   , 120];   % Routing time delay [d]
             
-            obj.StoreNames = ["S1" "S2"];                                  % Names for the stores
-            obj.FluxNames  = ["eint", "qtf", "veg", "ebs",...
-                              "qse",  "qss", "qbf", "qt"];                 % Names for the fluxes
+            obj.StoreNames = {"S1", "S2"};                                  % Names for the stores
+            obj.FluxNames  = {"eint", "qtf", "veg", "ebs",...
+                              "qse",  "qss", "qbf", "qt"};                 % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 3 4];                                   % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 8;                                         % Index or indices of fluxes to add to Streamflow
@@ -53,6 +53,9 @@ classdef m_16_newzealand2_8p_2s < MARRMoT_model
             s1max   = theta(1);     % Maximum interception storage [mm] 
             s2max   = theta(2);     % Maximum soil moisture storage [mm] 
             d       = theta(8);     % Routing delay [d]
+            
+            % maximum store values
+            obj.store_max = [s1max, s2max];
             
             % initialise the unit hydrographs and still-to-flow vectors            
             uh = uh_4_full(d,delta_t);

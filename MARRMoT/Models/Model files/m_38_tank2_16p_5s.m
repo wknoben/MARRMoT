@@ -47,11 +47,11 @@ classdef m_38_tank2_16p_5s < MARRMoT_model
                                 0.01, 0.99;     % z1, Fraction Stot that is sm1 [-]
                                 0.01, 0.99;];   % z2, Fraction of Stot-sm1 that is sm2 [-]                 
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5"];                   % Names for the stores
-            obj.FluxNames  = ["t1", "t2",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5"};                   % Names for the stores
+            obj.FluxNames  = {"t1", "t2",...
                               "y1",  "y2",  "y3", "y4", "y5",...
                               "e1",  "e2",  "e3", "e4",...
-                              "f12", "f23", "f34"];                        % Names for the fluxes
+                              "f12", "f23", "f34"};                        % Names for the fluxes
             
             obj.FluxGroups.Ea = [8 9 10 11];                               % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [3 4 5 6 7];                               % Index or indices of fluxes to add to Streamflow

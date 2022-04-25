@@ -41,8 +41,8 @@ classdef m_05_ihacres_7p_1s < MARRMoT_model
                              1   , 700;     % tau_s, Slow flow routing delay [d]
                              0   , 119];    % tau_d, flow delay [d]
             
-            obj.StoreNames = ["S1"];                                       % Names for the stores
-            obj.FluxNames  = ["Ea", "u", "uq", "us", "xq","xs", "Qt"];     % Names for the fluxes
+            obj.StoreNames = {"S1"};                                       % Names for the stores
+            obj.FluxNames  = {"Ea", "u", "uq", "us", "xq","xs", "Qt"};     % Names for the fluxes
             
             obj.FluxGroups.Ea = 1;                                         % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 7;                                         % Index or indices of fluxes to add to Streamflow

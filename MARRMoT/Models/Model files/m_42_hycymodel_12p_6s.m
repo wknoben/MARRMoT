@@ -44,10 +44,10 @@ classdef m_42_hycymodel_12p_6s < MARRMoT_model
                                 0, 1;           % kh, Hillslope runoff coefficient [d-1]
                                 0, 1];          % kc, Channel runoff coefficient [d-1]
                              
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5" "S6"];              % Names for the stores
-            obj.FluxNames  = ["rc",  "rg", "eic", "qie", "qis", "rt"...
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5" "S6"};              % Names for the stores
+            obj.FluxNames  = {"rc",  "rg", "eic", "qie", "qis", "rt"...
                               "eis", "rs", "rn",  "esu", "re",  "qin"...
-                              "esb", "qb", "qh",  "qc",  "ec",  "qt"];     % Names for the fluxes
+                              "esb", "qb", "qh",  "qc",  "ec",  "qt"};     % Names for the fluxes
             
             obj.FluxGroups.Ea = [3 7 10 13 17];                            % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [18];                                      % Index or indices of fluxes to add to Streamflow

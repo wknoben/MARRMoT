@@ -36,9 +36,9 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
                              1   , 300;     % x3 [mm]
                              .5  , 15];     % x4 [d]
             
-            obj.StoreNames = ["S1" "S2"];                                  % Names for the stores
-            obj.FluxNames  = ["pn", "en", "ef", "ps", "es", "perc",...
-                              "q9", "q1", "fr", "fq", "qr", "qt", "ex"];   % Names for the fluxes
+            obj.StoreNames = {"S1", "S2"};                                 % Names for the stores
+            obj.FluxNames  = {"pn", "en", "ef", "ps", "es", "perc",...
+                              "q9", "q1", "fr", "fq", "qr", "qt", "ex"};   % Names for the fluxes
             
             obj.FluxGroups.Ea = [3 5];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [12];                                      % Index or indices of fluxes to add to Streamflow
@@ -54,6 +54,9 @@ classdef m_07_gr4j_4p_2s < MARRMoT_model
             x1 = theta(1);     % Maximum soil moisture storage [mm]
             x3 = theta(3);     % Maximum routing store storage [mm]
             x4 = theta(4);     % Flow delay [d]
+            
+            % max of stores
+            obj.store_max = [x1, x3];
             
             % initialise the unit hydrographs and still-to-flow vectors            
             uh_q9 = uh_1_half(x4,delta_t);

@@ -14,6 +14,7 @@ If you have any questions about using or running the code, or are willing to con
 ## MARRMoT v2
 The MARRMoT master branch has been updated to version 2. Main changes compared to v1 include code refactoring to rely on object-oriented programming. A paper describing these changes will be submitted to Geoscientific Model Development in the near future. Until such time, please be aware that this version of the code has not yet passed peer review.
 
+
 The last release of MARRMoT v1 is version 1.4 and can be found as a release here: dx.doi.org/10.5281/zenodo.6460624
 
 ## Getting Started
@@ -39,7 +40,7 @@ Download a copy of the files from this repository (note: do not use the folder '
 The User Manual provides further details.
 
 ## Documentation
-The article describing MARRMoT's v2.- update will soon be submitted to the scientific journal 'Geoscientific Model Development'.
+The article describing MARRMoT's v2 update will soon be submitted to the scientific journal 'Geoscientific Model Development'.
 
 MARRMoT's documentation includes:
 

@@ -8,6 +8,8 @@ classdef MARRMoT_model < handle
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 
     properties
+        % attribute to store whether we are running MATLAB or Octave
+        isOctave          % 1 if we're on Octave, 0 if MATLAB
         % static attributes, set for each models in the model definition
         numStores         % number of model stores
         numFluxes         % number of model fluxes
@@ -36,8 +38,7 @@ classdef MARRMoT_model < handle
         uhs               % unit hydrographs and still-to-flow fluxes
         solver_data       % step-by-step info of solver used and residuals
         status            % 0 = model created, 1 = simulation ended
-        % attribute to store whether we are running MATLAB or Octave
-        isOctave          % 1 if we're on Octave, 0 if MATLAB
+
     end
     methods
         % This will run as soon as any model object is created

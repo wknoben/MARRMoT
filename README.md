@@ -17,7 +17,7 @@ The MARRMoT master branch has been updated to version 2.1. Main changes compared
 The last release of MARRMoT v1 is version 1.4 and can be found as a release here: dx.doi.org/10.5281/zenodo.6460624
 
 ## Getting Started
-These instructions will help you install a copy of MARRMoT and run a few example cases.
+These instructions will help you install a copy of MARRMoT and run a few example cases. This process should be  straightforward and MARRMoT can (given some knowledge of Github and Matlab) be up and running in a matter of minutes.
 
 ### Requirements
 MARRMoT has been developed on MATLAB version 9.11.0.1873467 (R2021b) and tested with Octave 6.4.0. To run in MATLAB, the Optimization Toolbox is required, while Octave requires the "optim" package.
@@ -28,14 +28,18 @@ Note that the function `circshift()` that is used by routing routines has marked
 Download a copy of the files from this repository (note: do not use the folder 'Octave' when using Matlab) and extract the files in an appropriate directory.
 
 ### Try an example application
-- Open Matlab
-- Add the folder 'MARRMoT' and its subfolders 'Functions', 'Models' and 'User Manual' to the Matlab path
-- Navigate Matlab's current folder to './MARRMoT/User Manual'
-- Open the script 'workflow_example_1.m'
-- Run the script by pressing F5
-- Repeat with 'workflow_example_2.m' and 'workflow_example_3.m' ('workflow_example_4.m' shows a calibration example and takes a bit longer)
+- Open Matlab;
+- Add the folder 'MARRMoT' and its subfolders 'Functions', 'Models' and 'User Manual' to the Matlab path (see image below; open the context menu by right-clicking the main MARRMoT folder inside the Matlab explorer window);
+- Navigate Matlab's current folder to './MARRMoT/User Manual';
+- Open the script 'workflow_example_1.m';
+- Run the script by pressing F5 or clicking the `Run` button;
+- Repeat with 'workflow_example_2.m' and 'workflow_example_3.m' ('workflow_example_4.m' shows a calibration example and takes a bit longer).
 
 The User Manual provides further details.
+
+<p align="center">
+<img src="Figures/matlab_path.jpg" alt="Example of adding files to Matlab path" width="200"/>
+</p>
 
 ## Documentation
 The article describing MARRMoT's v2.1 update will soon be submitted to the scientific journal 'Geoscientific Model Development'.
@@ -96,4 +100,5 @@ MARRMoT could not have been made without the effort that many hydrologists have 
 - Clara Brandes for finding and suggesting a fix for a bug in the water balance calculations and implementing m47;
 - Koen Jansen for suggesting various improvements and correcting parameter descriptions;
 - Mustafa Kemal Türkeri for making workflow_example_4 operational in Octave; and for performing extensive testing of MARRMoT in Matlab and Octave;
-- Thomas Wöhling for suggesting various additional efficiency metrics and a possible implementation for warmup periods.
+- Thomas Wöhling for suggesting various additional efficiency metrics and a possible implementation for warmup periods;
+- Hidde Drost for suggesting a way to clarify MARRMoT install instructions in this readme.

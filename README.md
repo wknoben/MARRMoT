@@ -29,11 +29,11 @@ Download a copy of the files from this repository (note: do not use the folder '
 
 ### Try an example application
 - Open Matlab;
-- Add the folder 'MARRMoT' and its subfolders 'Functions', 'Models' and 'User Manual' to the Matlab path (see image below; open the context menu by right-clicking the main MARRMoT folder inside the Matlab explorer window);
+- Add the `MARRMoT` folder  and its subfolders `Functions`, `Models` and `User Manual` to the Matlab path (see image below; open the context menu by right-clicking the main MARRMoT folder inside the Matlab explorer window);
 - Navigate Matlab's current folder to './MARRMoT/User Manual';
-- Open the script 'workflow_example_1.m';
+- Open the script `workflow_example_1.m`;
 - Run the script by pressing F5 or clicking the `Run` button;
-- Repeat with 'workflow_example_2.m' and 'workflow_example_3.m' ('workflow_example_4.m' shows a calibration example and takes a bit longer).
+- Repeat with `workflow_example_2.m` and `workflow_example_3.m` (`workflow_example_4.m` shows a calibration example and takes a bit longer).
 
 The User Manual provides further details.
 

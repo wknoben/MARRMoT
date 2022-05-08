@@ -8,6 +8,8 @@ classdef MARRMoT_model < handle
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 
     properties
+        % attribute to store whether we are running MATLAB or Octave
+        isOctave          % 1 if we're on Octave, 0 if MATLAB
         % static attributes, set for each models in the model definition
         numStores         % number of model stores
         numFluxes         % number of model fluxes
@@ -36,21 +38,20 @@ classdef MARRMoT_model < handle
         uhs               % unit hydrographs and still-to-flow fluxes
         solver_data       % step-by-step info of solver used and residuals
         status            % 0 = model created, 1 = simulation ended
-        % attribute to store whether we are running MATLAB or Octave
-        isOctave          % 1 if we're on Octave, 0 if MATLAB
+
     end
     methods
         % This will run as soon as any model object is created
         function [obj] = MARRMoT_model()
             obj.isOctave = exist('OCTAVE_VERSION', 'builtin')~=0;
             % if running in Octave, load the optim package
-            % (which contains fsolve and lsqnonlin)
             if obj.isOctave; pkg load optim; end
         end
-
+        function [] = set.isOctave(obj, value); obj.isOctave = value; end
+        
         % Set methods with checks on inputs for attributes set by the user:
         function [] = set.delta_t(obj, value)
-            if numel(value) == 1
+            if numel(value) == 1 || isempty(value)
                 obj.delta_t = value;
                 obj.reset();
             else
@@ -58,7 +59,7 @@ classdef MARRMoT_model < handle
             end
         end
         function [] = set.theta(obj, value)
-            if numel(value) == obj.numParams
+            if numel(value) == obj.numParams || isempty(value)
                 obj.theta = value(:);
                 obj.reset();
             else
@@ -84,7 +85,7 @@ classdef MARRMoT_model < handle
                            'precip, pet, temp']);
                 end
             elseif isnumeric(value)
-                if size(value,2)
+                if size(value,2)  || isempty(value)
                     obj.input_climate = value;
                     obj.reset();
                 else
@@ -97,7 +98,7 @@ classdef MARRMoT_model < handle
             end
         end
         function [] = set.S0(obj, value)
-            if numel(value) == obj.numStores
+            if numel(value) == obj.numStores || isempty(value)
                 obj.S0 = value(:);
                 obj.reset();
             else

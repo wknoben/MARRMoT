@@ -528,7 +528,7 @@ else % flgresume
      ubounds = repmat(10, N, 1);
      xmean = scale_linear(xmean, original_lbounds, original_ubounds, lbounds, ubounds);
      fitfun = @(x, varargin) fitfun(scale_linear(x, lbounds, ubounds, original_lbounds, original_ubounds), varargin{:});
-     if ~isempty(insigma); insigma = scale_linear(insigma, original_lbounds, original_ubounds, lbounds, ubounds); end
+     if ~isempty(insigma); insigma = scale_linear_range(insigma, original_ubounds - original_lbounds, ubounds - lbounds); end
   else
       lbounds = original_lbounds;
       ubounds = original_ubounds;
@@ -1901,6 +1901,12 @@ function xscaled = scale_linear(x, old_lbs, old_ubs, new_lbs, new_ubs)
         xscaled = new_lbs + (new_ubs - new_lbs) .* (x - old_lbs) ./ (old_ubs - old_lbs);
     end
 
+function xscaled = scale_linear_range(x, old_range, new_range)
+    if all(old_range == new_range)
+        xscaled = x;
+    else
+        xscaled = new_range .* x ./ (old_range);
+    end
  
 % ---------------------------------------------------------------  
 % ---------------------------------------------------------------  

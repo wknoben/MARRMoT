@@ -1811,7 +1811,7 @@ while isempty(stopflag)
       if ~isempty(strsaving) && ~isoctave
 	save('-mat', strsaving, inopts.SaveFilename); % for inspection and possible restart	
       else 
-	%save('-mat', inopts.SaveFilename); % for inspection and possible restart
+	save('-mat', inopts.SaveFilename); % for inspection and possible restart
       end
       time.saving = time.saving + time.c * max(0,etime(clock, time.t3)); 
     end
@@ -1854,7 +1854,7 @@ if flgsavingfinal
   if ~isempty(strsaving) && ~isoctave
     save('-mat', strsaving, inopts.SaveFilename); % for inspection and possible restart	
   else 
-    %save('-mat', inopts.SaveFilename);    % for inspection and possible restart
+    save('-mat', inopts.SaveFilename);    % for inspection and possible restart
   end
   message = [' (saved to ' inopts.SaveFilename ')'];
 else

@@ -523,7 +523,8 @@ else % flgresume
   % We'll use fixed bounds [0;10] and rescale the parameters linearly
   % withing this bounds, if original bounds are given - otherwise no
   % scaling happens
-  if all(original_lbounds > -Inf) && all(original_ubounds < Inf) 
+  if irun == 0 &&... % only rescale on the first re-run, otherwise it will mess up the sigma
+      all(original_lbounds > -Inf) && all(original_ubounds < Inf) 
      lbounds = zeros(N, 1);
      ubounds = repmat(10, N, 1);
      xmean = scale_linear(xmean, original_lbounds, original_ubounds, lbounds, ubounds);

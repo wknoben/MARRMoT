@@ -523,7 +523,7 @@ else % flgresume
   % We'll use fixed bounds [0;10] and rescale the parameters linearly
   % withing this bounds, if original bounds are given - otherwise no
   % scaling happens
-  if irun == 0 &&... % only rescale on the first re-run, otherwise it will mess up the sigma
+  if irun == 1 &&... % only rescale on the first re-run, otherwise it will mess up the sigma
       all(original_lbounds > -Inf) && all(original_ubounds < Inf) 
      lbounds = zeros(N, 1);
      ubounds = repmat(10, N, 1);

@@ -331,12 +331,12 @@ else
 end
 
 % EDITS to add insigma to inopts
-insigma = myeval(inopts.insigma);
-input.sigma = insigma;
+original_insigma = myeval(inopts.insigma);
+input.sigma = original_insigma;
 if isempty(inopts.insigma)
   if all(size(myeval(xstart)) > 1)
-    insigma = std(xstart, 0, 2); 
-    if any(insigma == 0)
+    original_insigma = std(xstart, 0, 2); 
+    if any(original_insigma == 0)
       error(['Initial search volume is zero, choose SIGMA or X0 appropriate']);
     end
   else
@@ -374,10 +374,11 @@ if ~flgresume % not resuming a former run
   % lambda0 = floor(myeval(opts.PopSize) * 3^floor((irun-1)/2)); 
   popsize = lambda0;
   lambda = lambda0;
-  insigma = myeval(insigma);
-  if all(size(insigma) == [N 2]) 
-    insigma = 0.5 * (insigma(:,2) - insigma(:,1));
+  original_insigma = myeval(original_insigma);
+  if all(size(original_insigma) == [N 2]) 
+    original_insigma = 0.5 * (original_insigma(:,2) - original_insigma(:,1));
   end
+  insigma = original_insigma;
 else % flgresume is true, do resume former run
   tmp = whos('-file', inopts.SaveFilename);
   for i = 1:length(tmp)
@@ -427,7 +428,7 @@ stopMaxIter = myeval(inopts.MaxIter);
 stopFunEvals = myeval(inopts.StopFunEvals);  
 stopIter = myeval(inopts.StopIter); 
 if flgresume
-    stopIter = stopIter + countiter
+    stopIter = stopIter + countiter;
 end
 stopTolX = myeval(inopts.TolX);
 stopTolUpX = myeval(inopts.TolUpX);
@@ -504,12 +505,12 @@ if flgresume % resume is on
   end
   
 else % flgresume
-  % xmean = mean(myeval(xstart), 2); % evaluate xstart again, because of irun
+  xmean = mean(myeval(xstart), 2); % evaluate xstart again, because of irun
   maxdx = myeval(inopts.DiffMaxChange); % maximal sensible variable change
   mindx = myeval(inopts.DiffMinChange); % minimal sensible variable change 
 				      % can both also be defined as Nx1 vectors
 
-  % rescale 
+                        % rescale 
   original_lbounds = myeval(inopts.LBounds);		     
   original_ubounds = myeval(inopts.UBounds);
 
@@ -523,16 +524,18 @@ else % flgresume
   % We'll use fixed bounds [0;10] and rescale the parameters linearly
   % withing this bounds, if original bounds are given - otherwise no
   % scaling happens
-  if irun == 1 &&... % only rescale on the first re-run, otherwise it will mess up the sigma
-      all(original_lbounds > -Inf) && all(original_ubounds < Inf) 
+  if all(original_lbounds > -Inf) && all(original_ubounds < Inf) 
      lbounds = zeros(N, 1);
      ubounds = repmat(10, N, 1);
      xmean = scale_linear(xmean, original_lbounds, original_ubounds, lbounds, ubounds);
      fitfun = @(x, varargin) fitfun(scale_linear(x, lbounds, ubounds, original_lbounds, original_ubounds), varargin{:});
-     if ~isempty(insigma); insigma = scale_linear_range(insigma, original_ubounds - original_lbounds, ubounds - lbounds); end
+     if ~isempty(original_insigma)
+         insigma = scale_linear_range(original_insigma, original_ubounds - original_lbounds, ubounds - lbounds);
+     end
   else
       lbounds = original_lbounds;
       ubounds = original_ubounds;
+      insigma = original_insigma;
   end
 
   if isempty(insigma) % last chance to set insigma

@@ -442,7 +442,8 @@ flgreadsignals = myevalbool(inopts.ReadSignals);
 flgWarnOnEqualFunctionValues = myevalbool(inopts.WarnOnEqualFunctionValues);
 flgEvalParallel = myevalbool(inopts.EvalParallel);
 if flgEvalParallel
-    poolobj = parpool;
+    poolobj = gcp('nocreate');
+    if isempty(poolobj); poolobj = parpool; end
 end
 stopOnEqualFunctionValues = myeval(inopts.StopOnEqualFunctionValues);
 arrEqualFunvals = zeros(1, 10+N);

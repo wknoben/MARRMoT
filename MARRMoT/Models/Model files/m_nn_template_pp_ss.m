@@ -28,8 +28,8 @@ classdef m_nn_template_pp_ss < MARRMoT_model
                              
                              0  , Inf];     % parameter p [unit]
             
-            obj.StoreNames = ["S1" "S2", "Ss"];                            % Names for the stores
-            obj.FluxNames  = ["f1", "f2", "f2", "r1", "r2"];               % Names for the fluxes
+            obj.StoreNames = {"S1", "S2", "Ss"};                            % Names for the stores
+            obj.FluxNames  = {"f1", "f2", "f2", "r1", "r2"};               % Names for the fluxes
             
             obj.FluxGroups.Ea = 0;                                         % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 0;                                         % Index or indices of fluxes to add to Streamflow
@@ -109,7 +109,7 @@ classdef m_nn_template_pp_ss < MARRMoT_model
             % outputs
             dS = [dS1 dS2 dSs];                       % output are arrays of all stores dS and
             fluxes = [flux_f1,  flux_f2, flux_f3,...  % all fluxes at this timestep. Order must match
-                      flux_r1, flux_r2];              % the naming in obj.StoreNames and obj.FluxNames
+                      flux_r1, flux_r2};              % the naming in obj.StoreNames and obj.FluxNames
         end
         
         % STEP runs at the end of every timestep.

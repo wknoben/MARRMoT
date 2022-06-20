@@ -8,6 +8,8 @@ classdef MARRMoT_model < handle
 % WARRANTY. See <https://www.gnu.org/licenses/> for details.
 
     properties
+        % attribute to store whether we are running MATLAB or Octave
+        isOctave          % 1 if we're on Octave, 0 if MATLAB
         % static attributes, set for each models in the model definition
         numStores         % number of model stores
         numFluxes         % number of model fluxes
@@ -36,12 +38,20 @@ classdef MARRMoT_model < handle
         uhs               % unit hydrographs and still-to-flow fluxes
         solver_data       % step-by-step info of solver used and residuals
         status            % 0 = model created, 1 = simulation ended
+
     end
     methods
+        % This will run as soon as any model object is created
+        function [obj] = MARRMoT_model()
+            obj.isOctave = exist('OCTAVE_VERSION', 'builtin')~=0;
+            % if running in Octave, load the optim package
+            if obj.isOctave; pkg load optim; end
+        end
+        function [] = set.isOctave(obj, value); obj.isOctave = value; end
         
         % Set methods with checks on inputs for attributes set by the user:
         function [] = set.delta_t(obj, value)
-            if numel(value) == 1
+            if numel(value) == 1 || isempty(value)
                 obj.delta_t = value;
                 obj.reset();
             else
@@ -49,7 +59,7 @@ classdef MARRMoT_model < handle
             end
         end
         function [] = set.theta(obj, value)
-            if numel(value) == obj.numParams
+            if numel(value) == obj.numParams || isempty(value)
                 obj.theta = value(:);
                 obj.reset();
             else
@@ -75,7 +85,7 @@ classdef MARRMoT_model < handle
                            'precip, pet, temp']);
                 end
             elseif isnumeric(value)
-                if size(value,2)
+                if size(value,2)  || isempty(value)
                     obj.input_climate = value;
                     obj.reset();
                 else
@@ -88,7 +98,7 @@ classdef MARRMoT_model < handle
             end
         end
         function [] = set.S0(obj, value)
-            if numel(value) == obj.numStores
+            if numel(value) == obj.numStores || isempty(value)
                 obj.S0 = value(:);
                 obj.reset();
             else
@@ -115,7 +125,8 @@ classdef MARRMoT_model < handle
             
             % empty struct with the solver data
             obj.solver_data.resnorm   = zeros(t_end,1);
-            obj.solver_data.solver = strings(t_end,1);
+            obj.solver_data.solver = zeros(t_end,1);
+            if(~obj.isOctave); obj.solver_data.solver = categorical(obj.solver_data.solver); end;
             obj.solver_data.iter   = zeros(t_end,1);
             
             % model specific initialisation
@@ -163,10 +174,17 @@ classdef MARRMoT_model < handle
             iter_v    = ones(3,1);
             
             % first try to solve the ODEs using NewtonRaphson
-            [tmp_Snew, tmp_fval] = ...
+            if(~obj.isOctave) %if MATLAB
+                [tmp_Snew, tmp_fval] = ...
                             NewtonRaphson(@obj.ODE_approx_IE,...
                                           Sold,...
                                           solver_opts.NewtonRaphson);
+            else              % if Octave
+                [tmp_Snew, tmp_fval] = ...
+                            NewtonRaphson_octave(@obj.ODE_approx_IE,...
+                                                 Sold,...
+                                                 solver_opts.NewtonRaphson);
+            end
             tmp_resnorm = sum(tmp_fval.^2);
             
             Snew_v(1,:)  = tmp_Snew;
@@ -205,8 +223,12 @@ classdef MARRMoT_model < handle
             [resnorm, solver_id] = min(resnorm_v);
             Snew = Snew_v(solver_id,:);
             iter = iter_v(solver_id);
-            solvers = ["NewtonRaphson", "fsolve", "lsqnonlin"];
-            solver = solvers(solver_id);
+            if(obj.isOctave)
+                solver = solver_id;
+            else
+                solvers = ["NewtonRaphson", "fsolve", "lsqnonlin"];
+                solver = solvers(solver_id);
+            end
             
         end
         
@@ -221,7 +243,7 @@ classdef MARRMoT_model < handle
         % get out useful attributes
         solver_opts = obj.solver_opts.(solverName);
         solve_fun = @obj.ODE_approx_IE;
-        max_iter = obj.solver_opts.rerun_maxiter;
+        max_iter = obj.solver_opts.resnorm_maxiter;
         resnorm_tolerance = obj.solver_opts.resnorm_tolerance * min(min(abs(Sold)) + 1E-5, 1);
         
         % Initialize iteration counter, sampling checker and find number of ODEs
@@ -230,18 +252,12 @@ classdef MARRMoT_model < handle
         numStores = obj.numStores;
         stopflag  = 1;                                                     % normal function run
 
-        % Initialise vector of sNew and fval for each iteration, this way you can
+        % Initialise vector of Snew and fval for each iteration, this way you can
         % keep the best one, not the last one.
         Snew_v    = zeros(numStores, max_iter);
         fval_v    = inf(numStores,max_iter);
         resnorm_v = inf(1, max_iter);
         Snew = -1 * ones(numStores, 1);
-
-        % Create the constant parts of the PROBLEM structure
-        problem.solver      = solverName;                                  % I.e. 'fsolve' or 'lsqnonlin'
-        problem.options     = solver_opts;                                 % option structure from 'optimoptions'
-        problem.objective   = solve_fun;                                   % function to be solved
-        problem.lb          = obj.store_min;
 
         % Start the re-sampling
         % Re-sampling uses different starting points for the solver to see if
@@ -257,27 +273,25 @@ classdef MARRMoT_model < handle
             % Select the starting points
             switch iter
                 case 1
-                    problem.x0 = initGuess(:);                             % 1. Location where solver got stuck
+                    x0 = initGuess(:);                                     % 1. Location where solver got stuck
                 case 2
-                    problem.x0 = Sold(:);                                  % 2. Stores at t-1
+                    x0 = Sold(:);                                          % 2. Stores at t-1
                 case 3
-                    problem.x0 = max(-2*10^4.*ones(numStores,1),...
-                                     obj.store_min(:));                    % 3. Low values (store minima or -2E4)
+                    x0 = max(-2*10^4.*ones(numStores,1),obj.store_min(:)); % 3. Low values (store minima or -2E4)
                 case 4
-                    problem.x0 = min(2*10^4.*ones(numStores,1),...
-                                     obj.store_max(:));                    % 4. High values (store maxima or 2E4)
-
+                    x0 = min(2*10^4.*ones(numStores,1),obj.store_max(:));  % 4. High values (store maxima or 2E4)
                 otherwise
-                    problem.x0 = max(zeros(numStores,1),...
-                                     Sold(:)+randn(numStores,1).*Sold(:)/10);     % 5. Randomized values close to starting location
+                    x0 = max(zeros(numStores,1),...
+                             Sold(:)+randn(numStores,1).*Sold(:)/10);      % 5. Randomized values close to starting location
             end
 
             % Re-run the solver
-            solver_string = string(solverName);
-            if solver_string == "fsolve"
-                [Snew_v(:,iter), fval_v(:,iter), stopflag] = feval(solverName, problem);
-            elseif solver_string == "lsqnonlin"
-                [Snew_v(:,iter), ~,  fval_v(:,iter), stopflag] = feval(solverName, problem);
+            if strcmpi(solverName, 'fsolve')
+                [Snew_v(:,iter), fval_v(:,iter), stopflag] = ...
+                    fsolve(solve_fun, x0, solver_opts);
+            elseif strcmpi(solverName, 'lsqnonlin')
+                [Snew_v(:,iter), ~,  fval_v(:,iter), stopflag] = ...
+                    lsqnonlin(solve_fun, x0, obj.store_min, [], solver_opts);
             else
                 error('Only fsolve and lsqnonlin are supported');
             end
@@ -378,13 +392,13 @@ classdef MARRMoT_model < handle
             % --- Fluxes internal to the model ---
             fluxInternal = struct;
             for i = 1:obj.numFluxes
-                fluxInternal.(obj.FluxNames(i)) = obj.fluxes(:,i)';
+                fluxInternal.(obj.FluxNames{i}) = obj.fluxes(:,i)';
             end
             
             % --- Stores ---
             storeInternal = struct;
             for i = 1:obj.numStores
-                storeInternal.(obj.StoreNames(i)) = obj.stores(:,i)';
+                storeInternal.(obj.StoreNames{i}) = obj.stores(:,i)';
             end
             
             % --- Water balance, if requested ---
@@ -405,7 +419,6 @@ classdef MARRMoT_model < handle
             if nargin > 1 || isempty(obj.status) || obj.status == 0 
                 obj.run(varargin{:});
             end
-            
             % Get variables
             P  = obj.input_climate(:,1);
             fg = fieldnames(obj.FluxGroups);
@@ -416,7 +429,7 @@ classdef MARRMoT_model < handle
                 OutFluxes(k) = sum(sum(signs.*obj.fluxes(:,idx), 1),2);
             end
             if isempty(obj.StoreSigns); obj.StoreSigns = repelem(1, obj.numStores); end
-            dS = obj.StoreSigns .* (obj.stores(end,:) - obj.S0');          % difference of final and initial storage for each store
+            dS = obj.StoreSigns(:) .* (obj.stores(end,:)' - obj.S0);          % difference of final and initial storage for each store
             if isempty(obj.uhs); obj.uhs = {}; end
             R = cellfun(@(uh) sum(uh(2,:)), obj.uhs);                      % cumulative of each flows still to be routed
             
@@ -475,6 +488,7 @@ classdef MARRMoT_model < handle
                                        optim_opts,...                      % options to optim_fun
                                        of_name,...                         % name of objective function to use
                                        inverse_flag,...                    % should the OF be inversed?
+                                       display,...                         % should I display information about the calibration?
                                        varargin)                           % additional arguments to the objective function
              
              if isempty(obj.input_climate) || isempty(obj.delta_t) ||...
@@ -490,6 +504,11 @@ classdef MARRMoT_model < handle
                  cal_idx = 1:length(Q_obs);
              end
              
+             % use display by default
+             if isempty(display)
+                 display = true;
+             end
+
              % use the data from the start to the last value of cal_idx to
              % run the simulation
              if islogical(cal_idx); cal_idx = find(cal_idx); end
@@ -510,6 +529,41 @@ classdef MARRMoT_model < handle
                  fitness = (-1)^inverse_flag*feval(of_name, Q_obs, Q_sim, cal_idx, varargin{:});
              end
              
+             % display some useful things for the user to make sure they
+             % used the right settings
+             if display
+                 disp('---')
+                 disp(['Starting calibration of model ' class(obj) '.'])
+                 disp(['Simulation will run for timesteps 1-' num2str(max(cal_idx)) '.'])
+                 
+                   % this is a bit ugly, but it formats the list of cal_idx in
+                   % a pretty and concise way
+                 cal_idx = sort(cal_idx);
+                 i = 1;
+                 previous = cal_idx(i);
+                 cal_idx_str = num2str(previous);
+                 while i < numel(cal_idx)
+                     i = i + 1;
+                     if cal_idx(i)-previous == 1
+                         i = find(diff(cal_idx(i:end)) ~= 1, 1) + i - 1;
+                         if isempty(i); i = numel(cal_idx); end
+                         previous = cal_idx(i);
+                         cal_idx_str = append(cal_idx_str, '-', num2str(previous));
+                     else
+                         previous = cal_idx(i);
+                         cal_idx_str = append(cal_idx_str, ', ', num2str(previous));
+                     end
+                 end
+    
+                 disp(['Objective function ' of_name ' will be calculated in time steps ' cal_idx_str '.'])
+                 disp(['The optimiser ' optim_fun ' will be used to optimise the objective function.'])
+                 disp(['Options passed to the optimiser:'])
+                 disp(optim_opts)
+                 disp('All other options are left to their default,')
+                 disp('check the source code of the optimiser to find these default values.')
+                 disp('---')
+             end
+
              [par_opt,...                                                  % optimal parameter set at the end of the optimisation
                  of_cal,...                                                % value of the objective function at par_opt
                  stopflag,...                                              % flag indicating reason the algorithm stopped
@@ -530,15 +584,22 @@ classdef MARRMoT_model < handle
          % function to return default solver options
          function solver_opts = default_solver_opts(obj)
             solver_opts.resnorm_tolerance = 0.1;                                       % Root-finding convergence tolerance
-            solver_opts.rerun_maxiter   = 6;                                           % Maximum number of re-runs
+            solver_opts.resnorm_maxiter   = 6;                                         % Maximum number of re-runs used in rerunSolver
             solver_opts.NewtonRaphson = optimset('MaxIter', obj.numStores * 10);
-            solver_opts.fsolve = optimoptions('fsolve',...
-                                              'Display','none',...                     % Disable display settings
-                                              'JacobPattern', obj.JacobPattern);
-            solver_opts.lsqnonlin = optimoptions('lsqnonlin',...                       % lsqnonlin settings for cases where fsolve fails
-                                                 'Display','none',...
-                                                 'JacobPattern',obj.JacobPattern,...
-                                                 'MaxFunEvals',1000);
+            % if MATLAB
+            if(~obj.isOctave)
+              solver_opts.fsolve = optimoptions('fsolve',...
+                                                'Display','none',...                     % Disable display settings
+                                                'JacobPattern', obj.JacobPattern);
+              solver_opts.lsqnonlin = optimoptions('lsqnonlin',...                       % lsqnonlin settings for cases where fsolve fails
+                                                  'Display','none',...
+                                                  'JacobPattern',obj.JacobPattern,...
+                                                  'MaxFunEvals',1000);
+            else % if OCTAVE
+              solver_opts.fsolve = optimset('Display', 'off');
+              solver_opts.lsqnonlin = optimset('Display', 'off', 'MaxFunEvals',1000);
+            end
+                                              
          end
          
          % function to add new solver opts to the default ones
@@ -547,7 +608,7 @@ classdef MARRMoT_model < handle
              if nargin == 1 || isempty(opts)
                  solver_opts = def_opts;
              else
-                 def_fields = fields(def_opts);
+                 def_fields = fieldnames(def_opts);
                  % for each field in the default options (5 at the moment)
                  for k = 1:length(def_fields)
                      field = def_fields{k};

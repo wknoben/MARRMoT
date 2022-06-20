@@ -43,11 +43,11 @@ classdef m_40_smar_8p_6s < MARRMoT_model
                                 1,  10;     % n, Number of Nash cascade reservoirs [-]
                                 1, 120];    % n*k, Routing delay [d]
         
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5" "S6"];              % Names for the stores
-            obj.FluxNames  = ["pstar", "estar", "evap",   "r1", "i",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5" "S6"};              % Names for the stores
+            obj.FluxNames  = {"pstar", "estar", "evap",   "r1", "i",...
                               "r2",    "e1",    "e2",     "e3", "e4",...
                               "e5",    "q1",    "q2",     "q3", "q4",...
-                              "r3",    "rg",    "r3star", "qr", "qg"];     % Names for the fluxes
+                              "r3",    "rg",    "r3star", "qr", "qg"};     % Names for the fluxes
             
             obj.FluxGroups.Ea = [3 7 8 9 10 11];                           % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [19 20];                                   % Index or indices of fluxes to add to Streamflow

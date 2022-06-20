@@ -34,9 +34,9 @@ classdef m_09_susannah1_6p_2s < MARRMoT_model
                              0.2 , 1;       % b, Runoff coefficient [-] (should be > 0)
                              0   , 1];      % r, Runoff coefficient [d-1] 
             
-            obj.StoreNames = ["S1" "S2"];                                  % Names for the stores
-            obj.FluxNames  = ["Ebs", "Evg", "Qse", "Qss",...
-                              "qr",  "Qb",  "qt"];                         % Names for the fluxes
+            obj.StoreNames = {"S1", "S2"};                                  % Names for the stores
+            obj.FluxNames  = {"Ebs", "Evg", "Qse", "Qss",...
+                              "qr",  "Qb",  "qt"};                         % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 2];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 7;                                         % Index or indices of fluxes to add to Streamflow

@@ -33,8 +33,8 @@ classdef m_04_newzealand1_6p_1s < MARRMoT_model
                              1   , 5;      % b, Runoff non-linearity [-]
                              0   , 1];     % tcbf, Baseflow runoff coefficient [d-1]
             
-            obj.StoreNames = ["S1"];                                       % Names for the stores
-            obj.FluxNames  = ["veg", "ebs", "qse", "qss", "qbf"];          % Names for the fluxes
+            obj.StoreNames = {"S1"};                                       % Names for the stores
+            obj.FluxNames  = {"veg", "ebs", "qse", "qss", "qbf"};          % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 2];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [3 4 5];                                   % Index or indices of fluxes to add to Streamflow

@@ -58,7 +58,7 @@ end
 
 %% call individual KGE functions (they have their own error checking)
 [val1,c1,~,w1] = of_KGE(obs,sim,[],w1);
-[val2,c2,~,w2] = of_inverse_KGE(obs,sim,[],w2);
+[val2,c2,~,w2] = of_root5_KGE(obs,sim,[],w2);
 
 %% calculate value
 val = 0.5*(val1+val2);      % weighted KGE

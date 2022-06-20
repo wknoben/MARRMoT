@@ -16,7 +16,7 @@ data_origin = [35.29,87.49];
 forcing.precip       = data_MARRMoT_examples.precipitation;
 forcing.temp         = data_MARRMoT_examples.temperature;
 forcing.pet          = data_MARRMoT_examples.potential_evapotranspiration;
-forcing.delta_t_days = 1;   % 1 [d]
+forcing.delta_t      = 1;   % 1 [d]
 forcing.time_unit    = 'day';
 
 % 'time_start' & 'time_end' are a vector with starting/end date

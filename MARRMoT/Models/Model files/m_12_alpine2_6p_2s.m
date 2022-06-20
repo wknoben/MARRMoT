@@ -34,8 +34,8 @@ classdef m_12_alpine2_6p_2s < MARRMoT_model
                              0   , 1;       % time delay of interflow [d-1]
                              0   , 1];      % time delay of baseflow [d-1]
             
-            obj.StoreNames = ["S1" "S2"];                                  % Names for the stores
-            obj.FluxNames  = ["ps", "pr", "qn", "ea", "qse", "qin", "qbf"];% Names for the fluxes
+            obj.StoreNames = {"S1", "S2"};                                  % Names for the stores
+            obj.FluxNames  = {"ps", "pr", "qn", "ea", "qse", "qin", "qbf"};% Names for the fluxes
             
             obj.FluxGroups.Ea = [4];                                       % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [5 6 7];                                   % Index or indices of fluxes to add to Streamflow

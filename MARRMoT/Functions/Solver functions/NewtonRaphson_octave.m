@@ -1,5 +1,6 @@
-function [x, F, exitflag] = NewtonRaphson(fun, x0, options)
+function [x, F, exitflag] = NewtonRaphson_octave(fun, x0, options)
 % NEWTONRAPHSON Solve set o non-linear equations using Newton-Raphson method.
+% this version works in Octave
 
 % Copyright (C) 2021 Luca Trotter
 % This file is part of the Modular Assessment of Rainfall-Runoff Models
@@ -114,9 +115,9 @@ x0 = x0(:); % needs to be a column vector
 defaultopt = struct('TolX', 1e-12, 'TolFun', 1e-6, 'MaxIter', 1000);%, 'Display', 'off');
 
 %% get options
-TOLX = optimget(options, 'TolX', defaultopt, 'fast'); % relative max step tolerance
-TOLFUN = optimget(options, 'TolFun', defaultopt, 'fast'); % function tolerance
-MAXITER = optimget(options, 'MaxIter', defaultopt, 'fast'); % max number of iterations
+TOLX = optimget(options, 'TolX', defaultopt.TolX);
+TOLFUN = optimget(options, 'TolFun', defaultopt.TolFun);
+MAXITER = optimget(options, 'MaxIter', defaultopt.MaxIter);
 
 %TYPX = max(abs(x0), 1); % x scaling value, remove zeros
 ALPHA = 1e-4; % criteria for decrease

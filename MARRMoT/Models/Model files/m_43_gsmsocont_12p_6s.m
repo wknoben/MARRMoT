@@ -44,11 +44,11 @@ classdef m_43_gsmsocont_12p_6s < MARRMoT_model
                                  0, 1;       % ksl,    Runoff coefficient for baseflow [d-1]
                                  0, 1];      % beta,   Runoff coefficient for quick flow [mm^(4/3)/d]
         
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5" "S6"];              % Names for the stores
-            obj.FluxNames  = ["pice", "pices", "picer", "mis", "pirs",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5" "S6"};              % Names for the stores
+            obj.FluxNames  = {"pice", "pices", "picer", "mis", "pirs",...
                               "piri", "mii",   "qis",   "qii", "pni",...
                               "pnis", "pnir",  "mnis",  "peq", "peff",...
-                              "pinf", "et",    "qsl",   "qqu"];            % Names for the fluxes
+                              "pinf", "et",    "qsl",   "qqu"};            % Names for the fluxes
             
             obj.FluxGroups.Ea = [17];                                      % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [8 9 18 19];                               % Index or indices of fluxes to add to Streamflow

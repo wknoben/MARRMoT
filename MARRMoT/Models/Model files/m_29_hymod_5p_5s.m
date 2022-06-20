@@ -35,9 +35,9 @@ classdef m_29_hymod_5p_5s < MARRMoT_model
                              0  , 1;        % kf, fast flow time parameter [d-1]
                              0  , 1];       % ks, base flow time parameter [d-1]
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5"];                   % Names for the stores
-            obj.FluxNames  = ["ea",  "pe",  "pf",  "ps",...
-                              "qf1", "qf2", "qf3", "qs"];                  % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5"};                   % Names for the stores
+            obj.FluxNames  = {"ea",  "pe",  "pf",  "ps",...
+                              "qf1", "qf2", "qf3", "qs"};                  % Names for the fluxes
             
             obj.FluxGroups.Ea = 1;                                         % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [7 8];                                     % Index or indices of fluxes to add to Streamflow

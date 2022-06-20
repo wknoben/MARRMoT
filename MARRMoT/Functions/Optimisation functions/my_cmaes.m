@@ -2,7 +2,7 @@ function [xmin,...                                                         % Sol
             fmin,...                                                       % Objective function value at the solution, returned as a real number.
             stopflag,...                                                   % Reason cmaes stopped, returned as an integer.
             out] = ...                                                     % Information about the optimization process, returned as a structure
-                      my_cmaes(fitfun,...                                  % Function to minimize, specified as a function handle or function name
+                      my_cmaes(infitfun,...                                  % Function to minimize, specified as a function handle or function name
                                xstart,...                                  % Initial point, specified as a real vector or real array
                                inopts,...                                  % Optimization options, specified as a structure
                                varargin)                                   % Additional arguments to FITFUN
@@ -267,7 +267,7 @@ defopts.UserDat2 = ''; 'for saving data/comments associated with the run';
 
 % ---------------------- Handling Input Parameters ----------------------
 
-if nargin < 1 || isequal(fitfun, 'defaults') % pass default options
+if nargin < 1 || isequal(infitfun, 'defaults') % pass default options
   if nargin < 1
     disp('Default options returned (type "help cmaes" for help).');
   end
@@ -278,7 +278,7 @@ if nargin < 1 || isequal(fitfun, 'defaults') % pass default options
   return;
 end
 
-if isequal(fitfun, 'displayoptions')
+if isequal(infitfun, 'displayoptions')
  names = fieldnames(defopts); 
  for name = names'
    disp([name{:} repmat(' ', 1, 20-length(name{:})) ': ''' defopts.(name{:}) '''']); 
@@ -286,8 +286,8 @@ if isequal(fitfun, 'displayoptions')
  return; 
 end
 
-input.fitfun = fitfun; % record used input
-if isempty(fitfun)
+input.fitfun = infitfun; % record used input
+if isempty(infitfun)
   % fitfun = definput.fitfun; 
   % warning(['Objective function not determined, ''' fitfun ''' used']);
   error(['Objective function not determined']);
@@ -297,9 +297,11 @@ end
 % if ~ischar(fitfun)
 %   error('first argument FUN must be a string');
 % end
-if ischar(fitfun)
-  fitfun_char = fitfun;
-  fitfun = @(varargin) feval(fitfun_char, varargin{:});
+if ischar(infitfun)
+    fitfun_char = infitfun;
+    original_fitfun = @(varargin) feval(fitfun_char, varargin{:});
+else
+    original_fitfun = infitfun;
 end
 
 if nargin < 2 
@@ -331,12 +333,12 @@ else
 end
 
 % EDITS to add insigma to inopts
-insigma = myeval(inopts.insigma);
-input.sigma = insigma;
+original_insigma = myeval(inopts.insigma);
+input.sigma = original_insigma;
 if isempty(inopts.insigma)
   if all(size(myeval(xstart)) > 1)
-    insigma = std(xstart, 0, 2); 
-    if any(insigma == 0)
+    original_insigma = std(xstart, 0, 2); 
+    if any(original_insigma == 0)
       error(['Initial search volume is zero, choose SIGMA or X0 appropriate']);
     end
   else
@@ -374,10 +376,11 @@ if ~flgresume % not resuming a former run
   % lambda0 = floor(myeval(opts.PopSize) * 3^floor((irun-1)/2)); 
   popsize = lambda0;
   lambda = lambda0;
-  insigma = myeval(insigma);
-  if all(size(insigma) == [N 2]) 
-    insigma = 0.5 * (insigma(:,2) - insigma(:,1));
+  original_insigma = myeval(original_insigma);
+  if all(size(original_insigma) == [N 2]) 
+    original_insigma = 0.5 * (original_insigma(:,2) - original_insigma(:,1));
   end
+  insigma = original_insigma;
 else % flgresume is true, do resume former run
   tmp = whos('-file', inopts.SaveFilename);
   for i = 1:length(tmp)
@@ -427,7 +430,7 @@ stopMaxIter = myeval(inopts.MaxIter);
 stopFunEvals = myeval(inopts.StopFunEvals);  
 stopIter = myeval(inopts.StopIter); 
 if flgresume
-    stopIter = stopIter + countiter
+    stopIter = stopIter + countiter;
 end
 stopTolX = myeval(inopts.TolX);
 stopTolUpX = myeval(inopts.TolUpX);
@@ -439,7 +442,8 @@ flgreadsignals = myevalbool(inopts.ReadSignals);
 flgWarnOnEqualFunctionValues = myevalbool(inopts.WarnOnEqualFunctionValues);
 flgEvalParallel = myevalbool(inopts.EvalParallel);
 if flgEvalParallel
-    poolobj = parpool;
+    poolobj = gcp('nocreate');
+    if isempty(poolobj); poolobj = parpool; end
 end
 stopOnEqualFunctionValues = myeval(inopts.StopOnEqualFunctionValues);
 arrEqualFunvals = zeros(1, 10+N);
@@ -504,18 +508,40 @@ if flgresume % resume is on
   end
   
 else % flgresume
-  % xmean = mean(myeval(xstart), 2); % evaluate xstart again, because of irun
+  xmean = mean(myeval(xstart), 2); % evaluate xstart again, because of irun
   maxdx = myeval(inopts.DiffMaxChange); % maximal sensible variable change
   mindx = myeval(inopts.DiffMinChange); % minimal sensible variable change 
 				      % can both also be defined as Nx1 vectors
-  lbounds = myeval(inopts.LBounds);		     
-  ubounds = myeval(inopts.UBounds);
-  if length(lbounds) == 1
-    lbounds = repmat(lbounds, N, 1);
+
+                        % rescale 
+  original_lbounds = myeval(inopts.LBounds);		     
+  original_ubounds = myeval(inopts.UBounds);
+
+  if length(original_lbounds) == 1
+    original_lbounds = repmat(original_lbounds, N, 1);
   end
-  if length(ubounds) == 1
-    ubounds = repmat(ubounds, N, 1);
+  if length(original_ubounds) == 1
+    original_ubounds = repmat(original_ubounds, N, 1);
   end
+
+  % We'll use fixed bounds [0;10] and rescale the parameters linearly
+  % withing this bounds, if original bounds are given - otherwise no
+  % scaling happens
+  if all(original_lbounds > -Inf) && all(original_ubounds < Inf) 
+     lbounds = zeros(N, 1);
+     ubounds = repmat(10, N, 1);
+     xmean = scale_linear(xmean, original_lbounds, original_ubounds, lbounds, ubounds);
+     fitfun = @(x, varargin) original_fitfun(scale_linear(x, lbounds, ubounds, original_lbounds, original_ubounds), varargin{:});
+     if ~isempty(original_insigma)
+         insigma = scale_linear_range(original_insigma, original_ubounds - original_lbounds, ubounds - lbounds);
+     end
+  else
+      lbounds = original_lbounds;
+      ubounds = original_ubounds;
+      insigma = original_insigma;
+      fitfun  = original_fitfun;
+  end
+
   if isempty(insigma) % last chance to set insigma
     if all(lbounds > -Inf) && all(ubounds < Inf)
       if any(lbounds>=ubounds)
@@ -639,7 +665,7 @@ else % flgresume
   % ooo initial feval, for output only
   if irun == 1 
     out.algorithm = 'Evolution Strategy with Covariance Matrix Adaptation (CMA-ES)';
-    out.solutions.bestever.x = xmean;
+    out.solutions.bestever.x = scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds);
     out.solutions.bestever.f = Inf;  % for simpler comparison below
     out.solutions.bestever.evals = counteval;
     bestever = out.solutions.bestever;
@@ -651,7 +677,7 @@ else % flgresume
     fitness.histsel(1)=fitness.hist(1);
     counteval = counteval + 1;
     if fitness.hist(1) < out.solutions.bestever.f 
-	out.solutions.bestever.x = xmean;
+	out.solutions.bestever.x = scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds);
 	out.solutions.bestever.f = fitness.hist(1);
 	out.solutions.bestever.evals = counteval;
 	bestever = out.solutions.bestever;
@@ -740,7 +766,7 @@ else % flgresume
 	    fprintf(fid, '%ld %ld 0 0 0 ', 0, counteval); 
 	    % fprintf(fid, '%ld %ld 0 0 %e ', countiter, counteval, fmean); 
 %qqq	    fprintf(fid, msprintf('%e ', genophenotransform(out.genopheno, xmean)) + '\n'); 
-	    fprintf(fid, '%e ', xmean);
+	    fprintf(fid, '%e ', scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds));
             fprintf(fid, '\n'); 
 	  end
 	  fclose(fid); 
@@ -881,198 +907,67 @@ while isempty(stopflag)
 
   % Generate and evaluate lambda offspring
  
-  fitness.raw = repmat(NaN, 1, lambda + noiseReevals);
-
-  % parallel evaluation
-  if flgEvalParallel
-%       arz = randn(N,lambda);
-% 
-%       if ~flgDiagonalOnly
-%         arx = repmat(xmean, 1, lambda) + sigma * (BD * arz); % Eq. (1)
-%       else
-%         arx = repmat(xmean, 1, lambda) + repmat(sigma * diagD, 1, lambda) .* arz; 
-%       end
-% 
-%       if noiseHandling 
-%         if noiseEpsilon == 0
-%           arx = [arx arx(:,1:noiseReevals)]; 
-%         elseif flgDiagonalOnly
-%           arx = [arx arx(:,1:noiseReevals) + ...
-%                  repmat(noiseEpsilon * sigma * diagD, 1, noiseReevals) ...
-%                  .* randn(N,noiseReevals)]; 
-%         else 
-%           arx = [arx arx(:,1:noiseReevals) + ...
-%                  noiseEpsilon * sigma * ...
-%                  (BD * randn(N,noiseReevals))]; 
-%         end
-%       end
-% 
-%       % You may handle constraints here. You may either resample
-%       % arz(:,k) and/or multiply it with a factor between -1 and 1
-%       % (the latter will decrease the overall step size) and
-%       % recalculate arx accordingly. Do not change arx or arz in any
-%       % other way.
-%  
-%       if ~bnd.isactive
-%         arxvalid = arx;
-%       else
-%         arxvalid = xintobounds(arx, lbounds, ubounds);
-%       end
-%       % You may handle constraints here.  You may copy and alter
-%       % (columns of) arxvalid(:,k) only for the evaluation of the
-%       % fitness function. arx and arxvalid should not be changed.
-%       % EDITS to make fitfun a handle rather than a string
-%       %fitness.raw = feval(fitfun, arxvalid, varargin{:}); 
-%       fitness.raw = fitfun(arxvalid, varargin{:}); 
-%       countevalNaN = countevalNaN + sum(isnan(fitness.raw));
-%       counteval = counteval + sum(~isnan(fitness.raw)); 
-%   end
-% 
-%   % non-parallel evaluation and remaining NaN-values
-%   % set also the reevaluated solution to NaN
-  fitness.raw(lambda + find(isnan(fitness.raw(1:noiseReevals)))) = NaN;
-  all_fitness = fitness.raw;
-  fitness_to_calc=find(isnan(all_fitness(1:lambda)));
-  arz = NaN(N, numel(all_fitness));
+  fitness.raw = NaN(1, lambda + noiseReevals);
+  fitness_to_calc=find(isnan(fitness.raw));
+  arz = NaN(N,numel(fitness.raw));
   arx = arz; arxvalid = arx;
-  
-  parfor k=fitness_to_calc % regular samples (not the re-evaluation-samples)
-    this_fitness = NaN; 
-    tries = flgEvalParallel;  % in parallel case this is the first re-trial
-    % Resample, until fitness is not NaN
-    while isnan(this_fitness)
 
-        arz(:,k) = randn(N,1); % (re)sample
+  tries = 0;
+  while numel(fitness_to_calc)>0
+    
+    arz(:,fitness_to_calc) = randn(N, numel(fitness_to_calc));
 
-        if flgDiagonalOnly  
-          arx(:,k) = xmean + sigma * diagD .* arz(:,k);              % Eq. (1)
-        else
-          arx(:,k) = xmean + sigma * (BD * arz(:,k));                % Eq. (1)
-        end
-      
-      % You may handle constraints here. You may either resample
-      % arz(:,k) and/or multiply it with a factor between -1 and 1
-      % (the latter will decrease the overall step size) and
-      % recalculate arx accordingly. Do not change arx or arz in any
-      % other way.
- 
-      if ~bnd.isactive
-        arxvalid(:,k) = arx(:,k);
-      else
-        arxvalid(:,k) = xintobounds(arx(:,k), lbounds, ubounds);
-      end
-      % You may handle constraints here.  You may copy and alter
-      % (columns of) arxvalid(:,k) only for the evaluation of the
-      % fitness function. arx should not be changed.
-      % EDITS to make fitfun a handle rather than a string
-      %fitness.raw(k) = feval(fitfun, arxvalid(:,k), varargin{:}); 
-      this_fitness = fitfun(arxvalid(:,k), varargin{:}); 
-      tries = tries + 1;
-      if isnan(this_fitness)
-	  countevalNaN = countevalNaN + 1;
-      end
-      if mod(tries, 100) == 0
-	  warning([num2str(tries) ...
-                 ' NaN objective function values at evaluation ' ...
-                 num2str(counteval)]);
-      end
-    end
-    all_fitness(k)=this_fitness;
-  end
-  counteval = counteval + numel(fitness_to_calc);
-  
-  % re-evaluation solution with index > lambda
-  fitness_to_recalc=find(find(isnan(fitness.raw)) > lambda);
-  if(numel(fitness_to_recalc)>0)
-    old_arx = arx;
-    parfor k=fitness_to_recalc
-      this_fitness = NaN; 
-      tries = 0;  % in parallel case this is the first re-trial
-      % Resample, until fitness is not NaN
-      while isnan(this_fitness)
-
-        arz(:,k) = randn(N,1); % (re)sample
-        if flgDiagonalOnly  
-          arx(:,k) = old_arx(:,k-lambda) + (noiseEpsilon * sigma) * diagD .* arz(:,k);
-        else
-          arx(:,k) = old_arx(:,k-lambda) + (noiseEpsilon * sigma) * (BD * arz(:,k));
-        end
-          
-        if ~bnd.isactive
-          arxvalid(:,k) = arx(:,k);
-        else
-          arxvalid(:,k) = xintobounds(arx(:,k), lbounds, ubounds);
-        end
+    for k=fitness_to_calc
         
-        this_fitness = fitfun(arxvalid(:,k), varargin{:});
-        tries = tries + 1;
-        if isnan(this_fitness)
-	      countevalNaN = countevalNaN + 1;
-        end
-        if mod(tries, 100) == 0
-	      warning([num2str(tries) ...
-                   ' NaN objective function values at evaluation ' ...
-                   num2str(counteval)]);
-        end
-      end
-      all_fitness(k)=this_fitness;
-    end
-    counteval = counteval + numel(fitness_to_recalc);
-  end
-  fitness.raw = all_fitness;
-  
-  else %if parallel computing is not allowed
-      for k=find(isnan(fitness.raw)), 
-        % fitness.raw(k) = NaN; 
-        tries = 0;
-        % Resample, until fitness is not NaN
-        while isnan(fitness.raw(k))
-          if k <= lambda  % regular samples (not the re-evaluation-samples)
-            arz(:,k) = randn(N,1); % (re)sample
-
+        % calculate samples
+        if k <= lambda  % regular samples (not the re-evaluation-samples)
             if flgDiagonalOnly  
               arx(:,k) = xmean + sigma * diagD .* arz(:,k);              % Eq. (1)
             else
               arx(:,k) = xmean + sigma * (BD * arz(:,k));                % Eq. (1)
             end
-          else % re-evaluation solution with index > lambda
+        else % re-evaluation solution with index > lambda
             if flgDiagonalOnly  
-              arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * diagD .* randn(N,1);
+              arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * diagD .* arz(:,k);
             else
-              arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * (BD * randn(N,1));
+              arx(:,k) = arx(:,k-lambda) + (noiseEpsilon * sigma) * (BD * arz(:,k));
             end
-          end
-
-          % You may handle constraints here. You may either resample
-          % arz(:,k) and/or multiply it with a factor between -1 and 1
-          % (the latter will decrease the overall step size) and
-          % recalculate arx accordingly. Do not change arx or arz in any
-          % other way.
-
-          if ~bnd.isactive
-            arxvalid(:,k) = arx(:,k);
-          else
-            arxvalid(:,k) = xintobounds(arx(:,k), lbounds, ubounds);
-          end
-          % You may handle constraints here.  You may copy and alter
-          % (columns of) arxvalid(:,k) only for the evaluation of the
-          % fitness function. arx should not be changed.
-          % EDITS to make fitfun a handle rather than a string
-          %fitness.raw(k) = feval(fitfun, arxvalid(:,k), varargin{:}); 
-          fitness.raw(k) = fitfun(arxvalid(:,k), varargin{:}); 
-          tries = tries + 1;
-          if isnan(fitness.raw(k))
-        countevalNaN = countevalNaN + 1;
-          end
-          if mod(tries, 100) == 0
-        warning([num2str(tries) ...
-                     ' NaN objective function values at evaluation ' ...
-                     num2str(counteval)]);
-          end
         end
-        counteval = counteval + 1; % retries due to NaN are not counted
-      end      
-  end
+
+        % Handle bounds
+        if ~bnd.isactive
+            arxvalid(:,k) = arx(:,k);
+        else
+            arxvalid(:,k) = xintobounds(arx(:,k), lbounds, ubounds);
+        end
+    end
+
+    % non-parallel evaluation
+    if ~flgEvalParallel
+        for k=fitness_to_calc
+            fitness.raw(k) = fitfun(arxvalid(:,k), varargin{:});
+        end
+    else % parallel implementation here
+        all_fitness = fitness.raw;
+        parfor k=fitness_to_calc
+            all_fitness(k) = fitfun(arxvalid(:,k), varargin{:});
+        end
+        fitness.raw = all_fitness;
+    end
+
+    counteval = counteval + numel(fitness_to_calc);
+    % these are the ones that still need to be calculated, because they
+    % gave NaN
+    fitness_to_calc=find(isnan(fitness.raw));
+    countevalNaN = countevalNaN + numel(fitness_to_calc);
+
+    tries = tries + 1;
+    if mod(tries,100)==0
+        warning([num2str(tries) ...
+                 ' NaN objective function values at evaluation ' ...
+                 num2str(counteval)]);
+    end
+  end  
   fitness.sel = fitness.raw; 
 
   % ----- handle boundaries -----
@@ -1570,17 +1465,17 @@ while isempty(stopflag)
   % Keep overall best solution
   out.evals = counteval;
   out.solutions.evals = counteval;
-  out.solutions.mean.x = xmean;
+  out.solutions.mean.x = scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds);
   out.solutions.mean.f = fmean;
   out.solutions.mean.evals = counteval;
-  out.solutions.recentbest.x = arxvalid(:, fitness.idx(1));
+  out.solutions.recentbest.x = scale_linear(arxvalid(:, fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds);
   out.solutions.recentbest.f = fitness.raw(1);
   out.solutions.recentbest.evals = counteval + fitness.idx(1) - lambda;
-  out.solutions.recentworst.x = arxvalid(:, fitness.idx(end));
+  out.solutions.recentworst.x = scale_linear(arxvalid(:, fitness.idx(end)), lbounds, ubounds, original_lbounds, original_ubounds);
   out.solutions.recentworst.f = fitness.raw(end);
   out.solutions.recentworst.evals = counteval + fitness.idx(end) - lambda;
   if fitness.hist(1) < out.solutions.bestever.f
-    out.solutions.bestever.x = arxvalid(:, fitness.idx(1));
+    out.solutions.bestever.x = scale_linear(arxvalid(:, fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds);
     out.solutions.bestever.f = fitness.hist(1);
     out.solutions.bestever.evals = counteval + fitness.idx(1) - lambda;
     bestever = out.solutions.bestever;
@@ -1739,12 +1634,12 @@ while isempty(stopflag)
 	    else
 	      fprintf(fid, '%ld %ld 0 0 %e ', countiter, counteval, fmean); 
 	    end
-	    fprintf(fid, '%e ', xmean); 
+	    fprintf(fid, '%e ', scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds));
             fprintf(fid, '\n');
 	  elseif strcmp(name, 'xrecentbest')
             % TODO: fitness is inconsistent with x-value
 	    fprintf(fid, '%ld %ld %25.18e 0 0 ', countiter, counteval, fitness.raw(1)); 
-	    fprintf(fid, '%e ', arx(:,fitness.idx(1))); 
+	    fprintf(fid, '%e ', scale_linear(arx(:,fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds)); 
             fprintf(fid, '\n');
 	  end
 	  fclose(fid); 
@@ -1784,7 +1679,7 @@ while isempty(stopflag)
   % save everything
   time.t3 = clock;
   if ~isempty(stopflag) || time.saving < 0.05 * time.nonoutput || countiter == 100
-    xmin = arxvalid(:, fitness.idx(1));
+    xmin = scale_linear(arxvalid(:, fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds);
     fmin = fitness.raw(1);
     if flgsaving && countiter > 2
       clear idx; % prevents error under octave
@@ -1809,9 +1704,9 @@ if flgEvalParallel
     delete(poolobj);
 end
 
-% Evaluate xmean and return best recent point in xmin
+% Evaluate xmean and return best point as xmin
 fmin = fitness.raw(1);
-xmin = arxvalid(:, fitness.idx(1)); % Return best point of last generation.
+xmin = scale_linear(arxvalid(:, fitness.idx(1)), lbounds, ubounds, original_lbounds, original_ubounds); % Return best point of last generation.
 if length(stopflag) > sum(strcmp(stopflag, 'stoptoresume')) % final stopping
   out.solutions.mean.f = ...
     fitfun(xintobounds(xmean, lbounds, ubounds), varargin{:});
@@ -1819,15 +1714,14 @@ if length(stopflag) > sum(strcmp(stopflag, 'stoptoresume')) % final stopping
     %feval(fitfun, xintobounds(xmean, lbounds, ubounds), varargin{:});
   counteval = counteval + 1;
   out.solutions.mean.evals = counteval;
-  if out.solutions.mean.f < fitness.raw(1)
-    fmin = out.solutions.mean.f;
-    xmin = xintobounds(xmean, lbounds, ubounds); % Return xmean as best point
-  end
   if out.solutions.mean.f < out.solutions.bestever.f
     out.solutions.bestever = out.solutions.mean; % Return xmean as bestever point
-    out.solutions.bestever.x = xintobounds(xmean, lbounds, ubounds); 
+    out.solutions.bestever.x = scale_linear(xintobounds(xmean, lbounds, ubounds), lbounds, ubounds, original_lbounds, original_ubounds); 
     bestever = out.solutions.bestever;
   end
+
+  fmin = bestever.f;
+  xmin = bestever.x;
 end
 
 % Save everything and display final message
@@ -1857,7 +1751,7 @@ if flgdisplay
         num2str(out.solutions.bestever.f, '%.11e') ' | ' ...
 	strstop{1:end}]);
   if N < 102
-     disp(['mean solution:' sprintf(' %+.1e', xmean)]);
+     disp(['mean solution:' sprintf(' %+.1e', scale_linear(xmean, lbounds, ubounds, original_lbounds, original_ubounds))]);
      disp(['std deviation:' sprintf('  %.1e', sigma*sqrt(diagC))]);
      disp(sprintf('use plotcmaesdat.m for plotting the output at any time (option LogModulo must not be zero)'));
   end
@@ -1875,6 +1769,22 @@ end
   end
 end % while irun <= Restarts
 
+% ---------------------------------------------------------------  
+% --------------------------------------------------------------- 
+function xscaled = scale_linear(x, old_lbs, old_ubs, new_lbs, new_ubs)
+    if all(old_lbs == new_lbs) && all(old_ubs == new_ubs)
+        xscaled = x;
+    else
+        xscaled = new_lbs + (new_ubs - new_lbs) .* (x - old_lbs) ./ (old_ubs - old_lbs);
+    end
+
+function xscaled = scale_linear_range(x, old_range, new_range)
+    if all(old_range == new_range)
+        xscaled = x;
+    else
+        xscaled = new_range .* x ./ (old_range);
+    end
+ 
 % ---------------------------------------------------------------  
 % ---------------------------------------------------------------  
 function [x, idx] = xintobounds(x, lbounds, ubounds)

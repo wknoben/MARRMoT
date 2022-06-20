@@ -48,11 +48,11 @@ classdef m_33_sacramento_11p_5s < MARRMoT_model
                              0       , 1;        % klzp, Primary baseflow runoff coefficient [d-1]
                              0       , 1];       % klzs, Supplemental baseflow runoff coefficient [d-1]
             
-            obj.StoreNames = ["S1", "S2", "S3", "S4", "S5"];               % Names for the stores
-            obj.FluxNames  = ["qdir", "peff", "ru", "euztw", "twexu",...
+            obj.StoreNames = {"S1", "S2", "S3", "S4", "S5"};               % Names for the stores
+            obj.FluxNames  = {"qdir", "peff", "ru", "euztw", "twexu",...
                               "qsur", "qint", "euzfw", "pc", "pctw",...
                               "elztw", "twexl", "twexlp", "twexls", "pcfwp",...
-                              "pcfws", "rlp", "rls", "qbfp", "qbfs"];      % Names for the fluxes
+                              "pcfws", "rlp", "rls", "qbfp", "qbfs"};      % Names for the fluxes
             
             obj.FluxGroups.Ea = [4 8 11];                                    % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [1 6 7 19 20];                               % Index or indices of fluxes to add to Streamflow

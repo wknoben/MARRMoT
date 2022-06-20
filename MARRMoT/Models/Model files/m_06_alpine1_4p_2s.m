@@ -32,8 +32,8 @@ classdef m_06_alpine1_4p_2s < MARRMoT_model
                              1   , 2000;    % Smax [mm]
                              0   , 1];      % time delay of subsurface flow [d-1]
             
-            obj.StoreNames = ["S1" "S2"];                                  % Names for the stores
-            obj.FluxNames  = ["ps", "pr", "qn", "ea", "qse", "qss"];       % Names for the fluxes
+            obj.StoreNames = {"S1", "S2"};                                  % Names for the stores
+            obj.FluxNames  = {"ps", "pr", "qn", "ea", "qse", "qss"};       % Names for the fluxes
             
             obj.FluxGroups.Ea = 4;                                         % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [5 6];                                     % Index or indices of fluxes to add to Streamflow

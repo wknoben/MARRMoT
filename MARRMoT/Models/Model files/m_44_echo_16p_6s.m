@@ -54,11 +54,11 @@ classdef m_44_echo_16p_6s < MARRMoT_model
                                  0, 1;      % kf, Runoff coefficient [d-1]
                                  0, 1];     % ks, Runoff coefficient [d-1]
          
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5" "S6"];              % Names for the stores
-            obj.FluxNames  = ["ei", "pn",  "ps", "pr", "ms"...
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5" "S6"};              % Names for the stores
+            obj.FluxNames  = {"ei", "pn",  "ps", "pr", "ms"...
                               "fs", "gs",  "mw", "ew", "eq"...
                               "rh", "eps", "et", "fi", "rd"...
-                              "l",  "lf",  "ls", "rf", "rs"];              % Names for the fluxes
+                              "l",  "lf",  "ls", "rf", "rs"};              % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 13];                                    % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [11 15 19 20];                             % Index or indices of fluxes to add to Streamflow

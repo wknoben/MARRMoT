@@ -45,11 +45,11 @@ classdef m_47_IHM19_16p_4s < MARRMoT_model
                                 1,     5;      % 15 XQS2, runoff scale parameter second soil layer [-]
                                 0.01,  5];     % 16 D, Flow delay before surface runoff [d]
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4"];                        % Names for the stores
-            obj.FluxNames  = ["ei",    "pex", "pexmp",  "pexs1", "fmp",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4"};                        % Names for the stores
+            obj.FluxNames  = {"ei",    "pex", "pexmp",  "pexs1", "fmp",...
                               "qexmp", "qmp", "pqexsl", "fs1",   "etas1",...
                               "qs1",   "q0",  "q0r",    "qmps1", "pc",...
-                              "qh",    "qs2", "qgw"];                      % Names for the fluxes
+                              "qh",    "qs2", "qgw"};                      % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 10];                                    % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [13 16 17 18];                             % Index or indices of fluxes to add to Streamflow

@@ -48,9 +48,9 @@ classdef m_39_mcrm_16p_5s < MARRMoT_model
                              0   , 1;       % kor, Out-of-bank flow time parameter [d-1]
                              1   , 5];      % gamor, Out-of-bank flow non-linearity [-]
      
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5"];                   % Names for the stores
-            obj.FluxNames  = ["ec", "qt", "qr",  "er",  "qn", "qd",...
-                              "qp", "qb", "uib", "uob", "qic", "qoc"];     % Names for the fluxes
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5"};                   % Names for the stores
+            obj.FluxNames  = {"ec", "qt", "qr",  "er",  "qn", "qd",...
+                              "qp", "qb", "uib", "uob", "qic", "qoc"};     % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 4];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [11 12];                                   % Index or indices of fluxes to add to Streamflow

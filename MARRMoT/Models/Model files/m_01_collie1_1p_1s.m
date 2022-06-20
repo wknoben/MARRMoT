@@ -28,8 +28,8 @@ classdef m_01_collie1_1p_1s < MARRMoT_model
             
             obj.parRanges = [1   , 2000];      % Smax [mm]
             
-            obj.StoreNames = ["S1"];                                       % Names for the stores
-            obj.FluxNames  = ["ea", "qse"];                                % Names for the fluxes
+            obj.StoreNames = {"S1"};                                       % Names for the stores
+            obj.FluxNames  = {"ea", "qse"};                                % Names for the fluxes
             
             obj.FluxGroups.Ea = 1;                                         % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 2;                                         % Index or indices of fluxes to add to Streamflow

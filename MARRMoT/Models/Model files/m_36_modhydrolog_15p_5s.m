@@ -48,11 +48,11 @@ classdef m_36_modhydrolog_15p_5s < MARRMoT_model
                              0,     1;      % K2, Flow exchange parameter, [d-1] 
                              0,     100];   % K3, Flow exchange parameter, [d-1]                  
             
-            obj.StoreNames = ["S1" "S2" "S3" "S4" "S5"];                   % Names for the stores
-            obj.FluxNames  = ["Ei",   "EXC", "INF",  "INT",...
+            obj.StoreNames = {"S1", "S2" "S3" "S4" "S5"};                   % Names for the stores
+            obj.FluxNames  = {"Ei",   "EXC", "INF",  "INT",...
                               "REC",  "SMF", "Et",   "GWF",...
                               "TRAP", "Ed",  "DINF", "SEEP",...
-                              "FLOW", "Q",   "RUN",  "SRUN"];              % Names for the fluxes
+                              "FLOW", "Q",   "RUN",  "SRUN"};              % Names for the fluxes
             
             obj.FluxGroups.Ea = [1 7 10];                                  % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = [14];                                      % Index or indices of fluxes to add to Streamflow

@@ -41,6 +41,6 @@ obs = obs+e;
 sim = sim+e;
 
 %% Calculate metric
-val = mean(abs((sim-obs)/obs));
+val = mean(abs((sim-obs)./obs));
 end
 

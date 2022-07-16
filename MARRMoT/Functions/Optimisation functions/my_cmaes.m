@@ -1572,6 +1572,11 @@ while isempty(stopflag)
 	    num2str(minstd, ' %.1e') ' ' ...
 	    repmat(' ',1,1-floor(log10(maxstdidx))) num2str(maxstdidx) ':' ...
 	    num2str(maxstd, ' %.1e')]);
+    elseif countiter == 3
+        disp("Don't worry! Your calibration is still running.");
+        disp(['The next output will be displayed at the ',...
+            num2str(verbosemodulo), 'th iteration or at the end of the calibration.']);
+        disp("You can change this setting using the 'DispModulo' option passed to 'my_cmaes'")
     end
   end
 

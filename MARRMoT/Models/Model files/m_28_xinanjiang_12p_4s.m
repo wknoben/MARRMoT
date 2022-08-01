@@ -31,7 +31,7 @@ classdef m_28_xinanjiang_12p_4s < MARRMoT_model
             obj.JacobPattern  = [1,0,0,0;
                                  1,1,0,0;
                                  0,1,1,0;
-                                 0,0,1,1];                                 % Jacobian matrix of model store ODEs
+                                 0,1,0,1];                                 % Jacobian matrix of model store ODEs
                              
             obj.parRanges = [   0, 1;           % aim,  Fraction impervious area [-]
                                 -0.49, 0.49;    % a,    Tension water distribution inflection parameter [-]

@@ -36,7 +36,7 @@ classdef m_13_hillslope_7p_2s < MARRMoT_model
             
             obj.StoreNames = {"S1", "S2"};                                  % Names for the stores
             obj.FluxNames  = {"pe",   "ei", "ea",    "qse",  "qses",...
-                              "qseg", "c",  "qhsrf", "qhgw", "qt"};        % Names for the fluxes
+                              "qseg", "c", "qhgw", "qhsrf", "qt"};         % Names for the fluxes
             
             obj.FluxGroups.Ea = [2 3];                                     % Index or indices of fluxes to add to Actual ET
             obj.FluxGroups.Q  = 10;                                        % Index or indices of fluxes to add to Streamflow

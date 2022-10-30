@@ -16,6 +16,7 @@ classdef m_23_lascam_24p_3s < MARRMoT_model
 
     properties
         % model-specific attributes
+        aux_theta     % auxiliary parameters
     end
     methods
         

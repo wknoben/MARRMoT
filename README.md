@@ -58,8 +58,6 @@ The User Manual provides further details.
 
 
 ## Documentation
-The article describing MARRMoT's v2.1 update will soon be submitted to the scientific journal 'Geoscientific Model Development'.
-
 MARRMoT's documentation includes:
 
 - **New paper**: object-oriented implementation, changes from MARRMoT v1 to v2 ([Trotter et al., 2022](https://doi.org/10.5194/gmd-15-6359-2022))

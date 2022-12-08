@@ -12,9 +12,19 @@ MARRMoT is based around individual flux functions and aggregated model functions
 If you have any questions about using or running the code, or are willing to contribute, please contact l.trotter[-at-] unimelb.edu.au or wouter.knoben[-at-]usask.ca
 
 ## MARRMoT v2
-The MARRMoT master branch has been updated to version 2.1. Main changes compared to v1 include code refactoring to rely on object-oriented programming and speed-ups in the model solving routines. A paper describing these changes will be submitted to Geoscientific Model Development in the near future. Until such time, please be aware that this version of the code has not yet passed peer review.
+The MARRMoT master branch has been updated to version 2.1.1.
+Main changes in MARRMoT v2 compared to v1 include code refactoring to rely on object-oriented programming and speed-ups in the model solving routines.
+The paper describing these changes was peer reviewed and published in Geoscientific Model Development ([Trotter et al., 2022](https://doi.org/10.5194/gmd-15-6359-2022))
 
 The last release of MARRMoT v1 is version 1.4 and can be found as a release here: [dx.doi.org/10.5281/zenodo.6460624](dx.doi.org/10.5281/zenodo.6460624)
+
+### Changes since peer-review:
+Since MARRMoT v2.1 was peer reviewed, the following minor changes to the code were implemented and included in the release of v2.1.1
+- Edits to _my_cmaes_ to fix typos and improve clarity of outputs to screen
+- Typos fixed in models _m_13_ and _m_28_
+- Edits to _MARRMoT_model_ class to make model objects loadable
+- Addition of new objective functions _of_MARE_ and _of_PCMARE_
+- Updates to this _REAMDE_ file
 
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases. This process should be  straightforward and MARRMoT can (given some knowledge of Github and Matlab) be up and running in a matter of minutes.
@@ -52,8 +62,8 @@ The article describing MARRMoT's v2.1 update will soon be submitted to the scien
 
 MARRMoT's documentation includes:
 
-- **New paper**: object-oriented implementation, changes from MARRMoT v1 to v2
-- **Original paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment. https://doi.org/10.5194/gmd-12-2463-2019
+- **New paper**: object-oriented implementation, changes from MARRMoT v1 to v2 ([Trotter et al., 2022](https://doi.org/10.5194/gmd-15-6359-2022))
+- **Original paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment ([Knoben et al., 2019](https://doi.org/10.5194/gmd-12-2463-2019)).
 - **User manual**: description on how to use MARRMoT v2.- and how to contribute to it.
 - **User manual appendices**: detailed model descriptions (A), flux equations (B) and unit hydrographs (C)
 
@@ -92,12 +102,13 @@ In addition to a range of unnamed models, the following models provided inspirat
 MARRMoT is licensed under the GNU GPL v3 license - see the LICENSE file for details.
 
 ## DOIs of previous releases
-- v2.0: [dx.doi.org/10.5281/zenodo.6483914](dx.doi.org/10.5281/zenodo.6483914)
-- v1.4: [dx.doi.org/10.5281/zenodo.6460624](dx.doi.org/10.5281/zenodo.6460624)
-- v1.3: [dx.doi.org/10.5281/zenodo.3552961](dx.doi.org/10.5281/zenodo.3552961)
-- v1.2: [dx.doi.org/10.5281/zenodo.3235664](dx.doi.org/10.5281/zenodo.3235664)
-- v1.1: [dx.doi.org/10.5281/zenodo.2677728](dx.doi.org/10.5281/zenodo.2677728)
-- v1.0: [dx.doi.org/10.5281/zenodo.2482542](dx.doi.org/10.5281/zenodo.2482542)
+- v2.1: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6484372.svg)](https://doi.org/10.5281/zenodo.6484372)
+- v2.0: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6483914.svg)](https://doi.org/10.5281/zenodo.6483914)
+- v1.4: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6460624.svg)](https://doi.org/10.5281/zenodo.6460624)
+- v1.3: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3552961.svg)](https://doi.org/10.5281/zenodo.3552961)
+- v1.2: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3235664.svg)](https://doi.org/10.5281/zenodo.3235664)
+- v1.1: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2677728.svg)](https://doi.org/10.5281/zenodo.2677728)
+- v1.0: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2482542.svg)](https://doi.org/10.5281/zenodo.2482542)
 
 ## Acknowledgements
 MARRMoT could not have been made without the effort that many hydrologists have put into development of their models. Their effors are gratefully acknowledged. Special thanks are extended to:

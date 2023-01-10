@@ -335,7 +335,7 @@ end
 % EDITS to add insigma to inopts
 original_insigma = myeval(inopts.insigma);
 input.sigma = original_insigma;
-if isempty(inopts.insigma)
+if isempty(original_insigma)
   if all(size(myeval(xstart)) > 1)
     original_insigma = std(xstart, 0, 2); 
     if any(original_insigma == 0)

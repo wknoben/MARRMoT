@@ -948,11 +948,13 @@ while isempty(stopflag)
             fitness.raw(k) = fitfun(arxvalid(:,k), varargin{:});
         end
     else % parallel implementation here
-        all_fitness = fitness.raw;
-        parfor k=fitness_to_calc
-            all_fitness(k) = fitfun(arxvalid(:,k), varargin{:});
+        arxvalid_to_calc = arxvalid(:,fitness_to_calc);
+        par_fitness = zeros(1, numel(fitness_to_calc));
+
+        parfor k = 1:numel(fitness_to_calc)
+            par_fitness(k) = fitfun(arxvalid_to_calc(:,k), varargin{:});
         end
-        fitness.raw = all_fitness;
+        fitness.raw(fitness_to_calc) = par_fitness;
     end
 
     counteval = counteval + numel(fitness_to_calc);

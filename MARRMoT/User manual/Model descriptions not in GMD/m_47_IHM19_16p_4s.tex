@@ -1,0 +1,369 @@
+\documentclass[11pt,color]{tudbook} 
+\usepackage{tudthesis}
+\usepackage{english}
+\usepackage{lmodern}
+
+\usepackage{setspace}
+%\singlespacing
+\onehalfspacing
+%\doublespacing
+%\setstretch{<factor>} % for custom spacing
+
+%Schriftart wird geändert auf serifenfreie Schriftart Helvetica
+%\usepackage{helvet}
+%\renewcommand\familydefault{\sfdefault}
+
+% Matlab-code 
+\usepackage{matlab-prettifier}
+
+%wichtig für Formeln :)
+\usepackage{amsmath}
+
+%Pakete für Graphiken
+\usepackage[graphicx]{realboxes}
+%Pfad zu Graphiken von ort der kompilierung aus betrachtet, vermutlich  . steht für "dieser Ordner"
+\graphicspath{{./figures/}}
+
+\usepackage{lscape}
+\usepackage{tikz}
+\usepackage{wrapfig}
+
+%für hyperlinks
+\usepackage{url}
+
+%Beschriftungsbenennung 
+\usepackage{caption}
+\captionsetup{tablename=Tab.}
+\captionsetup{figurename=Fig.}
+
+%Graphikplatzierung auf der Seite
+\usepackage{float}
+
+%In einer Tabelle können Zeilen verbunden werden
+\usepackage{multirow}
+\usepackage{tabularx}
+
+
+% Spaltenbreite Tabellen festlegen
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+%Auflösung linksbündig von CD
+\let\linksbuendig=\raggedright \let\raggedright=\relax
+
+% Anstriche in Tabellen, naja ist nicht so sinnvoll
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+%\usepackage[titletoc]{appendix}
+\usepackage{appendix}
+
+\usepackage{hyperref} % sorgt für Hyperlinks in PDF-Dokumenten, muss vor apacite kommen, ansonsten funktioniert es nicht
+
+%Literaturverzeichnis und Zitierstil
+\usepackage{apacite} 
+\bibliographystyle{apacite}
+
+
+\einrichtung{Fakultät Umweltwissenschaften}
+\institut{Institut für Hydrologie und Meteorologie Lehrstuhl Hydrologie}
+
+%------------------------------------------------------------------------------
+%------------------------------------------------------------------------------
+\begin{document}
+
+\begin{onehalfspacing}
+
+
+
+\begin{figure}[H]
+% h-here, t-top, b-bottom ... latex versucht placement nacheinander
+% mit bsp. !h wird latex gezwungen placement so zu machen user das will
+\centering
+\includegraphics[width=0.93\textwidth]{m_57_gw_Speicherkaskade.pdf}
+\caption{Structure of IHM19 Model}
+% wenn caption unter includegraphics steht gibt es eine Bildunterschrift
+% steht die caption darüber wird eine Bildüberschrift erzeugt, gilt auch für Tabellen
+% wenn man mit apacite in captions zitiert muss ein \protect davor, sonst ist alles kaputt
+\label{fig:m_57_gw_Speicherkaskade}
+%labels sind wichtig für Verweise, Beispiel für Referenzerzeugung im Text \ref{fig:Verweis_Name}
+\end{figure}
+
+\section{IHM19 Model (model ID: 47)}
+
+The IHM19 model was created in a master's thesis at the Institute for Hydrology and Meteorology at the Technical University of Dresden (Germany) for a small catchment in the Bavarian Forest National Park.
+The Forellenbach basin was originally covered by a spruce forest, where the tree population dramatically declined due to a bark beetle infestation in the 1990ies and 2000s.
+The model was developed to test the previously identified main features of the catchment that influence the unique flood reaction with a lumped approach.
+One very important factor is the increase in macropores, due to root channels, which formed after 60\% of the forest cover perished.\\
+This conceptual model is the first addition to the 46 original models of the finished MARRMoT Toolbox.
+
+\begin{itemize}
+\item Interception
+\item Separate macropore storage
+\item Combined soil and vegetation evapotranspiration
+\item Interflow when soil moisture exceeds storage capacity
+\item Percolation to a lower soil storage with baseflow
+\end{itemize}
+
+\section{File names}
+
+Model: m\_47\_ihm19\_16p\_4s \\
+Parameter ranges: m\_47\_ihm19\_16p\_4s\_parameter\_ranges
+
+\section{Model equations}
+
+\begin{equation}
+\label{eq:ODE_SI}
+\frac{dSI}{dt}\;=\;P\;-\;EI\;-\;PEX
+\end{equation}
+
+\begin{equation}
+\label{eq:EI}
+ EI = evap\_1 = 
+\begin{cases}
+    E_P&\quad \text{, if SI > 0}  \\
+    0  &\quad  \text{, otherwise }
+  \end{cases}
+\end{equation}
+\begin{center}
+$EI \leq SI$
+\end{center}
+
+\begin{equation}
+\label{eq:PEX}
+ PEX = interception\_1 = 
+\begin{cases}
+    P  & \quad \text{, if SI} \geq \text{SIMAX}  \\
+    0  & \quad \text{, otherwise }
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+\label{eq:PEXMP}
+PEXMP\;=\;split\_2\;=\;(1-A)\;\cdot\;PEX
+\end{equation}
+
+\begin{equation}
+\label{eq:PEXS1}
+PEXS1\;=\;split\_1\;=\;A\cdot\;PEX
+\end{equation}
+
+Where $SI$ is the current interception
+storage (equation~\ref{eq:ODE_SI}) which is refilled through
+Precipitation $P$ an emptied by interception evaporation $EI$ (equation~\ref{eq:EI})occuring
+at potential rate when possible.\\
+When the maximum capacity of the interception storage $SIMAX$ is  exceeded throughfall $PEX$ forms and drips to the soil surface.\\
+Throughfall $PEX$ is divided into macropore excess precipitation $PEXMP$ which forms the possible inflow into macropore storage $SMP$ and excess precipitation for the soil storage $PEXSI$, by multiplying a splitting factor $A$ (equation~\ref{eq:PEXMP} \& \ref{eq:PEXS1}).
+
+\begin{equation}
+\label{eq:ODE_SMP}
+\frac{dSMP}{dt}\;=\;FMP\;-\;QMP
+\end{equation}
+
+\begin{equation}
+\label{eq:FMP}
+ FMP = infiltration\_8 = 
+\begin{cases}
+    PEXMP & \quad \text{, if SMP < SMPMAX}  \\
+    0     & \quad \text{, otherwise }
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+\label{eq:QMP}
+QMP =\;interflow\_3\;=\;CQMP\;\cdot SMP^{XQMP}
+\end{equation}
+
+
+\begin{equation}
+\label{eq:QEXMP}
+QEXMP\;=\;subtraction\_2\;=\;PEXMP\;-\;FMP
+\end{equation}
+
+\begin{equation}
+\label{eq:PQEXS1}
+PQEXS1\;=\;addition\_2\;=\;PEXS1\;+\;QEXMP
+\end{equation}
+
+Macropore storage $SMP$ (equation~\ref{eq:ODE_SMP}) is refilled by macropore infiltration $FMP$ (equation~ \ref{eq:FMP}), that is equal to $PEXMP$ until maximum macropore storage $SMPMAX$ is reached.\\
+The runoff from the macropore storage $QMP$ (equation~\ref{eq:QMP}) depends on current storage $SMP$, time-parameter $CQMP$ an scaling-parameter $XQMP$ (equation~\ref{eq:QMP}). 
+When the macopore storage is filled $SMPMAX$ macropore excess flow $QEXMP$ forms on the soil surface.\\
+$PEXS1$ and $QEXMP$ (equation~\ref{eq:QEXMP}) together form the possible flow to the first soil layer  $PQEXS1$ (equation~\ref{eq:PQEXS1}).\\
+
+
+
+\begin{equation}
+\label{eq:ODE_SS1}
+\frac{dSS1}{dt}\;=\;FS1\;-\;ETAS1\;-\;QS1
+\end{equation}
+
+\begin{equation}
+\label{eq:FS1}
+ FS1 = infiltration\_7 = 
+\begin{cases}
+    CFS1 \cdot exp \left( - XFS1 \cdot \frac{SS1}{SS1MAX}\right) & \quad \text{, if SS1 < SS1MAX}  \\
+    0     & \quad \text{, otherwise}
+  \end{cases}
+\end{equation}
+\begin{center}
+$FS1\;\leq\;PQEXS1$
+\end{center}
+
+\begin{equation}
+\label{eq:ETAS1}
+ ETAS1 = evap\_24 = 
+\begin{cases}
+    FF \cdot E_P + (1-FF)\cdot \frac{SS1}{SS1MAX} \cdot E_P &\text{, if SS1 > FCCS1} \cdot \text{SS1MAX}  \\
+    FF \cdot\frac{SS1}{FCCS1 \cdot SS1MAX} \cdot E_P + (1-FF) \cdot \frac{SS1}{SS1MAX} \cdot E_P &\text{, otherwise }
+  \end{cases}
+\end{equation}
+\begin{center}
+$ETAS1\;\leq\;SS1$
+\end{center}
+
+\begin{equation}
+\label{eq:QS1}
+ QS1 = interflow\_12 = 
+\begin{cases}
+    CQS1 \cdot (SS1 - (FCCS1 \cdot SS1MAX))^{XQS1} &\quad \text{, if SS1 > FCCS1} \cdot \text{SS1MAX}  \\
+    0 & \quad \text{, otherwise} 
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+\label{eq:Q0}
+Q0 =\;subtraction\_2\;=\;PQEXS1\;-\;FS1
+\end{equation}
+
+\begin{equation}
+\label{eq:Q0R}
+Q0R = uh\_4\_full(Q0, D0, delta\_t)
+\end{equation}
+
+
+\begin{equation}
+\label{eq:QMPS1}
+QMPS1 =\;addition\_2\;= \;QMP\; +\; QS1
+\end{equation}
+
+The upper soil storage $SS1$ is filled by Soil Infiltration $FS1$ and drained by soil runoff $QS1$, as well as evapotranspiration $ETAS1$ (equation~\ref{eq:ODE_SS1}).
+The soil infiltration rate $FS1$ is calculated with an exponentially declining function with maximum infiltration rate $CFS1$ and a loss exponent $XFS1$, it is also dependent on the current soil storage and becomes zero as soon as $SS1$ reaches $SS1MAX$.
+The runoff $QSI$ (equation~\ref{eq:QS1}) is  calculated with a non-linear function, depending on a time-and scaling-Parameters $CQS1$ and $XQS1$. It only occurs when the current soil storage $SS1$ exceeds the field capacity of soil $FCCS1 \cdot SS1MAX$, where $FCCS1$ is a value between 0 and 1. This ensures that the field capacity is always smaller than maximum storage $SS1MAX$.\\
+When the current storage of $SS1$ is smaller than the field capacity it is emptied only by evapotranspiration $ETAS1$ (equation~\ref{eq:ETAS1}).
+Parameters for the actual evapotranspiration $ETAS1$ are the forest fraction $FF$ (Transpiration), maximum soil storage $SS1MAX$ (Soil Evaporation) and the field capacity $FCCS1 \cdot SS1MAX$.\\
+If the soil storage of the first layer is filled completely and potential inflow still occures through $PQEXS1$ surface runoff $Q0$ forms (equation~\ref{eq:Q0}).\\
+The surface runoff is routed with the full triangular routing-function included in the framework, which is one of the frequently used routing-functions. It uses only one additional parameter $D0$ which is the time base of routing delay (equation~\ref{eq:Q0R}).\\
+The sum of the runoffs from macropore and fist soil storage $QMPS1$ is the potential inflow for the lower soil storage $SS2$.
+
+
+\begin{equation}
+\label{eq:ODE_SS2}
+\frac{dSS2}{dt}\;=\;PC\;-\;QS2
+\end{equation}
+
+\begin{equation}
+\label{eq:PC}
+ PC\;=\;infiltration\_8\;=\;
+\begin{cases}
+    QMPS1 & \quad \text{, if SS2 < SS2MAX}  \\
+    0     & \quad \text{, otherwise }
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+\label{eq:QS2}
+QS2\;=\;interflow\_3\;=\;CQS2\;\cdot\;SS2^{XQS2}
+\end{equation}
+
+\begin{equation}
+\label{eq:QH}
+QH\;=\;subtraction\_2\;=\;QMPS1\;-\;PC
+\end{equation}
+
+\begin{equation}
+\label{eq:QTOT}
+QTOT\;=\;addition\_3\;=\;Q0\;+\;QH\;+\;QS2
+\end{equation}
+
+The second, lower soil layer $SS2$ is filled by percolation $PC$ (equation~\ref{eq:PC}), which is equal to the runoff from the upper soil storages $QMPS1$, as long as the second soil layer is not saturated. If $SS2MAX$ is reached and there is still runoff from above interflow $QH$ is created between the soil layers (equation~\ref{eq:QH}).\\
+The runoff from the second soil layer $QS2$ is the baseflow of the model (equation~\ref{eq:QS2}) and is calculated similarly to the Macropore-runoff with a non-linear function and two parameters for time and scaling  $CQS2$ \& $XQS2$.\\
+The total runoff $QTOT$ is calculated as an addition of the routed surface runoff $Q0R$, interflow $QH$ and the baseflow $QS2$ (equation~\ref{eq:QTOT}).
+
+
+\begin{table}[H]
+\caption{Jacobian Matrix for dependencies of Storages}
+\label{tab:Jacobian_Matrix_Storages_Model_47}
+\begin{center}
+\begin{tabular}{L{1.5cm}L{2cm}L{3cm}|L{1cm}|L{1cm}|L{1cm}|L{1cm}|}
+\cline{4-7}
+                               &                                            &                & \multicolumn{4}{l|}{Jacobian Matrix} \\ \hline
+\multicolumn{1}{|l|}{Storage} & \multicolumn{1}{l|}{Description}          & Storage Number & S1          & S2          & S3         & S4         \\ \hline
+\multicolumn{1}{|l|}{SI}       & \multicolumn{1}{l|}{Interception Storage} & S1             & 1           & 0           & 0          & 0          \\ \hline
+\multicolumn{1}{|l|}{SMP}      & \multicolumn{1}{l|}{Macropore Storage}    & S2             & 1           & 1           & 0          & 0          \\ \hline
+\multicolumn{1}{|l|}{SS1}      & \multicolumn{1}{l|}{Upper Soil Storage}       & S3             & 1           & 1           & 1          & 0          \\ \hline
+\multicolumn{1}{|l|}{SS2}      & \multicolumn{1}{l|}{Lower Soil Storage}       & S4             & 0           & 1           & 1          & 1          \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\caption{Flux Overview}
+\label{tab:Fluxes_Storage_Cascade_model_47}
+\begin{center}
+\begin{tabular}{|L{1.5cm}|L{9cm}|}
+\hline
+Flux   & Description                                  \\ \hline
+P      & precipitation                                \\ \hline
+EI     & interception evaporation                     \\ \hline
+PEX    & excess precipitation                         \\ \hline
+PEXMP  & excess precipitation macropore storage       \\ \hline
+FMP    & infiltration macropore storage               \\ \hline
+QMP    & runoff macropore storage                     \\ \hline
+QEXMP  & excess runoff macropore storage              \\ \hline
+PEXS1  & excess precipitation soil storage 1          \\ \hline
+PQEXS1 & excess influx soil storage 1                 \\ \hline
+FS1    & infiltration soil storage 1                  \\ \hline
+ETAS1  & actual evapotranspiration soil storage 1     \\ \hline
+QS1    & runoff soil storage 1                        \\ \hline
+Q0     & surface runoff                               \\ \hline
+Q0R    & routed surface runoff                        \\ \hline
+QMPS1  & runoff macropore storage and soil storage 1  \\ \hline
+PC     & percolation                                  \\ \hline
+QS2    & runoff soil storage 2                        \\ \hline
+QH     & interflow                                    \\ \hline
+QTOT   & total runoff                                 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Parameter overview}
+\label{tab:Parameters_model_47}
+\begin{center}
+\begin{tabular}{|L{0.5cm}|L{11cm}|L{1.2cm}|L{0.8cm}|L{0.8cm}|}
+\hline
+Nr. & Parameter Description                  & Unit                                        & Min  & Max \\ \hline
+1   & SIMAX, maximum interception storage & {[}mm{]}                                    & 2    & 5    \\ \hline
+2   & A, splitting coeffcient for excess precipitation & {[}-{]}                        & 0,9  & 1    \\ \hline
+3   & FF, forest fraction & {[}-{]}                                                     & 0,4  & 0,95 \\ \hline
+4   & SMPMAX, maximum storage macropores & {[}mm{]}                                     & 0,05 & 5    \\ \hline
+5   & CQMP, runoff time parameter (fast/slow runnoff) first soil layer & {[}1/d{]}      & 0    & 1    \\ \hline
+6   & XQMP, runoff scale parameter first soil layer & {[}-{]}                           & 1    & 5    \\ \hline
+7   & SS1MAX, maximum soil moisture storage first soil layer & {[}mm{]}                 & 400  & 600  \\ \hline
+8   & FCCS1, field capacity coefficient fist soil layer & {[}-{]}                       & 0,3  & 0,7  \\ \hline
+9   & CFS1, maximum infiltration rate first soil layer & {[}mm/d{]}                     & 0    & 1000 \\ \hline
+10  & XFS1, infiltration loss exponent first soil layer & {[}-{]}                       & 0    & 15   \\ \hline
+11  & CQS1, runoff time parameter for (fast/slow runnoff) first soil layer & {[}1/d{]}  & 0    & 1    \\ \hline
+12  & XQS1, runoff scale parameter first soil layer & {[}-{]}                           & 1    & 5    \\ \hline
+13  & SS2MAX, maximum soil moisture storage second soil layer & {[}mm{]}                & 300  & 500  \\ \hline
+14  & CQS2, runoff time parameter for (fast/slow runnoff) second soil layer & {[}1/d{]} & 0    & 1    \\ \hline
+15  & XQS2, runoff scale parameter second soil layer & {[}-{]}                          & 1    & 5    \\ \hline
+16  & D0, Flow delay before surface runoff & {[}d{]}                                    & 0,01 & 5    \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\end{onehalfspacing}
+\end{document}

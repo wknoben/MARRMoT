@@ -64,9 +64,8 @@ MARRMoT's documentation includes:
 - **Original paper**: rationale behind MARRMoT development, best practices used during development, summary of included model structures and an example application of all structures to simulate streamflow in a single catchment ([Knoben et al., 2019](https://doi.org/10.5194/gmd-12-2463-2019)).
 - **User manual**: description on how to use MARRMoT v2.- and how to contribute to it.
 - **User manual appendices**: detailed model descriptions (A), flux equations (B) and unit hydrographs (C)
-- **New models**: description of models added after the initial GMD publication.
 
-User manual and appendices are found in this repository in `./MARRMoT/User manual`. New model descriptions are found in `./MARRMoT/User manual/Model descriptions not in GMD`.
+User manual and appendices are found in this repository in `./MARRMoT/User manual`.
 
 ## Model structure summary
 MARRMoT model structures are based on a wide variety of different models.

@@ -109,7 +109,7 @@ classdef m_nn_template_pp_ss < MARRMoT_model
             % outputs
             dS = [dS1 dS2 dSs];                       % output are arrays of all stores dS and
             fluxes = [flux_f1,  flux_f2, flux_f3,...  % all fluxes at this timestep. Order must match
-                      flux_r1, flux_r2};              % the naming in obj.StoreNames and obj.FluxNames
+                      flux_r1, flux_r2];              % the naming in obj.StoreNames and obj.FluxNames
         end
         
         % STEP runs at the end of every timestep.

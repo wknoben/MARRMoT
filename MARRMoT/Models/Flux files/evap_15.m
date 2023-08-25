@@ -18,7 +18,7 @@ function [out] = evap_15(Ep,S1,S1max,S2,S2min,dt)
 %               S2max - maximum storage in S2 [mm]
 %               dt    - time step size [d]
 
-out = min((S1/S1max*Ep).*smoothThreshold_storage_logistic(S2,S2min,S1/dt));
+out = min((S1/S1max*Ep).*smoothThreshold_storage_logistic(S2,S2min),S1/dt);
 
 end
 

@@ -19,12 +19,17 @@ The paper describing these changes was peer reviewed and published in Geoscienti
 The last release of MARRMoT v1 is version 1.4 and can be found as a release here: [dx.doi.org/10.5281/zenodo.6460624](dx.doi.org/10.5281/zenodo.6460624)
 
 ### Changes since peer-review:
-Since MARRMoT v2.1 was peer reviewed, the following minor changes to the code were implemented and included in the release of v2.1.1
-- Edits to _my_cmaes_ to fix typos and improve clarity of outputs to screen
-- Typos fixed in models _m_13_ and _m_28_
-- Edits to _MARRMoT_model_ class to make model objects loadable
-- Addition of new objective functions _of_MARE_ and _of_PCMARE_
-- Updates to this _REAMDE_ file
+Since MARRMoT v2.1 was peer reviewed, the following minor changes to the code were implemented:
+- Changes included in the release of v2.1.1
+  - Edits to _my_cmaes_ to fix typos and improve clarity of outputs to screen
+  - Typos fixed in models _m_13_ and _m_28_
+  - Edits to _MARRMoT_model_ class to make model objects loadable
+  - Addition of new objective functions _of_MARE_ and _of_PCMARE_
+  - Updates to this _README_ file
+- Changes included in the release of v2.1.2
+  - Edits to _my_cmaes_ to fix typos (including error running parallel evaluation)
+  - Typo fixed in flux _evap_15_ affecting _m_41_ and _m_45_
+  - Updates to this _README_ file
 
 ## Getting Started
 These instructions will help you install a copy of MARRMoT and run a few example cases. This process should be  straightforward and MARRMoT can (given some knowledge of Github and Matlab) be up and running in a matter of minutes.

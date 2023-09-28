@@ -548,11 +548,10 @@ classdef MARRMoT_model < handle
                          i = find(diff(cal_idx(i:end)) ~= 1, 1) + i - 1;
                          if isempty(i); i = numel(cal_idx); end
                          previous = cal_idx(i);
-                         cal_idx_str = append(cal_idx_str, '-', num2str(previous));
                      else
                          previous = cal_idx(i);
-                         cal_idx_str = append(cal_idx_str, ', ', num2str(previous));
                      end
+					 cal_idx_str = strcat(cal_idx_str, '-', num2str(previous));
                  end
     
                  disp(['Objective function ' of_name ' will be calculated in time steps ' cal_idx_str '.'])

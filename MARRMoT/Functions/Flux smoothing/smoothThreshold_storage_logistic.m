@@ -35,7 +35,11 @@ if nargin == 2
     r = 0.01;
     e = 5.00;
 elseif nargin == 3
+    r = r{1};
     e = 5.00;
+elseif nargin == 4
+    r = r{1};
+    e = e{1};
 end
 
 % Calculate multiplier

@@ -10,7 +10,7 @@ classdef m_08_us1_5p_2s < MARRMoT_model
 % Model reference
 % Bai, Y., Wagener, T., & Reed, P. (2009). A top-down framework for 
 % watershed model evaluation and selection under uncertainty. Environmental
-% Modelling & Software, 24(8), 901–916. 
+% Modelling & Software, 24(8), 901â€“916. 
 % http://doi.org/10.1016/j.envsoft.2008.12.012
 
     properties
@@ -74,8 +74,8 @@ classdef m_08_us1_5p_2s < MARRMoT_model
             flux_eusei   = interception_3(alpha_ei,P);
             flux_eusveg  = evap_8(S1,S2,m,fc*(smax-S2),Ep,delta_t);
             flux_eusbs   = evap_9(S1,S2,m,smax,Ep,delta_t);
-            flux_esatveg = evap_10(m,S2,S1+S2,Ep,delta_t);
-            flux_esatbs  = evap_5(m,S2,S1+S2,Ep,delta_t);
+            flux_esatveg = evap_10(m,S2,smax,Ep,delta_t);
+            flux_esatbs  = evap_5(m,S2,smax,Ep,delta_t);
             flux_rg      = saturation_1(P,S1,fc*(smax-S2));
             flux_se      = excess_1(S1,fc*(smax-S2),delta_t);
             flux_qse     = saturation_1(flux_rg+flux_se,S2,smax);

@@ -122,4 +122,5 @@ MARRMoT could not have been made without the effort that many hydrologists have 
 - Mustafa Kemal Türkeri for making workflow_example_4 operational in Octave; and for performing extensive testing of MARRMoT in Matlab and Octave;
 - Thomas Wöhling for suggesting various additional efficiency metrics and a possible implementation for warmup periods;
 - Hidde Drost for suggesting a way to clarify MARRMoT install instructions in this readme;
-- Dongdong Kong for finding a few typos in the code foe m13 and m28.
+- Dongdong Kong for finding a few typos in the code of m13 and m28;
+- Scott Sheeder for finding various bugs in flux function inputs.

@@ -31,7 +31,7 @@ function [ UH ] = uh_2_full( d_base,delta_t )
 
 %%TIME STEP SIZE
 delay = d_base/delta_t;
-tt = 1:2*ceil(delay); % time series for which we need UH ordinates [days]
+tt = 1:ceil(delay); % time series for which we need UH ordinates [days]
 
 %%EMPTIES
 SH = zeros(1,length(tt)+1); SH(1) = 0;

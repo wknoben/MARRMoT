@@ -123,4 +123,5 @@ MARRMoT could not have been made without the effort that many hydrologists have 
 - Thomas Wöhling for suggesting various additional efficiency metrics and a possible implementation for warmup periods;
 - Hidde Drost for suggesting a way to clarify MARRMoT install instructions in this readme;
 - Dongdong Kong for finding a few typos in the code of m13 and m28;
-- Scott Sheeder for finding various bugs in flux function inputs.
+- Scott Sheeder for finding various bugs in flux function inputs;
+- Nyree Campion and Kiernan Fowler for finding a bug in the GR4J routing function.

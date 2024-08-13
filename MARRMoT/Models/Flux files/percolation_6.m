@@ -16,7 +16,7 @@ function [out] = percolation_6(p1,p2,S,dt)
 %               S    - current storage [mm]
 %               dt   - time step size [d]
 
-out = min(S/dt,p1.*min(1,max(0,S)./p2));
+out = min(max(0,S)/dt,p1.*min(1,max(0,S)./p2));
 
 end
 

@@ -27,6 +27,7 @@ classdef MARRMoT_model < handle
         S0                % initial store values
         input_climate     % vector of input climate
         solver_opts       % options for numerical solving of ODEs
+        use_ode = true    % use implicit Euler ODE solver; false uses explicit Euler
             % automatically, based on parameter set
         store_min         % store minimum values
         store_max         % store maximum values
@@ -350,16 +351,19 @@ classdef MARRMoT_model < handle
                else; Sold = obj.stores(t-1,:)';
                end
 
-               [Snew,resnorm,solver,iter] = obj.solve_stores(Sold);
+               if obj.use_ode
+                   [Snew,resnorm,solver,iter] = obj.solve_stores(Sold);
+                   obj.solver_data.resnorm(t) = resnorm;
+                   obj.solver_data.solver(t) = solver;
+                   obj.solver_data.iter(t) = iter;
+               else
+                   Snew = Sold;
+               end
                
                [dS, f] = obj.model_fun(Snew);
     
                obj.fluxes(t,:) = f * obj.delta_t;
                obj.stores(t,:) = Sold + dS' * obj.delta_t;
-               
-               obj.solver_data.resnorm(t) = resnorm;
-               obj.solver_data.solver(t) = solver;
-               obj.solver_data.iter(t) = iter;
                
                obj.step();
             end
@@ -492,10 +496,9 @@ classdef MARRMoT_model < handle
                                        varargin)                           % additional arguments to the objective function
              
              if isempty(obj.input_climate) || isempty(obj.delta_t) ||...
-                     isempty(obj.S0) || isempty(obj.solver_opts)
-                 error(['input_climate, delta_t, S0 and solver_opts '...
-                        'attributes must be specified before calling '...
-                        'calibrate.']);
+                     isempty(obj.S0) || (obj.use_ode && isempty(obj.solver_opts))
+                 error(['input_climate, delta_t and S0 must be specified; '...
+                        'solver_opts is also required when use_ode is true.']);
              end
              
              % if the list of timesteps to use for calibration is empty,
